@@ -39,5 +39,5 @@ steps:
     azureSubscription: 'DreamSpark(5cb87845-9a16-45b1-a244-c9f7d707bac3)'
     appType: 'webApp'
     appName: 'Goke'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    package: '$(build.artifactStagingDirectory)\WebApp.zip'
     deploymentMethod: 'auto'
