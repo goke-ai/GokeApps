@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34707.107
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Web", "Goke.Web\Goke.Web\Goke.Web.csproj", "{B49620A7-075C-4087-973B-EF16913EDAEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Web", "Goke.Web\Goke.Web\Goke.Web.csproj", "{B49620A7-075C-4087-973B-EF16913EDAEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Web.Client", "Goke.Web\Goke.Web.Client\Goke.Web.Client.csproj", "{79FAB020-7399-42B6-BE48-B6F3ECA80779}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Web.Client", "Goke.Web\Goke.Web.Client\Goke.Web.Client.csproj", "{79FAB020-7399-42B6-BE48-B6F3ECA80779}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{20EB2C99-4489-497C-BDBE-391A9509313B}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

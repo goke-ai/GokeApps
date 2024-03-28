@@ -1,0 +1,15 @@
+﻿@page "/blogging"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+@rendermode InteractiveAuto
+
+<PageTitle>Blogging</PageTitle>
+
+
+<h3>Blogging</h3>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!. Please say something.
+</AuthorizeView>
