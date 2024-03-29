@@ -32,12 +32,3 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'DreamSpark(5cb87845-9a16-45b1-a244-c9f7d707bac3)'
-    appType: 'webApp'
-    appName: 'Goke'
-    package: '$(build.artifactStagingDirectory)\WebApp.zip'
-    deploymentMethod: 'auto'
