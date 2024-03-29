@@ -53,8 +53,7 @@
 </section>
 <!-- End Hero -->
 @code {
-    bool isTrue = false;
-
+    
     protected override void OnInitialized()
     {
 
@@ -101,7 +100,7 @@
     /// <param name="contentType">"html" or "null" for plaintext</param>
     /// <exception cref="ArgumentNullException"></exception>
     void TypedControl(string element,
-    string[] strings = null, //["These are the default values...", "You know what you should do?", "Use your own!", "Have a great day!"],
+    string[]? strings = null, //["These are the default values...", "You know what you should do?", "Use your own!", "Have a great day!"],
     string? stringsElement = null,
     int typeSpeed = 0,
     int startDelay = 0,
