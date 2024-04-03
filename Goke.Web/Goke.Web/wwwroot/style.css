@@ -1,4 +1,4 @@
-﻿
+﻿@import url('css/style.css');
 body {
     font-family: "Open Sans", sans-serif;
     color: #272829;
@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 #hero {
     width: 100%;
     height: 100vh;
-    background: url("img/hero-bg.jpg") top center;
+    background: url("images/hero-bg.jpg") top center;
     background-size: cover;
 }
 
@@ -30,4 +30,8 @@ a:has(.bi) {
     background-size: cover;
     /*vertical-align: -.125em;*/
     fill: currentColor;
+}
+
+.wizard {
+   
 }

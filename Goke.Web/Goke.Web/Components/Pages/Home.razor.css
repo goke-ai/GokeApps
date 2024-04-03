@@ -1,5 +1,4 @@
 ﻿#hero {
-   
 }
 
     #hero h1 {
@@ -35,22 +34,22 @@
 
 
 
-    @media (min-width: 641px) {
-        #hero {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+@media (min-width: 641px) {
+    #hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+        #hero .personal-wrapper {
+            top: 55vh;
         }
 
-            #hero .personal-wrapper {
-                top: 55vh;
+            #hero .personal-wrapper > div {
+                font-size: 0.8rem;
             }
-
-                #hero .personal-wrapper > div {
-                    font-size: 0.8rem;
-                }
-    }
+}
 
 @media (min-width: 1024px) {
     #hero .personal-wrapper > div {
@@ -58,6 +57,3 @@
         font-size: 1.1rem;
     }
 }
-
-
-
