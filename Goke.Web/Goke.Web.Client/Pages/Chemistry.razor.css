@@ -1,4 +1,11 @@
-﻿
+﻿.disabled {
+    --_form-disabled-border-color: var(--form-disabled-border-color, var(--clr-body-bg));
+    pointer-events: none;
+    opacity: 0.4;
+    border-color: var(--_form-disabled-border-color);
+}
+
+
 .wizard {
     position: relative;
     --wizard-height: calc(100vh - 6rem);
@@ -18,10 +25,12 @@
 .lab {
     height: 90%;
     position: relative;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.lab-menu {
 }
 
 .lab-left, .lab-right, .lab-bottom {
@@ -29,8 +38,8 @@
 
 .lab-center {
     min-height: 80%;
+    position: relative;
     outline: 1px solid gold;
-
 }
 
 .lab-center-top {
@@ -39,6 +48,9 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    max-width: 780px;
+    margin-inline: auto;
+
     outline: 1px solid gold;
 }
 
@@ -82,6 +94,10 @@
         --wizard-height: calc(100vh - 2em);
     }
 
+    .lab-center {
+        min-height: 70%;
+    }
+
     .tile {
         --_tile-width: 8em;
         font-size: 0.8rem;
@@ -93,10 +109,9 @@
         --wizard-height: calc(100vh - 3em);
     }
 
-    .lab-left, .lab-right{
-        position:absolute;
-        top:0;
-
+    .lab-left, .lab-right {
+        position: absolute;
+        top: 0;
         display: flex;
         flex-direction: column;
     }

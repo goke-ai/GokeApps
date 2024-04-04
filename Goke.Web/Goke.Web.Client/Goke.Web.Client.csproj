@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Goke.web.Shared\Goke.web.Shared.csproj" />
+    <ProjectReference Include="..\..\Goke.web.Shared\Goke.Web.Shared.csproj" />
   </ItemGroup>
 
 </Project>

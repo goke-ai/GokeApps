@@ -21,13 +21,31 @@
         </div>
         <div class="wizard-page">
             <div class="lab">
+                <div class="lab-menu">
+                    <div style="display:flex; justify-content:space-between;">
+                        <div>@_labCounter</div>
+                        <div>@Time</div>
+                        <div>@_clock</div>
+                    </div>
+                </div>
                 <div class="lab-center" style="@_dropStatusCss"
                      @onclick="OnLaboratoryTable"
-                     @ondrop="HandleDrop" 
+                     @ondrop="HandleDrop"
                      @ondragover="HandleDragOver"
-                     @ondrop:preventDefault="true" 
+                     @ondrop:preventDefault="true"
                      @ondragover:preventDefault="true">
                     <div class="lab-center-top">
+                        @if (_showTitrationTimer)
+                        {
+                            <div>
+                                <button class="default" style="display: block; position: absolute; top: 0; left: 0;" @onclick=ToggleTitration>
+                                    <div>
+                                        @(_isTitrationOn ? "STOP" : "START")
+                                    </div>
+                                    @TitrationTime
+                                </button>
+                            </div>
+                        }
                         <div>
                             @((MarkupString)_action)
                         </div>
@@ -35,22 +53,36 @@
                 </div>
                 <div class="lab-toolbar">
                     <div class="lab-bottom">
-                        @foreach (var p in titration.Apparatuses)
+                        @if (_actionTime > _minTimeInSeconds)
                         {
-                            <div class="tile" 
-                                @onclick="@(()=>_selected = p.Item)"  
-                                @ondragstart="@((e) => HandleDragStart(e, p))" 
-                                draggable="true">
-                                <div>
-                                    <img src="@p.Media" />
-                                    @p.Title
+                            foreach (var p in _apparatuses)
+                            {
+                                <div class="tile" style="cursor: pointer;"
+                                     @onclick="@(()=>_selected = p.Item)"
+                                     @ondragstart="@((e) => HandleDragStart(e, p))"
+                                     draggable="true">
+                                    <div>
+                                        <img src="@p.Media" />
+                                        @p.Title
+                                    </div>
                                 </div>
-                            </div>
+                            }
+                        }
+                        else
+                        {
+                            foreach (var p in _apparatuses)
+                            {
+                                <div class="tile disabled" disabled="true">
+                                    <div>
+                                        <img src="@p.Media" />
+                                        @p.Title
+                                    </div>
+                                </div>
+                            }
                         }
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="wizard-page">
             <h3>Report</h3>
@@ -58,13 +90,12 @@
             odio autem provident praesentium facilis at dolore doloremque soluta esse expedita iste quibusdam,
             recusandae cupiditate sit?
         </div>
-
     </div>
     <div class="wizard-controller ">
         <div class="wizard-controller-labels show-text show-radio">
             <label class="wizard-page-controller-label">
                 <span>Welcome</span>
-                <input type="radio" name="wizard-page" id="wizardpage1" class="wizard-page-controller" checked>
+                <input type="radio" name="wizard-page" id="wizardpage1" class="wizard-page-controller">
             </label>
             <label class="wizard-page-controller-label">
                 <span>Instructions</span>
@@ -72,7 +103,7 @@
             </label>
             <label class="wizard-page-controller-label">
                 <span>Game</span>
-                <input type="radio" name="wizard-page" id="wizardpage3" class="wizard-page-controller">
+                <input type="radio" name="wizard-page" id="wizardpage3" class="wizard-page-controller" checked>
             </label>
             <label class="wizard-page-controller-label">
                 <span>Report</span>
@@ -81,23 +112,94 @@
 
         </div>
     </div>
-
 </div>
 <!-- -wizard -->
+<div class="game-sound| " style="display: none">
+    @switch (_gameStatus)
+    {
+        case GameStatus.Success:
+            <audio autoplay controls><source src="audios/success2.mp3" /></audio>
+            break;
+        case GameStatus.Fail:
+            <audio autoplay controls><source src="audios/fail.mp3" /></audio>
+            break;
+        case GameStatus.Start:
+            <audio autoplay controls><source src="audios/start.mp3" /></audio>
+            break;
+        case GameStatus.End:
+            <audio autoplay controls><source src="audios/end.mp3" /></audio>
+            break;
+        default: break;
+    }
+
+</div>
+
 @code {
+    enum GameStatus { None, Success, Fail, Start, End }
+
+    GameStatus _gameStatus;
+
     Titration titration = new();
+    List<Apparatus> _apparatuses = default!;
 
     ApparatusItem _selected;
     ApparatusItem _target;
     ApparatusItem _previousTarget;
-    string _action =string.Empty;
+    string _action = "Drag and Drop Apparatus here";
+    int _actionTime, _minTimeInSeconds;
     int _order;
 
     Queue<ApparatusItem>? queueItems;
 
+    static System.Timers.Timer _timer = new(1000);
+    string _clock = default!;
+    int _labCounter;
+    string Time => TimeSpan.FromSeconds(_labCounter).ToString();
+
+    bool _isTitrationOn;
+    bool _showTitrationTimer;
+    int _titrationCounter;
+    string TitrationTime => TimeSpan.FromSeconds(_titrationCounter).ToString();
+
     protected override void OnInitialized()
     {
+        _timer.Elapsed += (o, e) =>
+        {
+            _labCounter++;
+            _actionTime++;
+
+            if (_isTitrationOn)
+            {
+                _titrationCounter++;
+            }
+
+            _clock = e.SignalTime.ToString("HH:mm:ss");
+            this.InvokeAsync(StateHasChanged);
+        };
+
+        StartTimer();
+        _apparatuses = titration.Apparatuses;
         NextSequence(_order);
+    }
+
+    void StartTimer()
+    {
+        // Have the timer fire repeated events (true is the default)
+        _timer.AutoReset = true;
+
+        // Start the timer
+        _timer.Enabled = true;
+        _gameStatus = GameStatus.Start;
+    }
+
+    void EndTimer()
+    {
+        // Have the timer fire repeated events (true is the default)
+        _timer.AutoReset = false;
+
+        // Start the timer
+        _timer.Enabled = false;
+        _gameStatus = GameStatus.End;
     }
 
     void NextSequence(int index)
@@ -113,8 +215,9 @@
                 _target = queueItems!.Dequeue();
             }
         }
+        //_apparatuses = ShuffleByOrderBy(titration.Apparatuses);
+        Shuffle(_apparatuses);
     }
-
 
     void OnLaboratoryTable()
     {
@@ -125,7 +228,7 @@
             if (selectedApparatus.Update is not null)
             {
                 selectedApparatus.Update(titration.Apparatuses, _target, _previousTarget);
-                this.StateHasChanged();
+                //this.StateHasChanged();
             }
             _action = selectedApparatus.Action();
 
@@ -152,6 +255,7 @@
         e.DataTransfer.DropEffect = "copy";
         _selectedApparatus = p;
         _dropStatusCss = "outline: 3px solid transparent;";
+        _gameStatus = GameStatus.None;
     }
 
     void HandleDragOver(DragEventArgs e)
@@ -164,21 +268,46 @@
         _selected = _selectedApparatus!.Item;
         if (_target == _selected)
         {
+            if (_target == ApparatusItem.Titration)
+            {
+                _showTitrationTimer = true;
+            }
             OnLaboratoryTable();
             _dropStatusCss = "outline: 3px solid green;";
+            _gameStatus = GameStatus.Success;
+            _actionTime = 0;
+            _minTimeInSeconds = _selectedApparatus.MinTimeInSeconds;
         }
         else
         {
             _dropStatusCss = "outline: 3px solid red;";
+            _gameStatus = GameStatus.Fail;
         }
-
     }
 
+    void ToggleTitration()
+    {
+        _isTitrationOn = !_isTitrationOn;
+    }
 
+    public List<T> ShuffleByOrderBy<T>(List<T> listToShuffle)
+    {
+        return listToShuffle.OrderBy(x => Guid.NewGuid()).ToList();
+    }
 
-    
-    
+    private static Random rng = new Random();
 
-
+    public void Shuffle<T>(IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
 
 }

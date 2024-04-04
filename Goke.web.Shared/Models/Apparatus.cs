@@ -26,5 +26,6 @@
         public string Title { get; set; } = "Beaker";
         public Func<string> Action { get; set; } = () => { return "Beaker"; };
         public Action<List<Apparatus>, ApparatusItem, ApparatusItem>? Update { get; set; }
+        public int MinTimeInSeconds { get; set; } = 10;
     }
 }

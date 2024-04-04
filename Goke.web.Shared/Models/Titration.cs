@@ -8,7 +8,7 @@
                 [ApparatusItem.Beaker,  ApparatusItem.Alkali, ApparatusItem.Pipette, ApparatusItem.ConicalFlask, ApparatusItem.PHIndicator],
                 [ApparatusItem.MeasuringCylinder,  ApparatusItem.Acid],
                 [ApparatusItem.RetortStand, ApparatusItem.Burette, ApparatusItem.MeasuringCylinder, ApparatusItem.ConicalFlask],
-                [ApparatusItem.Titration]
+                [ApparatusItem.Titration],
             ];
 
         public Titration()
@@ -22,7 +22,10 @@
                     if(ApparatusItem.None == previousItem)
                     {
                         var y = list.First(w => w.Item == currentItem);
-                        y.Action = () => { return "Put Beaker on table"; };
+                        y.Action = () => { return @"<video width='100%' >
+                                                        <source src=""videos/beaker.mp4"" type=""video/mp4"">
+                                                        Your browser does not support the video tag.
+                                                    </video>"; };
                     }
                 }},
                 new Apparatus{Item  = ApparatusItem.Alkali, Media = "images/apparatus/alkali.png", Title = "Alkali",
@@ -31,7 +34,11 @@
                     if(ApparatusItem.Beaker == previousItem)
                     {
                         var y = list.First(w => w.Item == currentItem);
-                        y.Action = () => { return "Pour Alkali into Beaker"; };
+                        // y.Action = () => { return "Pour Alkali into Beaker"; };
+                        y.Action = () => { return @"<video width='100%' autoplay>
+                                                        <source src=""videos/alkali.mp4"" type=""video/mp4"">
+                                                        Your browser does not support the video tag.
+                                                    </video>"; };
 
                         var x = list.First(w => w.Item == ApparatusItem.Beaker);
                         x.Title = "Beaker + Alkali";
@@ -45,7 +52,11 @@
                     if(ApparatusItem.Alkali == previousItem)
                     {
                         var y = list.First(w => w.Item == currentItem);
-                        y.Action = () => { return "Pipette draw content from Beaker"; };
+                        // y.Action = () => { return "Pipette draw content from Beaker"; };
+                        y.Action = () => { return @"<video width='100%' autoplay>
+                                                        <source src=""videos/pipette.mp4"" type=""video/mp4"">
+                                                        Your browser does not support the video tag.
+                                                    </video>"; };
                     }
                 }},
                 new Apparatus{Item  = ApparatusItem.ConicalFlask, Media = "images/apparatus/conical-flask.png", Title = "Conical Flask",
@@ -55,7 +66,11 @@
                     {
                         var y = list.First(w => w.Item == currentItem);
                         y.Title = "Conical Flask + Alkali";
-                        y.Action = () => { return "Pour Pipette content into Conical-Flask"; };
+                        // y.Action = () => { return "Pour Pipette content into Conical-Flask"; };
+                        y.Action = () => { return @"<video width='100%' autoplay>
+                                                        <source src=""videos/conical-flask.mp4"" type=""video/mp4"">
+                                                        Your browser does not support the video tag.
+                                                    </video>"; };
                     }
                     if(ApparatusItem.MeasuringCylinder == previousItem)
                     {
@@ -70,6 +85,10 @@
                     {
                         var y = list.First(w => w.Item == currentItem);
                         y.Action = () => { return "pH Indicator drop into Conical-Flask"; };
+                        y.Action = () => { return @"<video width='100%' autoplay>
+                                                        <source src=""videos/ph-indicator.mp4"" type=""video/mp4"">
+                                                        Your browser does not support the video tag.
+                                                    </video>"; };
 
                         var x = list.First(w => w.Item == ApparatusItem.ConicalFlask);
                         x.Title = "Conical Flask + Alkali + Indicator";
@@ -142,6 +161,12 @@
                 new Apparatus{Item  = ApparatusItem.Titration, Media = "images/apparatus/titration.png", Title = "Titration",
                 Action = () => { return "Titration"; },
                 Update = (List<Apparatus> list, ApparatusItem currentItem, ApparatusItem previousItem) => {
+                    if(ApparatusItem.None == previousItem)
+                    {
+                        var y = list.First(w => w.Item == currentItem);
+                        //y.Title = "Mounted Burette";
+                        y.Action = () => { return @"Press the START to begin Titration"; };
+                    }
                 }},
 
                 new Apparatus{Item  = ApparatusItem.RoundBottomFlask, Media = "images/apparatus/round-bottom-flask.png", Title = "Round Bottom Flask",
