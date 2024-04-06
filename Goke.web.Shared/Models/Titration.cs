@@ -5,6 +5,7 @@
         public List<Apparatus> Apparatuses { get; }
 
         public List<List<ApparatusItem>> Sequences => [
+                [ApparatusItem.Titration],
                 [ApparatusItem.Beaker,  ApparatusItem.Alkali, ApparatusItem.Pipette, ApparatusItem.ConicalFlask, ApparatusItem.PHIndicator],
                 [ApparatusItem.MeasuringCylinder,  ApparatusItem.Acid],
                 [ApparatusItem.RetortStand, ApparatusItem.Burette, ApparatusItem.MeasuringCylinder, ApparatusItem.ConicalFlask],

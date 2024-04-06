@@ -28,17 +28,21 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 .lab-menu {
+    width: 100%;
 }
 
 .lab-left, .lab-right, .lab-bottom {
 }
 
 .lab-center {
+    width: 100%;
     min-height: 80%;
     position: relative;
+
     outline: 1px solid gold;
 }
 

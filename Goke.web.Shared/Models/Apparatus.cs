@@ -3,12 +3,12 @@
     public enum ApparatusItem
     {
         None,
-        Beaker,
+        Beaker, Beaker1, Beaker2,
         MeasuringCylinder,
-        RoundBottomFlask,
+        RoundBottomFlask, RoundBottomFlask1, RoundBottomFlask2,
         RetortStand,
         BunsenBurner,
-        ConicalFlask,
+        ConicalFlask, ConicalFlask1, ConicalFlask2,
         Pipette,
         Burette,
         TripodStand,
