@@ -1,0 +1,34 @@
+<div class="game-sound | " >
+    @switch (GameStatus)
+    {
+        case GameStatus.Success:
+            <audio autoplay controls>
+                <source src="_content/Goke.Razor.Components/audios/success2.mp3" type="audio/mpeg" />
+            </audio>
+            break;
+        case GameStatus.Fail:
+            <audio autoplay controls>
+                <source src="_content/Goke.Razor.Components/audios/fail.mp3" type="audio/mpeg" />
+            </audio>
+            break;
+        case GameStatus.Start:
+            <audio autoplay controls>
+                <source src="_content/Goke.Razor.Components/audios/start.mp3" type="audio/mpeg" />
+            </audio>
+            break;
+        case GameStatus.End:
+            <audio autoplay controls>
+                <source src="_content/Goke.Razor.Components/audios/end.mp3" type="audio/mpeg" />
+            </audio>
+            break;
+        default: break;
+    }
+
+</div>
+
+@code{
+
+    [Parameter]
+    public GameStatus GameStatus { get; set; }
+
+}

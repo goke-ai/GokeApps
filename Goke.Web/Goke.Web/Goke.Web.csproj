@@ -97,7 +97,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assests\" />
-    <Folder Include="wwwroot\audios\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿@page "/chemistry"
 
-@using Goke.Web.Shared.Models;
 
 @rendermode InteractiveAuto
 
@@ -243,25 +242,7 @@
     </div>
 </div>
 <!-- -wizard -->
-<div class="game-sound| " style="display: none">
-    @switch (_gameStatus)
-    {
-        case GameStatus.Success:
-            <audio autoplay controls><source src="audios/success2.mp3" /></audio>
-            break;
-        case GameStatus.Fail:
-            <audio autoplay controls><source src="audios/fail.mp3" /></audio>
-            break;
-        case GameStatus.Start:
-            <audio autoplay controls><source src="audios/start.mp3" /></audio>
-            break;
-        case GameStatus.End:
-            <audio autoplay controls><source src="audios/end.mp3" /></audio>
-            break;
-        default: break;
-    }
-
-</div>
+<GameSound GameStatus=@_gameStatus />
 
 @code {
     void HandleImageError(ErrorEventArgs e)
@@ -270,7 +251,6 @@
     }
 
     bool _isGameOn;
-    enum GameStatus { None, Success, Fail, Start, End }
     GameStatus _gameStatus;
 
     Titration titration = new();

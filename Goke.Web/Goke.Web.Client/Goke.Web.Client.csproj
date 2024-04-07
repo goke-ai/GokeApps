@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Goke.Razor.Components\Goke.Razor.Components.csproj" />
     <ProjectReference Include="..\..\Goke.web.Shared\Goke.Web.Shared.csproj" />
   </ItemGroup>
 
