@@ -23,7 +23,7 @@
                     if(ApparatusItem.None == previousItem)
                     {
                         var y = list.First(w => w.Item == currentItem);
-                        y.Action = () => { return @"<video width='100%' >
+                        y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
                                                         <source src=""videos/beaker.mp4"" type=""video/mp4"">
                                                         <source src=""videos/beaker.m4v"" type=""video/x-m4v"">
                                                         Your browser does not support the video tag.                                                        
@@ -37,7 +37,7 @@
                     {
                         var y = list.First(w => w.Item == currentItem);
                         // y.Action = () => { return "Pour Alkali into Beaker"; };
-                        y.Action = () => { return @"<video width='100%' autoplay>
+                        y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
                                                         <source src=""videos/alkali.mp4"" type=""video/mp4"">
                                                         <source src=""videos/alkali.m4v"" type=""video/x-m4v"">
                                                         Your browser does not support the video tag.
@@ -56,7 +56,7 @@
                     {
                         var y = list.First(w => w.Item == currentItem);
                         // y.Action = () => { return "Pipette draw content from Beaker"; };
-                        y.Action = () => { return @"<video width='100%' autoplay>
+                        y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
                                                         <source src=""videos/pipette.mp4"" type=""video/mp4"">
                                                         Your browser does not support the video tag.
                                                     </video>"; };
@@ -70,7 +70,7 @@
                         var y = list.First(w => w.Item == currentItem);
                         y.Title = "Conical Flask + Alkali";
                         // y.Action = () => { return "Pour Pipette content into Conical-Flask"; };
-                        y.Action = () => { return @"<video width='100%' autoplay>
+                        y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
                                                         <source src=""videos/conical-flask.mp4"" type=""video/mp4"">
                                                         Your browser does not support the video tag.
                                                     </video>"; };
@@ -88,7 +88,7 @@
                     {
                         var y = list.First(w => w.Item == currentItem);
                         y.Action = () => { return "pH Indicator drop into Conical-Flask"; };
-                        y.Action = () => { return @"<video width='100%' autoplay>
+                        y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
                                                         <source src=""videos/ph-indicator.mp4"" type=""video/mp4"">
                                                         Your browser does not support the video tag.
                                                     </video>"; };
