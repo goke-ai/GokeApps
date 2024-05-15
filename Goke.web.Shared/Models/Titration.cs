@@ -23,9 +23,8 @@
                     if(ApparatusItem.None == previousItem)
                     {
                         var y = list.First(w => w.Item == currentItem);
-                        y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
+                        y.Action = () => { return @"<video width='100%' >
                                                         <source src=""videos/beaker.mp4"" type=""video/mp4"">
-                                                        <source src=""videos/beaker.m4v"" type=""video/x-m4v"">
                                                         Your browser does not support the video tag.                                                        
                                                     </video>"; };
                     }
@@ -39,7 +38,6 @@
                         // y.Action = () => { return "Pour Alkali into Beaker"; };
                         y.Action = () => { return @"<video width='100%' autoplay playsinline muted>
                                                         <source src=""videos/alkali.mp4"" type=""video/mp4"">
-                                                        <source src=""videos/alkali.m4v"" type=""video/x-m4v"">
                                                         Your browser does not support the video tag.
                                                     </video>"; };
 

@@ -129,7 +129,7 @@ body {
 
 h1,
 h2,
-h3, h4 {
+h3 {
     font-family: var(--ff-accent);
     line-height: 1.1;
     text-wrap: balance;
@@ -150,18 +150,13 @@ h3 {
     color: var(--clr-text);
 }
 
-h4 {
-    font-size: var(--size-300);
-    color: var(--clr-text);
-}
-
 p {
     margin-block: var(--size-300);
     text-align: justify;
 }
 
 a {
-    color: var(--clr-primary);
+    color: var(--clr-accent);
     cursor: pointer;
 }
 
@@ -283,7 +278,7 @@ input[type="checkbox"] {
     border: none;
     outline: 2px solid var(--clr-primary-400);
     outline-offset: 3px;
-    /*margin: 0.3em;*/
+    margin: 0.3em;
     /* margin: 5px; */
 }
 
@@ -321,7 +316,7 @@ nav {
     nav a {
         text-decoration: none;
         display: block;
-        padding: var(--padding, var(--size-300));
+        padding: var(--padding, var(--size-100));
         color: var(--clr-text);
         /* font-size: var(--size-400); */
     }
@@ -515,6 +510,12 @@ table:has(input[type="checkbox"].column-controller:checked) .column-control {
     margin-inline: auto;
     padding: var(--size-600);
 }
+
+    .wrapper:has(.max-screen) {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
 
 .flex,
 .flex-center,
@@ -819,7 +820,6 @@ button:has(.icon:only-child) {
     transition: 0.3s;
     display: grid;
     grid-template-rows: auto 1fr;
-    position: relative;
 }
 
 .wizard {
@@ -940,10 +940,7 @@ button:has(.icon:only-child) {
     .wizard-controller-labels:has(label:nth-child(8)>input:checked) > label:nth-child(7),
     .wizard-controller-labels:has(label:nth-child(9)>input:checked) > label:nth-child(8),
     .wizard-controller-labels:has(label:nth-child(10)>input:checked) > label:nth-child(9) {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        align-items: center;
+        display: block;
     }
 
 .wizard:has(.wizard-controller-labels label:nth-child(1)>input:checked) .wizard-page:nth-child(1),

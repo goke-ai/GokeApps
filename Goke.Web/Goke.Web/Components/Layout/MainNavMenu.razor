@@ -1,0 +1,138 @@
+﻿@implements IDisposable
+
+@inject NavigationManager NavigationManager
+
+<header>
+    <nav class="primary-navigation flex">
+        <a href="/">
+            <div class="logo"><span class="icon">LOGO</span></div>
+        </a>
+        <input type="checkbox" class="navbar-controller navbar-controller-checkbox" name="navbar-controller"
+               id="navbar-controller">
+        <label class="navbar-controller navbar-controller-label" for="navbar-controller">
+            <span class="icon"></span>
+        </label>
+
+        <ul class="primary-nav-list flex">
+            <li>
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span aria-hidden="true">🏡</span> Home
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="products">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="sprites.svg#cubes-solid"></use>
+                    </svg> Products
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="blogs">
+                    <svg class="icon">
+                        <use xlink:href="sprites.svg#blog-solid"></use>
+                    </svg> Blogs
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="chemistry">
+                    <svg class="icon">
+                        <use xlink:href="sprites.svg#gamepad-solid"></use>
+                    </svg> Game
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="ux">
+                    UX
+                </NavLink>
+            </li>
+            <li class="dropdown">
+                <a href="#">
+                    <svg class="icon">
+                        <use xlink:href="sprites.svg#icons-solid"></use>
+                    </svg> Components
+                </a>
+                <ul class="dropdown-list pop-down-left">
+                    <li>
+                        <NavLink class="nav-link" href="forms">
+                            Forms
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="layout">
+                            Layouts
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="Data">
+                            Data
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="Screens">
+                            Screens
+                        </NavLink>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">Account</a>
+                <ul class="dropdown-list">
+                    <AuthorizeView>
+                        <Authorized>
+                            <li>
+                                <NavLink class="nav-link" href="Account/Manage">
+                                    @context.User.Identity?.Name
+                                </NavLink>
+                            </li>
+                            <li>
+                                <form action="Account/Logout" method="post">
+                                    <AntiforgeryToken />
+                                    <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                    <button type="submit" class="nav-link">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </Authorized>
+                        <NotAuthorized>
+                            <li>
+                                <NavLink class="nav-link" href="Account/Register">
+                                    Register
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="Account/Login">
+                                    Login
+                                </NavLink>
+                            </li>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+</header>
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
+

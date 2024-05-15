@@ -1,0 +1,5 @@
+﻿button {
+    color: var(--clr-body-bg);
+    padding: var(--size-100);
+    border: 0;
+}

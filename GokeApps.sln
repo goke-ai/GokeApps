@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Web.Shared", "Goke.web.Shared\Goke.Web.Shared.csproj", "{F881093F-EC4D-46E4-BBF7-08030CBA5681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Razor.Components", "Goke.Razor.Components\Goke.Razor.Components.csproj", "{74D822C5-1B07-41C1-B867-C3199E14C657}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Razor.Components", "Goke.Razor.Components\Goke.Razor.Components.csproj", "{74D822C5-1B07-41C1-B867-C3199E14C657}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Mobile", "Goke.Mobile\Goke.Mobile.csproj", "{2D6F6025-3134-440A-9529-34B396567A4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,12 @@ Global
 		{74D822C5-1B07-41C1-B867-C3199E14C657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74D822C5-1B07-41C1-B867-C3199E14C657}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74D822C5-1B07-41C1-B867-C3199E14C657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D6F6025-3134-440A-9529-34B396567A4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D6F6025-3134-440A-9529-34B396567A4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D6F6025-3134-440A-9529-34B396567A4F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2D6F6025-3134-440A-9529-34B396567A4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D6F6025-3134-440A-9529-34B396567A4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D6F6025-3134-440A-9529-34B396567A4F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

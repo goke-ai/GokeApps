@@ -5,6 +5,7 @@ using Goke.Web.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+
+
 var app = builder.Build();
+
+var logger = app.Services.GetRequiredService<ILoggerFactory>()
+    .CreateLogger<Program>();
+logger.LogInformation("Logged after the app is built in the Program file.");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

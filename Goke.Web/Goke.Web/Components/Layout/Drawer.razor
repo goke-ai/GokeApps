@@ -1,0 +1,139 @@
+﻿@implements IDisposable
+
+@inject NavigationManager NavigationManager
+
+<aside class="drawer">
+    <div class="drawer-wrapper" style="--icon-sz:3em;">
+        <div class="drawer-controller">
+            <span class="icon" style=" --_clr-icon-fg:var(--clr-text)">
+            </span>
+        </div>
+        <div class="drawer-content">
+            <nav class="drawer-navigation" style="--_clr-icon-bg: var(--clr-body)">
+                <ul class="drawer-nav-list flex">
+                    <li>
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                            <span class="nav-item-wrapper">
+                                <span class="icon">🏡</span><span class="nav-item-text">
+                                    Home
+                                </span>
+                            </span>
+                        </NavLink>
+                    </li>
+                    <li class="dropdown">
+                        <a href="">
+                            <span class="nav-item-wrapper">
+                                <span class="icon">
+                                    <svg class="icon" aria-hidden="true" style="--icon-sz:0.5em">
+                                        <use xlink:href="sprites.svg#icons-solid"></use>
+                                    </svg>
+                                </span><span class="nav-item-text">Components</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-list pop-right">
+                            <li>
+                                <NavLink class="nav-link" href="forms">
+                                    Forms
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="layout">
+                                    Layouts
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="Data">
+                                    Data
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="Screens">
+                                    Screens
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <AuthorizeView>
+                        <Authorized>
+                            <li>
+                                <NavLink class="nav-link" href="Account/Manage">
+                                    <span class="nav-item-wrapper">
+                                        <span class="icon">X</span><span class="nav-item-text">
+                                            @context.User.Identity?.Name
+                                        </span>
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <span class="nav-item-wrapper">
+                                    <span class="icon">X</span><span class="nav-item-text">
+                                        <form action="Account/Logout" method="post" style="display:inline">
+                                            <AntiforgeryToken />
+                                            <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                            <button type="submit" class="nav-link">
+                                                Logout
+                                            </button>
+                                        </form>
+                                    </span>
+                                </span>
+                            </li>
+                        </Authorized>
+                        <NotAuthorized>
+                            <li>
+                                <NavLink class="nav-link" href="Account/Register">
+                                    <span class="nav-item-wrapper">
+                                        <span class="icon">
+                                            <svg class="icon" aria-hidden="true" style="--icon-sz:0.5em">
+                                                <use xlink:href="sprites.svg#id-card-solid"></use>
+                                            </svg>
+                                        </span><span class="nav-item-text">
+                                            Register
+                                        </span>
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="Account/Login">
+                                    <span class="nav-item-wrapper">
+                                        <span class="icon">
+                                            <svg class="icon" aria-hidden="true" style="--icon-sz:0.5em">
+                                                <use xlink:href="sprites.svg#user-solid"></use>
+                                            </svg>
+                                        </span><span class="nav-item-text">
+                                            Login
+                                        </span>
+                                    </span>
+                                </NavLink>
+                            </li>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</aside>
+
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
+

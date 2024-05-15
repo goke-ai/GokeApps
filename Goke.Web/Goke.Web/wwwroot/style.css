@@ -1,8 +1,4 @@
 ﻿@import url('css/style.css');
-body {
-    font-family: "Open Sans", sans-serif;
-    color: #272829;
-}
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Raleway", sans-serif;
@@ -17,21 +13,10 @@ h1, h2, h3, h4, h5, h6 {
     background-size: cover;
 }
 
-a:has(.bi) {
-    color: currentColor;
-    
+.wrapper:has(#hero) {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
 }
 
-
-.bi {
-    display: inline-block;
-    width: 1.25rem;
-    height: 1.25rem;
-    background-size: cover;
-    /*vertical-align: -.125em;*/
-    fill: currentColor;
-}
-
-.wizard {
-   
-}

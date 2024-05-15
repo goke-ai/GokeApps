@@ -24,6 +24,7 @@ footer {
     padding-inline: 0calc (var(--size-300) * 5);
     background: var(--clr-text);
     background-image: linear-gradient(180deg, var(--clr-primary) 0%, var(--clr-card-bg) 20%);
+    /* max-width: 200px; */
 }
 
 @media (max-width: 35em) {
@@ -58,9 +59,9 @@ footer {
     /* color: var(--clr-accent); */
 }
 
-.drawer-content li:hover a {
-    color: var(--clr-card-bg);
-}
+    .drawer-content li:hover a {
+        color: var(--clr-card-bg);
+    }
 
 .drawer-wrapper.collapse .nav-item-text {
     display: none;
@@ -76,9 +77,9 @@ footer {
     /* margin-top: var(--size-300); */
 }
 
-.drawer-controller .icon::before {
-    content: "\21DA";
-}
+    .drawer-controller .icon::before {
+        content: "\21DA";
+    }
 
 .drawer-wrapper.collapse .drawer-controller .icon::before {
     content: "\21DB";
@@ -97,9 +98,9 @@ footer {
     --padding: 0;
 }
 
-.drawer-nav-list .dropdown-list {
-    --padding: var(--size-300);
-}
+    .drawer-nav-list .dropdown-list {
+        --padding: var(--size-300);
+    }
 
 .nav-item-text {
     padding-inline: var(--size-300);
@@ -110,17 +111,20 @@ footer {
     justify-content: flex-start;
     align-items: center;
     gap: var(--size-700);
-    /* background: hsla(var(--hsl-text), 0.1); */
-    background-image: linear-gradient(180deg, var(--clr-card-bg) 0%, var(--clr-body-bg) 90%);
+    background: hsla(var(--hsl-text), 0.9);
+    /* background-image: linear-gradient(180deg, var(--clr-card-bg) 0%, var(--clr-body-bg) 90%); */
+    z-index: 999;
 }
 
+
 .logo {
-    min-width: 250px;
-    min-height: 50px;
+    /* min-width: 250px; */
+    /* min-height: 50px; */
     margin: 0calc (var(--size-300) * 5);
-    outline: 2px solid var(--clr-accent);
-    background-color: var(--clr-primary);
-    padding: 1em;
+    /* outline: 2px solid var(--clr-accent); */
+    background-color: var(--clr-body);
+    padding: 1em 1.5em;
+    /* color: var(--clr-accent); */
 }
 
 .navbar-controller,
@@ -130,72 +134,86 @@ footer {
 }
 
 .primary-nav-list {
-    --gap: var(--size-300);
-    background: hsla(var(--hsl-text), 0.9);
-    padding: var(--size-300);
+    --gap: var( --size-300);
+    /* background: hsla(var(--hsl-text), 0.9); */
+    padding: var(--size-100);
 }
 
-@supports (backdrop-filter: blur(var(--size-300))) {
-    .primary-nav-list {
-        background: hsla(var(--hsl-text), 0.1);
-        backdrop-filter: blur(var(--size-300));
+    .primary-nav-list li {
+        position: relative;
     }
-}
 
-.primary-nav-list li {
-    position: relative;
-}
+    .primary-nav-list a.active {
+        background-color: var(--clr-accent);
+        color: var(--clr-body-bg);
+        pointer-events: none;
+        cursor: default;
+    }
 
-.primary-nav-list a::before {
-    content: "";
-    display: block;
-    height: 5px;
-    width: 100%;
-    background-color: var(--clr-accent);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0%;
-    transition: all ease-in-out 250ms;
-}
+    .primary-nav-list a {
+        text-decoration: none;
+        display: block;
+        padding: var(--padding, var(--size-100));
+        color: var(--clr-body-bg);
+        /* font-size: var(--size-400); */
+    }
 
-.primary-nav-list a:hover::before {
-    width: 100%;
-}
+        .primary-nav-list a:hover {
+            width: 100%;
+            color: var(--clr-accent);
+        }
+
+        .primary-nav-list a::before {
+            content: "";
+            display: block;
+            height: 5px;
+            width: 100%;
+            background-color: var(--clr-accent);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            transition: all ease-in-out 250ms;
+        }
+
+        .primary-nav-list a:hover::before {
+            width: 100%;
+        }
 
 
 .dropdown {
     position: relative;
 }
 
-.dropdown a {
-    /* pointer-events: none; */
-    /* cursor: default; */
-    /* text-decoration: none; */
-}
+    .dropdown a {
+        /* pointer-events: none; */
+        /* cursor: default; */
+        /* text-decoration: none; */
+    }
 
 .dropdown-list {
     display: none;
     position: absolute;
     background-color: var(--clr-body);
+    z-index: 99;
 }
 
-.dropdown-list li {
-    /* display: block; */
-    /* margin-block: var(--size-300); */
-    /* padding: var(--size-300) 0; */
-    /* background-color: red; */
-}
+    .dropdown-list li {
+        /* display: block; */
+        /* margin-block: var(--size-300); */
+        /* padding: var(--size-300) 0; */
+        /* background-color: red; */
+    }
 
-.dropdown-list li a {
-    color: var(--clr-body-bg);
-}
+        .dropdown-list li a {
+            color: var(--clr-body-bg);
+        }
 
-.dropdown-list.pop-right li {
-    display: block;
-    /* margin: 0; */
-    /* padding: 0.calc(var(--size-300) * 5); */
-}
+    .dropdown-list.pop-right li {
+        display: block;
+        /* margin: 0; */
+        /* padding: 0.calc(var(--size-300) * 5); */
+    }
 
 li.dropdown:hover .dropdown-list {
     display: block;
@@ -235,14 +253,21 @@ li.dropdown:hover .dropdown-list {
         text-align: center;
     }
 
+    @supports (backdrop-filter: blur(var(--size-300))) {
+        .primary-nav-list {
+            background: hsla(var(--hsl-text), 0.2);
+            backdrop-filter: blur(var(--size-300));
+        }
+    }
+
     .navbar-controller-label {
         display: block;
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 1.5em;
+        right: 1.5em;
     }
 
-    input[type="checkbox"]:checked~.primary-nav-list {
+    input[type="checkbox"]:checked ~ .primary-nav-list {
         display: flex;
         flex-direction: column;
         gap: var(--size-300);
@@ -257,12 +282,12 @@ li.dropdown:hover .dropdown-list {
         /* font-size: var(--fs-600); */
     }
 
-    input[type="checkbox"]:checked~.navbar-controller .icon:before {
+    input[type="checkbox"]:checked ~ .navbar-controller .icon:before {
         content: "\00D7";
     }
 
     li.dropdown:hover .dropdown-list {
-        /* position: relative; */
+        position: relative;
     }
 }
 
@@ -328,15 +353,15 @@ li.dropdown:hover .dropdown-list {
     width: fit-content;
 }
 
-.color-picker input[type="radio"] {
-    appearance: none;
-    width: var(--size-300);
-    height: var(--size-300);
-    outline: 3px solid var(--radio-color);
-    outline-offset: 3px;
-    border: none;
-    border-radius: 50%;
-}
+    .color-picker input[type="radio"] {
+        appearance: none;
+        width: var(--size-300);
+        height: var(--size-300);
+        outline: 3px solid var(--radio-color);
+        outline-offset: 3px;
+        border: none;
+        border-radius: 50%;
+    }
 
 input[type="radio"]:checked {
     background-color: var(--radio-color, var(--clr-text));
@@ -393,25 +418,25 @@ input[type="radio"]:checked {
     --clr-accent: var(--accent);
 }
 
-.neutral .dark,
-:root:has(#neutral:checked):has(#dark:checked) {
-    --hsl-text: 0, 0%, 90%;
-    --hsl-background: 0, 0%, 10%;
-    --clr-primary-50: hsl(0, 0%, 5%);
-    --clr-primary-100: hsl(0, 0%, 10%);
-    --clr-primary-200: hsl(0, 0%, 25%);
-    --clr-primary-300: hsl(0, 0%, 70%);
-    --clr-primary-400: hsl(0, 0%, 90%);
-    --text: hsl(0, 0%, 95%);
-    --body-text: hsl(0, 0%, 85%);
-    --background: hsl(0, 0%, 7%);
-    --card-background: hsl(0, 0%, 17%);
-    --primary: hsl(0, 0%, 78%);
-    --secondary: hsl(0, 0%, 1%);
-    --accent: hsl(0, 0%, 70%);
-    --hsl-text: 0, 0%, 95%;
-    --hsl-background: 0, 0%, 7%;
-}
+    .neutral .dark,
+    :root:has(#neutral:checked):has(#dark:checked) {
+        --hsl-text: 0, 0%, 90%;
+        --hsl-background: 0, 0%, 10%;
+        --clr-primary-50: hsl(0, 0%, 5%);
+        --clr-primary-100: hsl(0, 0%, 10%);
+        --clr-primary-200: hsl(0, 0%, 25%);
+        --clr-primary-300: hsl(0, 0%, 70%);
+        --clr-primary-400: hsl(0, 0%, 90%);
+        --text: hsl(0, 0%, 95%);
+        --body-text: hsl(0, 0%, 85%);
+        --background: hsl(0, 0%, 7%);
+        --card-background: hsl(0, 0%, 17%);
+        --primary: hsl(0, 0%, 22%);
+        --secondary: hsl(0, 0%, 1%);
+        --accent: hsl(0, 0%, 70%);
+        --hsl-text: 0, 0%, 95%;
+        --hsl-background: 0, 0%, 7%;
+    }
 
 .pink,
 :root:has(#pink:checked) {
@@ -440,18 +465,18 @@ input[type="radio"]:checked {
     --clr-accent: var(--accent);
 }
 
-.pink .dark,
-:root:has(#pink:checked):has(#dark:checked) {
-    --text: hsl(310, 44%, 95%);
-    --body-text: hsl(310, 44%, 85%);
-    --background: hsl(310, 44%, 7%);
-    --card-background: hsl(310, 44%, 17%);
-    --primary: hsl(310, 100%, 78%);
-    --secondary: hsl(310, 60%, 1%);
-    --accent: hsl(310, 42%, 70%);
-    --hsl-text: 310, 44%, 95%;
-    --hsl-background: 310, 44%, 7%;
-}
+    .pink .dark,
+    :root:has(#pink:checked):has(#dark:checked) {
+        --text: hsl(310, 44%, 95%);
+        --body-text: hsl(310, 44%, 85%);
+        --background: hsl(310, 44%, 7%);
+        --card-background: hsl(310, 44%, 17%);
+        --primary: hsl(310, 100%, 22%);
+        --secondary: hsl(310, 60%, 1%);
+        --accent: hsl(310, 42%, 70%);
+        --hsl-text: 310, 44%, 95%;
+        --hsl-background: 310, 44%, 7%;
+    }
 
 .blue,
 :root:has(#blue:checked) {
@@ -480,18 +505,18 @@ input[type="radio"]:checked {
     --clr-accent: var(--accent);
 }
 
-.blue .dark,
-:root:has(#blue:checked):has(#dark:checked) {
-    --text: hsl(224, 44%, 95%);
-    --body-text: hsl(224, 44%, 85%);
-    --background: hsl(221, 44%, 7%);
-    --card-background: hsl(221, 44%, 17%);
-    --primary: hsl(221, 100%, 78%);
-    --secondary: hsl(220, 60%, 1%);
-    --accent: hsl(222, 42%, 70%);
-    --hsl-text: 224, 44%, 95%;
-    --hsl-background: 221, 44%, 7%;
-}
+    .blue .dark,
+    :root:has(#blue:checked):has(#dark:checked) {
+        --text: hsl(224, 44%, 95%);
+        --body-text: hsl(224, 44%, 85%);
+        --background: hsl(221, 44%, 7%);
+        --card-background: hsl(221, 44%, 17%);
+        --primary: hsl(221, 100%, 22%);
+        --secondary: hsl(220, 60%, 1%);
+        --accent: hsl(222, 42%, 70%);
+        --hsl-text: 224, 44%, 95%;
+        --hsl-background: 221, 44%, 7%;
+    }
 
 .green,
 :root:has(#green:checked) {
@@ -520,15 +545,15 @@ input[type="radio"]:checked {
     --clr-accent: var(--accent);
 }
 
-.green .dark,
-:root:has(#green:checked):has(#dark:checked) {
-    --text: hsl(140, 44%, 95%);
-    --body-text: hsl(140, 44%, 85%);
-    --background: hsl(140, 44%, 7%);
-    --card-background: hsl(140, 44%, 17%);
-    --primary: hsl(140, 100%, 78%);
-    --secondary: hsl(140, 60%, 1%);
-    --accent: hsl(140, 42%, 70%);
-    --hsl-text: 140, 44%, 95%;
-    --hsl-background: 140, 44%, 7%;
-}
+    .green .dark,
+    :root:has(#green:checked):has(#dark:checked) {
+        --text: hsl(140, 44%, 95%);
+        --body-text: hsl(140, 44%, 85%);
+        --background: hsl(140, 44%, 7%);
+        --card-background: hsl(140, 44%, 17%);
+        --primary: hsl(140, 100%, 22%);
+        --secondary: hsl(140, 60%, 1%);
+        --accent: hsl(140, 42%, 70%);
+        --hsl-text: 140, 44%, 95%;
+        --hsl-background: 140, 44%, 7%;
+    }

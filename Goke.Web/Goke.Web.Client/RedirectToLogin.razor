@@ -1,8 +1,18 @@
 ﻿@inject NavigationManager NavigationManager
+@inject ILogger<RedirectToLogin> Logger
+@inject ILoggerFactory LoggerFactory
 
 @code {
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+        var baseUri = NavigationManager.BaseUri;
+
+        Logger.LogInformation(baseUri);
+        
+        var logger = LoggerFactory.CreateLogger("RedirectToLogin");
+        logger.LogWarning($"LoggerFactory: {baseUri}");
+
+
+        NavigationManager.NavigateTo($"Account/Login2?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
     }
 }

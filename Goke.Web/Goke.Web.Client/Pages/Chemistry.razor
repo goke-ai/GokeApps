@@ -14,15 +14,15 @@
                 <h1 style="padding-bottom: 2em; text-align:center; font-weight:bolder;">
                     🔬🎮🏆🧪
                     <br />
-                    Welcome to the Chem Lab Challenge! 
+                    Welcome to the Chem Lab Challenge!
                     <br />
                     🔬🎮🏆🧪
                 </h1>
                 <h1 style="text-align: center">
-                    Get ready to embark on an exciting journey into the world of chemistry! Dive into thrilling experiments, 
-                    test your knowledge, and push the boundaries of discovery in this immersive game. 
-                    Safety first - don your lab coat and goggles, and let the adventure begin! 
-                    Are you ready to accept the Chem Lab Challenge?                   
+                    Get ready to embark on an exciting journey into the world of chemistry! Dive into thrilling experiments,
+                    test your knowledge, and push the boundaries of discovery in this immersive game.
+                    Safety first - don your lab coat and goggles, and let the adventure begin!
+                    Are you ready to accept the Chem Lab Challenge?
 
                 </h1>
             </div>
@@ -92,7 +92,7 @@
                                 <li>
                                     When you've chosen the correct combination of apparatus, an animation will play.
                                 </li>
-                                
+
                             </ul>
 
                             <h3>Titration Animation</h3>
@@ -137,7 +137,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                    Remember, this game is all about learning while having fun. Become a virtual chemist and master the art of titration! 🧪🎮🔬
+                            Remember, this game is all about learning while having fun. Become a virtual chemist and master the art of titration! 🧪🎮🔬
                         </div>
                     </div>
                 </div>
@@ -289,7 +289,7 @@
 
             _clock = e.SignalTime.ToString("HH:mm:ss");
             this.InvokeAsync(StateHasChanged);
-        };        
+        };
         _apparatuses = titration.Apparatuses;
     }
 
@@ -372,6 +372,11 @@
         _selectedApparatus = p;
         _dropStatusCss = "outline: 3px solid transparent;";
         _gameStatus = GameStatus.None;
+    }
+
+    void HandleDragStart2(DragItem<Apparatus>.DragItemArgs<Apparatus> v)
+    {
+        HandleDragStart(v.DragEventArgs, v.Item);
     }
 
     void HandleDragOver(DragEventArgs e)

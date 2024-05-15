@@ -1,0 +1,18 @@
+@typeparam TItem
+
+<div class="tile" >
+    @if (Item is not null && BodyTemplate is not null)
+    {
+        @BodyTemplate(Item)
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public RenderFragment<TItem>? BodyTemplate { get; set; }
+
+    [Parameter]
+    public TItem? Item { get; set; }
+
+}

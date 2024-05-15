@@ -1,0 +1,76 @@
+﻿.disabled {
+    --_form-disabled-border-color: var(--form-disabled-border-color, var(--clr-body-bg));
+    pointer-events: none;
+    opacity: 0.4;
+    border-color: var(--_form-disabled-border-color);
+}
+
+/* card, dialog, tile and accordion */
+.tile {
+    color: var(--clr-text);
+    background-color: var(--clr-card-bg);
+    /* padding: var(--size-600); */
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 hsl(var(--hsl-text), 0.8);
+    transition: 0.3s;
+}
+
+.tile-secondary {
+    color: var(--clr-text);
+    background-color: var(--clr-body-bg);
+    box-shadow: 0 4px 8px 0 hsl(var(--hsl-text), 0.8);
+    transition: 0.3s;
+}
+
+    .tile:hover,
+    .tile-secondary:hover {
+        box-shadow: 0 8px 16px 0 hsl(var(--hsl-text), 0.8);
+    }
+
+.tile > * {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    text-wrap: balance;
+}
+
+.tile img {
+}
+
+.tile {
+    --_tile-width: 6em;
+    display: inline-block;
+    padding: 0;
+    margin: 0.2em;
+    width: var(--_tile-width);
+    font-size: 0.6rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
+    .tile img {
+        height: var(--_tile-width);
+    }
+
+
+@media (min-width: 641px) {
+
+    .tile {
+        --_tile-width: 8em;
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .tile {
+        width: 10em;
+    }
+}
+
+@media (min-width: 1440px) {
+
+    .tile {
+        font-size: 1rem;
+    }
+}
