@@ -250,6 +250,7 @@ li.dropdown:hover .dropdown-list {
         position: absolute;
         width: 100%;
         text-align: center;
+        background: hsla(var(--hsl-text), 0.99);
     }
 
     @supports (backdrop-filter: blur(var(--size-300))) {
