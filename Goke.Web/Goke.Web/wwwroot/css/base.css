@@ -172,6 +172,13 @@ a {
         text-decoration: none;
     }
 
+    a:disabled,
+    a.disabled,
+    a[disabled],
+    a[disable-link]{
+        pointer-events: none;
+    }
+
 ::marker {
     color: var(--clr-primary);
 }

@@ -185,10 +185,9 @@ footer {
     position: relative;
 }
 
-    .dropdown a {
-        /* pointer-events: none; */
-        /* cursor: default; */
-        /* text-decoration: none; */
+    .dropdown:has(.active) > a {
+        background-color: var(--clr-accent);
+        color: var(--clr-body-bg);
     }
 
 .dropdown-list {
