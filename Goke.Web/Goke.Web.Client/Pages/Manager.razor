@@ -1,0 +1,14 @@
+﻿@page "/manager"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "Managers")]
+@rendermode InteractiveAuto
+
+<PageTitle>Managers</PageTitle>
+
+<h1>You are authenticated</h1>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+</AuthorizeView>

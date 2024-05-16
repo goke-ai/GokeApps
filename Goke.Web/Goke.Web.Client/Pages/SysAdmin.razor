@@ -1,0 +1,14 @@
+﻿@page "/sysadmin"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles ="SystemAdministrators")]
+@rendermode InteractiveAuto
+
+<PageTitle>System Admin</PageTitle>
+
+<h1>You are authenticated</h1>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+</AuthorizeView>

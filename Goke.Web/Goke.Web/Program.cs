@@ -38,7 +38,7 @@ if (isWindows)
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+        options.UseSqlServer(connectionString, b=>b.MigrationsAssembly("Goke.Web.WindowsMigrations")));
 }
 if(isLinux)
 {
@@ -48,7 +48,7 @@ if(isLinux)
     var serverVersion = new MariaDbServerVersion(new Version(8, 0, 2));
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseMySql(connectionString, serverVersion));
+        options.UseMySql(connectionString, serverVersion, b => b.MigrationsAssembly("Goke.Web.LinuxMigrations")));
 }
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
