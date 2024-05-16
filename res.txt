@@ -1,0 +1,66 @@
+To keep Entity Framework (EF) migrations separated by operating system (OS), you can use a combination of runtime checks and conditional compilation along with environment-specific configurations. Here's a step-by-step guide to achieve this:
+
+1. **Environment-Specific Migrations Folders**: Create separate folders for migrations corresponding to each OS within your project.
+
+2. **Conditional Compilation**: Use preprocessor directives to conditionally include the migrations based on the OS.
+
+```csharp
+#if WINDOWS
+    [Migration("20240101_InitialWindows", "Windows Migrations")]
+#elif LINUX
+    [Migration("20240101_InitialLinux", "Linux Migrations")]
+#endif
+public partial class InitialMigration : Migration
+{
+    // Migration code here
+}
+```
+
+3. **Runtime Environment Checks**: During the startup of your application, check the runtime environment and configure the `DbContext` to use the appropriate migrations assembly.
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<ApplicationDbContext>(options =>
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            options.UseSqlServer(Configuration.GetConnectionString("WindowsConnection"),
+                x => x.MigrationsAssembly("YourProject.WindowsMigrations"));
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            options.UseMySql(Configuration.GetConnectionString("LinuxConnection"),
+                ServerVersion.AutoDetect(Configuration.GetConnectionString("LinuxConnection")),
+                x => x.MigrationsAssembly("YourProject.LinuxMigrations"));
+        }
+    });
+}
+```
+
+4. **Environment-Specific Configuration Files**: Use `appsettings.Windows.json` and `appsettings.Linux.json` to store the connection strings and any other environment-specific settings.
+
+5. **Migration Commands**: When adding or updating migrations, use the command-line tools to specify the OS-specific migrations folder.
+
+For Windows:
+```shell
+dotnet ef migrations add InitialWindows --context ApplicationDbContext --output-dir Migrations/WindowsMigrations
+```
+
+For Linux:
+```shell
+dotnet ef migrations add InitialLinux --context ApplicationDbContext --output-dir Migrations/LinuxMigrations
+```
+
+6. **Applying Migrations**: Apply migrations conditionally based on the OS when deploying or during runtime.
+
+For more detailed guidance, you can refer to resources like Stack Overflow discussions¹ or Microsoft's official documentation² that walk through the process of managing migrations with multiple providers or in separate projects.
+
+This approach allows you to maintain a single `ApplicationDbContext` but tailor the migrations to the specific OS the application is running on, ensuring that the database schema is appropriate for the environment.
+
+Source: Conversation with Bing, 5/16/2024
+(1) entity framework - Split EF Core migrations to multiple projects .... https://stackoverflow.com/questions/48355992/split-ef-core-migrations-to-multiple-projects.
+(2) Migrations Overview - EF Core | Microsoft Learn. https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/.
+(3) Merging migration entries in Entity Framework - Stack Overflow. https://stackoverflow.com/questions/28911015/merging-migration-entries-in-entity-framework.
+(4) Migrate your database with Entity Framework Core using a separate .... https://josef.codes/migrate-your-database-with-entity-framework-core-using-a-separate-application/.
+(5) Migrations with Multiple Providers - EF Core | Microsoft Learn. https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers.
