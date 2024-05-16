@@ -247,7 +247,6 @@
 @code {
     void HandleImageError(ErrorEventArgs e)
     {
-        var src = "ss";
     }
 
     bool _isGameOn;
@@ -374,10 +373,10 @@
         _gameStatus = GameStatus.None;
     }
 
-    void HandleDragStart2(DragItem<Apparatus>.DragItemArgs<Apparatus> v)
-    {
-        HandleDragStart(v.DragEventArgs, v.Item);
-    }
+    // void HandleDragStart2(DragItem<Apparatus>.DragItemArgs<Apparatus> v)
+    // {
+    //     HandleDragStart(v.DragEventArgs, v.Item);
+    // }
 
     void HandleDragOver(DragEventArgs e)
     {

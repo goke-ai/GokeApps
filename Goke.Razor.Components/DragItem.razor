@@ -1,20 +1,23 @@
 @typeparam TItem
 
-@foreach (var item in Items)
+@if (Items != null)
 {
-    <div class="@(Draggable ? "drag-item | tile ":"drag-item | tile disabled")" style="cursor: pointer;"
-         @onclick="(e) => HandleClick(item)"
-         @ondragstart="(e) => HandleDragStart(e, item)"
-         draggable="@Draggable">
+    @foreach (var item in Items)
+    {
+        <div class="@(Draggable ? "drag-item | tile ":"drag-item | tile disabled")" style="cursor: pointer;"
+             @onclick="(e) => HandleClick(item)"
+             @ondragstart="(e) => HandleDragStart(e, item)"
+             draggable="@Draggable">
 
 
-        @if (BodyTemplate is not null)
-        {
-            BodyTemplate(item);
-        }
-    </div>
+            @if (BodyTemplate is not null)
+            {
+                BodyTemplate(item);
+            }
+        </div>
+    }
+
 }
-
 
 
 @code {
