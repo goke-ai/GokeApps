@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Web.Shared", "Goke.web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Razor.Components", "Goke.Razor.Components\Goke.Razor.Components.csproj", "{74D822C5-1B07-41C1-B867-C3199E14C657}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Web.LinuxMigrations", "Goke.Web.LinuxMigrations\Goke.Web.LinuxMigrations.csproj", "{056997E9-B940-427E-805A-7DDEEFBA2DB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{74D822C5-1B07-41C1-B867-C3199E14C657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74D822C5-1B07-41C1-B867-C3199E14C657}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74D822C5-1B07-41C1-B867-C3199E14C657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{056997E9-B940-427E-805A-7DDEEFBA2DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{056997E9-B940-427E-805A-7DDEEFBA2DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{056997E9-B940-427E-805A-7DDEEFBA2DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{056997E9-B940-427E-805A-7DDEEFBA2DB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
