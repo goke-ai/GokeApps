@@ -14,6 +14,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject IConfiguration Configuration
 
 <PageTitle>Register</PageTitle>
 
@@ -81,6 +82,26 @@
         }
 
         Logger.LogInformation("User created a new account with password.");
+
+        //+gk
+        // add sysadminemail to systemadministrators role 
+        if (user.UserName == Configuration["SystemAdminEmail"])
+        {
+            result = await UserManager.AddToRolesAsync(user, ["SystemAdministrators"]);
+        }
+        else
+        {
+            result = await UserManager.AddToRoleAsync(user, "Users");
+        }
+
+        if (!result.Succeeded)
+        {
+            identityErrors = result.Errors;
+            // return;
+        }
+        Logger.LogInformation("User added to roles.");
+
+        //-gk
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);

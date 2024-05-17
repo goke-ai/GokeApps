@@ -61,7 +61,7 @@ internal class DataInitializer
         {
             var adminUser = new ApplicationUser { Email = adminEmail, UserName = adminEmail, EmailConfirmed = true };
             await userManager.CreateAsync(adminUser, adminPassword);
-            await userManager.AddToRolesAsync(adminUser, ["SystemAdministrators", "Administrators"]);
+            await userManager.AddToRolesAsync(adminUser, ["Administrators"]);
         }
 
         string managerEmail = "manager@ark.com";

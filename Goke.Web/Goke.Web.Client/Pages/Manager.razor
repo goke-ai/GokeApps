@@ -2,7 +2,7 @@
 
 @using Microsoft.AspNetCore.Authorization
 
-@attribute [Authorize(Roles = "Managers")]
+@attribute [Authorize(Roles = "SystemAdministrators, Managers")]
 @rendermode InteractiveAuto
 
 <PageTitle>Managers</PageTitle>
