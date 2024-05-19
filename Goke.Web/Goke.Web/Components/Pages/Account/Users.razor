@@ -1,23 +1,19 @@
 ﻿@page "/account/users"
-@rendermode InteractiveServer
 
 @using Goke.Web.Data
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.AspNetCore.Identity
-
 
 @inject UserManager<ApplicationUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 
+@attribute [Authorize(Roles = "Administrators, SystemAdministrators")]
+@rendermode InteractiveServer
 
-<PageTitle>User & Roles</PageTitle>
 
-@if (message is not null)
-{
-    <div class="message @(message.Type.ToString().ToLower())" style="top: calc(4em * 1);">
-        @message.Text
-    </div>
-}
+
+<PageTitle>Users</PageTitle>
 
 <h1>Users</h1>
 
@@ -206,17 +202,54 @@
     }
 </div>
 
+@if (message is not null)
+{
+    <div class="message @(message.Type.ToString().ToLower())" style="top: calc(4em * 1); position: fixed;">
+        @message.Text
+    </div>
+}
+
+@if (messageList is not null)
+{
+    int k = 0;
+    foreach (var m in messageList)
+    {
+        ++k;
+        <div class="message @(m.Type.ToString().ToLower())" style="top: calc(4em * @k); right: 50em; left: 0; position: fixed;">
+            @m.Text
+        </div>
+    }
+}
+
 @code {
     public enum Action { Read, Add, Edit, Delete }
 
-    static System.Timers.Timer _timer = new(5000);
+    public enum MessageType { Primary, Info, Success, Warning, Error }
+
+    public class Message
+    {
+        public string? Text { get; set; }
+        public MessageType Type { get; set; }
+        public int Position { get; set; } = 1;
+    }
+
+    Queue<Message>? messages = new();
+    List<Message>? messageList = new();
+    static System.Timers.Timer _timer = new(2500);
     void StartTimer()
     {
         _timer.Elapsed += (o, e) =>
         {
             DisplayMessage();
+
+            if (messageList?.Count > 0)
+            {
+                messageList.RemoveAt(0);
+            }
+
             this.InvokeAsync(StateHasChanged);
-        };     
+
+        };
 
         // Have the timer fire repeated events (true is the default)
         _timer.AutoReset = true;
@@ -241,21 +274,19 @@
         if (messages is not null && messages.Count > 0)
         {
             message = messages.Dequeue();
+            message.Position = messages.Count;
+
         }
     }
 
-    public enum MessageType { Primary, Info, Success, Warning, Error }
-
-    public class Message
+    void AddMessage(Message message)
     {
-        public string? Text { get; set; }
-        public MessageType Type { get; set; }
+        messages?.Enqueue(message);
+        messageList?.Add(message);
     }
 
 
-
     Action action;
-    Queue<Message>? messages = new();
 
     List<ApplicationRole>? Roles { get; set; }
 
@@ -444,7 +475,9 @@
         totalItems = users.Count();
         OnPageChange(new PaginationEventsArg { PageNumber = 1, ItemsPerPage = itemsPerPage });
 
-        messages?.Enqueue(new Message { Text = "Data loaded.", Type = MessageType.Info });
+        AddMessage(new Message { Text = "Data loaded.", Type = MessageType.Info });
+        AddMessage(new Message { Text = "Data 2 loaded.", Type = MessageType.Error });
+        AddMessage(new Message { Text = "Data 3 loaded.", Type = MessageType.Primary });
 
         StartTimer();
     }
@@ -485,27 +518,27 @@
             {
                 Roles = NewRoles()
             };
-        messages?.Enqueue(new Message { Text = "Add record.", Type = MessageType.Info });
+        AddMessage(new Message { Text = "Add record.", Type = MessageType.Info });
     }
 
     void OnEdit(ApplicationUser user)
     {
         action = Action.Edit;
         Model = user;
-        messages?.Enqueue(new Message { Text = "Edit record.", Type = MessageType.Info });
+        AddMessage(new Message { Text = "Edit record.", Type = MessageType.Info });
     }
 
     void OnDelete(ApplicationUser user)
     {
         action = Action.Delete;
         Model = user;
-        messages?.Enqueue(new Message { Text = "Delete record.", Type = MessageType.Error });
+        AddMessage(new Message { Text = "Delete record.", Type = MessageType.Error });
     }
 
     void OnCancel()
     {
         Close();
-        messages?.Enqueue(new Message { Text = "Close.", Type = MessageType.Primary });
+        AddMessage(new Message { Text = "Close.", Type = MessageType.Primary });
     }
 
     void Close()
@@ -531,14 +564,14 @@
 
             // update user to roles
         }
-        messages?.Enqueue(new Message { Text = "Save record.", Type = MessageType.Success });
+        AddMessage(new Message { Text = "Save record.", Type = MessageType.Success });
 
         Close();
     }
 
     void Remove()
     {
-        messages?.Enqueue(new Message { Text = "Remove record.", Type = MessageType.Error });
+        AddMessage(new Message { Text = "Remove record.", Type = MessageType.Error });
         Close();
     }
 
