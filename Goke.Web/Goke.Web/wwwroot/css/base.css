@@ -355,6 +355,10 @@ th {
     padding: var(--size-100);
 }
 
+th > *{
+    cursor: pointer;
+}
+
 .grid-row-wrapper > * {
     display: flex;
     align-items: center;
@@ -702,7 +706,7 @@ button:has(.icon:only-child) {
 
 @media (max-width: 35em) {
     .form-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(300px, 1fr);
         /* One column for smaller screens */
         gap: 0;
         margin-block: var(--size-200, 0.5rem);

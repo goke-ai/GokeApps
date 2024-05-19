@@ -1,0 +1,141 @@
+﻿<div style="display: grid; grid-template-columns: auto 1fr; gap: 2em; align-items: center;">
+    <div>
+        Items per page:
+        <select @bind="@ItemsPerPageX">
+            <option>2</option>
+            <option>5</option>
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+        </select>
+    </div>
+    <div class="pagination">
+        <div style="display: flex; justify-content:space-around; align-items:center;gap:1em;">
+            <div>@TotalItems items</div>
+            <ul>
+                @if (CurrentPageNumber == 1)
+                {
+                    <li class="mobile" title="first page"><a class="active disabled" style="--radius: 50vh">1</a></li>
+                }
+                else
+                {
+                    <li class="mobile" title="first page"><a @onclick=@(_=>OnPage(1))>1</a></li>
+                    @* <li class="mobile" title="first page"><a @onclick=@(_=>OnPage(1))>&Lang; </a></li> *@
+                    <li class="mobile" title="previous page"><a @onclick=@(_=>OnPage(CurrentPageNumber-1))>&langle;</a></li>
+                }
+                @for (int i = StartPage; i <= MaxPage; i++)
+                {
+                    int k = i;
+                    if (i == CurrentPageNumber)
+                    {
+                        <li class="mobile" title="current page"><a class="active disabled" style="--radius: 50vh" href="#">@k</a></li>
+                    }
+                    else
+                    {
+                        <li title="page @k"><a @onclick=@(_=>OnPage(k))>@k</a></li>
+                    }
+                }
+
+                @if (CurrentPageNumber < TotalPages)
+                {
+                    <li class="mobile" title="next page"><a @onclick=@(_=>OnPage(CurrentPageNumber+1))>&rangle; </a></li>
+                    @* <li class="mobile" title="last page"><a @onclick=@(_=>OnPage(TotalPages))>&Rang;</a></li> *@
+                    <li class="mobile" title="last page"><a @onclick=@(_=>OnPage(TotalPages))>@TotalPages</a></li>
+                }
+                else
+                {
+                    <li class="mobile" title="last page"><a class="active disabled" style="--radius: 50vh" href="#">@TotalPages</a></li>
+                }
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int CurrentPageNumber { get; set; } = 1;
+    [Parameter]
+    public int ItemsPerPage { get; set; } = 5;
+    [Parameter]
+    public int ShowPages { get; set; } = 1;
+    [Parameter]
+    public int TotalItems { get; set; } = 100;
+    [Parameter]
+    public EventCallback<PaginationEventsArg> OnPageChange { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _itemsPerPage = ItemsPerPage;
+    }
+
+    int _itemsPerPage;
+    public int ItemsPerPageX
+    {
+        get { return _itemsPerPage; }
+        set
+        {
+            _itemsPerPage = value;
+            OnPage(CurrentPageNumber);
+        }
+    }
+
+    public int TotalPages
+    {
+        get
+        {
+            if (TotalItems == 0 || ItemsPerPage == 0)
+            {
+                return 1;
+            }
+
+            return (int)Math.Ceiling((double)TotalItems / (double)ItemsPerPage);
+        }
+    }
+
+    public int StartPage
+    {
+        get
+        {
+            int startPage = CurrentPageNumber - (ShowPages / 2);
+            if (startPage <= 1)
+            {
+                startPage = 2;
+            }
+
+            return startPage;
+        }
+    }
+
+    public int MaxPage
+    {
+        get
+        {
+            int maxPage = StartPage + ShowPages;
+
+            if (maxPage > TotalPages)
+            {
+                maxPage = TotalPages - 1;
+            }
+
+            return maxPage;
+        }
+    }
+
+    void OnPage(int page)
+    {
+        //
+        var totalPages = (int)Math.Ceiling((double)TotalItems / (double)ItemsPerPageX);
+        if (page <= 0 || page > totalPages)
+        {
+            page = 1;
+        }
+        CurrentPageNumber = page;
+
+        PaginationEventsArg arg = new() { PageNumber = CurrentPageNumber, ItemsPerPage = ItemsPerPageX };
+        OnPageChange.InvokeAsync(arg);
+    }
+
+    
+}

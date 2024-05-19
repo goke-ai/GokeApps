@@ -1,0 +1,626 @@
+﻿@page "/account/users"
+@rendermode InteractiveServer
+
+@using Goke.Web.Data
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.Identity
+
+
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+
+<PageTitle>User & Roles</PageTitle>
+
+@if (message is not null)
+{
+    <div class="message @(message.Type.ToString().ToLower())" style="top: calc(4em * 1);">
+        @message.Text
+    </div>
+}
+
+<h1>Users</h1>
+
+<div class="new-area">
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <button class="primary" @onclick=OnAdd>
+                    <svg class="icon">
+                        <use xlink:href="sprites.svg#plus-solid"></use>
+                    </svg>
+                    <span>Add New Person</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-area">
+    <div class="card">
+        <div class="card-body">
+            @if (FilteredUsers == null)
+            {
+                <p>No Records</p>
+            }
+            else
+            {
+                <table class="mobile-remove-col-3 mobile-remove-col-4">
+                    <tr>
+                        <th>
+                            <GridHeadContent Title="Username" ColumnName="Username"
+                                             ActiveSortColumn="@activeSortColumn"
+                                             IsSortedAscending="isSortedAscending"
+                                             OnFilterChange="OnFilterChange"
+                                             OnSort="OnSort" />
+                        </th>
+                        <th>
+                            <GridHeadContent Title="Email" ColumnName="Email"
+                                             ActiveSortColumn="@activeSortColumn"
+                                             IsSortedAscending="isSortedAscending"
+                                             OnFilterChange="OnFilterChange"
+                                             OnSort="OnSort" />
+                        </th>
+                        <th>
+                            <GridHeadContent Title="EmailConfirmed" ColumnName="EmailConfirmed"
+                                             ActiveSortColumn="@activeSortColumn"
+                                             IsSortedAscending="isSortedAscending"
+                                             OnFilterChange="OnFilterChange"
+                                             OnSort="OnSort"
+                                             SearchType="GridHeadContentSearchType.CheckBox" />
+                        </th>
+                        <th>
+                            <GridHeadContent Title="IsLockedOut" ColumnName="IsLockedOut"
+                                             ActiveSortColumn="@activeSortColumn"
+                                             IsSortedAscending="isSortedAscending"
+                                             OnFilterChange="OnFilterChange"
+                                             OnSort="OnSort"
+                                             SearchType="GridHeadContentSearchType.CheckBox" />
+                        </th>
+                        <th>
+                            <GridHeadContent Title="Roles" ColumnName="Roles"
+                                             ActiveSortColumn="@activeSortColumn"
+                                             IsSortedAscending="isSortedAscending"
+                                             OnFilterChange="OnFilterChange"
+                                             OnSort="OnSort" />
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (var u in FilteredUsers)
+                    {
+                        <tr>
+                            <td>@u.UserName</td>
+                            <td>@u.Email</td>
+                            <td>@u.EmailConfirmed</td>
+                            <td>@u.IsLockedOut</td>
+                            <td>
+                                @(RolesText(u))
+                            </td>
+                            <td>
+                                <button @onclick="@(() => OnEdit(u))" class="primary" title="edit record">
+                                    <svg class="icon">
+                                        <use xlink:href="sprites.svg#pencil-solid"></use>
+                                    </svg>
+                                </button>
+                                <button @onclick="@(() => OnDelete(u))" class="default" title="delete record">
+                                    <svg class="icon">
+                                        <use xlink:href="sprites.svg#trash-solid"></use>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <Pagination CurrentPageNumber="currentPageNumber" ItemsPerPage="itemsPerPage" ShowPages="showPages" TotalItems="totalItems" OnPageChange="OnPageChange" />
+            }
+        </div>
+    </div>
+</div>
+
+<div class="form-area">
+    @if (Model is not null)
+    {
+        <div class="edit">
+            <div class="card-secondary">
+                <div class="card-body">
+
+                    <EditForm Model="Model" OnValidSubmit="Save" FormName="User">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-row">
+                            <label for="username">UserName</label>
+                            <InputText @bind-Value="Model!.UserName" id="username" />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="email">Email</label>
+                            <InputText @bind-Value="Model!.Email" id="email" />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="PasswordHash">PasswordHash</label>
+                            <InputText @bind-Value="Model!.PasswordHash" id="PasswordHash" />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="EmailConfirmed">EmailConfirmed</label>
+                            <InputCheckbox @bind-Value="Model!.EmailConfirmed" id="EmailConfirmed" />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="PhoneNumber">PhoneNumber</label>
+                            <InputText @bind-Value="Model!.PhoneNumber" id="PhoneNumber" />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="PhoneNumberConfirmed">PhoneNumberConfirmed</label>
+                            <InputCheckbox @bind-Value="Model!.PhoneNumberConfirmed" id="PhoneNumberConfirmed" />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="AccessFailedCount">AccessFailedCount</label>
+                            <InputNumber @bind-Value="Model!.AccessFailedCount" id="AccessFailedCount" />
+                        </div>
+
+                        <div class="form-row">
+                            <label>Roles</label>
+                            <div class="form-row-col-2">
+                                @if (Model.Roles is not null)
+                                {
+                                    foreach (var role in Model.Roles)
+                                    {
+                                        <div>
+                                            <InputCheckbox @bind-Value="role.IsSelected" id="@role.Name" />
+                                            <label for="@role.Name">@role.Name</label>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div></div>
+                            <div>
+                                @switch (action)
+                                {
+                                    case Action.Add:
+                                        <button class="primary" type="submit">Submit</button>
+                                        <button type="reset">Reset</button>
+                                        break;
+                                    case Action.Edit:
+                                        <button class="primary" type="submit">Submit</button>
+                                        break;
+                                    case Action.Delete:
+                                        <button class="primary" type="button" @onclick=Remove>Delete</button>
+                                        break;
+                                    case Action.Read:
+                                    default:
+                                        break;
+                                }
+                                <button class="secondary" type="button" @onclick=OnCancel>Cancel</button>
+                            </div>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    public enum Action { Read, Add, Edit, Delete }
+
+    static System.Timers.Timer _timer = new(5000);
+    void StartTimer()
+    {
+        _timer.Elapsed += (o, e) =>
+        {
+            DisplayMessage();
+            this.InvokeAsync(StateHasChanged);
+        };     
+
+        // Have the timer fire repeated events (true is the default)
+        _timer.AutoReset = true;
+
+        // Start the timer
+        _timer.Enabled = true;
+    }
+
+    void EndTimer()
+    {
+        // Have the timer fire repeated events (true is the default)
+        _timer.AutoReset = false;
+
+        // Start the timer
+        _timer.Enabled = false;
+    }
+
+    Message? message;
+    void DisplayMessage()
+    {
+        message = null;
+        if (messages is not null && messages.Count > 0)
+        {
+            message = messages.Dequeue();
+        }
+    }
+
+    public enum MessageType { Primary, Info, Success, Warning, Error }
+
+    public class Message
+    {
+        public string? Text { get; set; }
+        public MessageType Type { get; set; }
+    }
+
+
+
+    Action action;
+    Queue<Message>? messages = new();
+
+    List<ApplicationRole>? Roles { get; set; }
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    IQueryable<ApplicationUser>? users;
+
+    string? filterUsername, filterEmail, filterRoles;
+    bool? filterEmailConfirmed, filterIsLockedOut;
+
+    IQueryable<ApplicationUser>? FilteredUsers
+    {
+        get
+        {
+            var result = users;
+
+            // filtering
+            if (!string.IsNullOrEmpty(filterUsername))
+            {
+                result = result?.Where(w => w.UserName!.Contains(filterUsername, StringComparison.CurrentCultureIgnoreCase));
+            }
+            if (!string.IsNullOrEmpty(filterEmail))
+            {
+                result = result?.Where(w => w.Email!.Contains(filterEmail, StringComparison.CurrentCultureIgnoreCase));
+            }
+            if (filterEmailConfirmed is not null)
+            {
+                result = result?.Where(w => w.EmailConfirmed == filterEmailConfirmed);
+            }
+            if (filterIsLockedOut is not null)
+            {
+                result = result?.Where(w => w.IsLockedOut == filterIsLockedOut);
+            }
+            if (!string.IsNullOrEmpty(filterRoles))
+            {
+                result = result?.Where(w => RolesText(w)!.Contains(filterRoles, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            // paging
+            result = result?.Skip(itemsPerPage * (currentPageNumber - 1)).Take(itemsPerPage);
+
+            // sorting
+            if (activeSortColumn == "Id")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.Id);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.Id);
+                }
+            }
+            else if (activeSortColumn == "Username")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.UserName);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.UserName);
+                }
+            }
+            else if (activeSortColumn == "Email")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.Email);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.Email);
+                }
+            }
+            else if (activeSortColumn == "EmailConfirmed")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.EmailConfirmed);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.EmailConfirmed);
+                }
+            }
+            else if (activeSortColumn == "IsLockedOut")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.IsLockedOut);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.IsLockedOut);
+                }
+            }
+            else if (activeSortColumn == "PhoneNumber")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.PhoneNumber);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.PhoneNumber);
+                }
+            }
+            else if (activeSortColumn == "PhoneNumberConfirmed")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.PhoneNumberConfirmed);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.PhoneNumberConfirmed);
+                }
+            }
+            else if (activeSortColumn == "AccessFailedCount")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => o.AccessFailedCount);
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => o.AccessFailedCount);
+                }
+            }
+            else if (activeSortColumn == "Roles")
+            {
+                if (isSortedAscending)
+                {
+                    result = result?.OrderBy(o => RolesText(o));
+                }
+                else
+                {
+                    result = result?.OrderByDescending(o => RolesText(o));
+                }
+            }
+
+            return result;
+        }
+    }
+
+    [SupplyParameterFromForm]
+    public ApplicationUser? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Roles = GetRoles();
+
+        var userList = UserManager.Users.Select(x => new ApplicationUser
+            {
+                Id = x.Id,
+                UserName = x.UserName,
+                Email = x.Email,
+                PasswordHash = "*****",
+                EmailConfirmed = x.EmailConfirmed,
+                PhoneNumber = x.PhoneNumber,
+                PhoneNumberConfirmed = x.PhoneNumberConfirmed,
+                AccessFailedCount = x.AccessFailedCount,
+
+                IsLockedOut = UserManager.IsLockedOutAsync(x).Result
+                // Roles = roles.Select(s => new ApplicationRole
+                // {
+                //     Id = s.Id,
+                //     Name = s.Name,
+                // }).ToList()
+            }).ToList();
+
+
+        foreach (var u in userList)
+        {
+            var userRoles = await UserManager.GetRolesAsync(u);
+            u.Roles = Roles.Select(s => new ApplicationRole
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    IsSelected = userRoles.Any(a => a == s.Name)
+                }).ToList();
+        }
+
+        users = userList.AsQueryable();
+
+        totalItems = users.Count();
+        OnPageChange(new PaginationEventsArg { PageNumber = 1, ItemsPerPage = itemsPerPage });
+
+        messages?.Enqueue(new Message { Text = "Data loaded.", Type = MessageType.Info });
+
+        StartTimer();
+    }
+
+    List<ApplicationRole> GetRoles()
+    {
+        return RoleManager.Roles.Select(x => new ApplicationRole
+            {
+                Id = x.Id,
+                Name = x.Name,
+                // IsSelected = UserManager.IsInRoleAsync(user, x.Name!).Result
+            }).ToList();
+    }
+
+    List<ApplicationRole>? NewRoles()
+    {
+        return Roles?.Select(s => new ApplicationRole
+            {
+                Id = s.Id,
+                Name = s.Name,
+            }).ToList();
+    }
+
+    string? RolesText(ApplicationUser user)
+    {
+        var roles = user.Roles?.Where(w => w.IsSelected).Select(s => s.Name);
+        if (roles is null)
+        {
+            return null;
+        }
+        return string.Join(", ", roles);
+    }
+
+    void OnAdd()
+    {
+        action = Action.Add;
+        Model = new()
+            {
+                Roles = NewRoles()
+            };
+        messages?.Enqueue(new Message { Text = "Add record.", Type = MessageType.Info });
+    }
+
+    void OnEdit(ApplicationUser user)
+    {
+        action = Action.Edit;
+        Model = user;
+        messages?.Enqueue(new Message { Text = "Edit record.", Type = MessageType.Info });
+    }
+
+    void OnDelete(ApplicationUser user)
+    {
+        action = Action.Delete;
+        Model = user;
+        messages?.Enqueue(new Message { Text = "Delete record.", Type = MessageType.Error });
+    }
+
+    void OnCancel()
+    {
+        Close();
+        messages?.Enqueue(new Message { Text = "Close.", Type = MessageType.Primary });
+    }
+
+    void Close()
+    {
+        action = Action.Read;
+        Model = null;
+    }
+
+    void Save()
+    {
+        if (Model!.Id == null)
+        {
+            // new
+            // create user
+
+            // add user to roles
+
+        }
+        else
+        {
+            // update
+            // update user
+
+            // update user to roles
+        }
+        messages?.Enqueue(new Message { Text = "Save record.", Type = MessageType.Success });
+
+        Close();
+    }
+
+    void Remove()
+    {
+        messages?.Enqueue(new Message { Text = "Remove record.", Type = MessageType.Error });
+        Close();
+    }
+
+    // sort
+    string? activeSortColumn;
+    bool isSortedAscending;
+
+    void OnSort(GridHeadContentEventsArg arg)
+    {
+        var columnName = arg.ColumnName;
+
+        if (columnName != activeSortColumn)
+        {
+            isSortedAscending = true;
+            activeSortColumn = columnName;
+        }
+        else
+        {
+            if (isSortedAscending)
+            {
+            }
+            else
+            {
+            }
+            isSortedAscending = !isSortedAscending;
+        }
+    }
+
+    // filter
+    void OnFilterChange(GridHeadContentEventsArg arg)
+    {
+        if (arg.ColumnName == "Username")
+        {
+            filterUsername = arg.Filter;
+        }
+        else if (arg.ColumnName == "Email")
+        {
+            filterEmail = arg.Filter;
+        }
+        else if (arg.ColumnName == "EmailConfirmed")
+        {
+            if (arg.Filter == null)
+            {
+                filterEmailConfirmed = null;
+            }
+            else
+            {
+                if (bool.TryParse(arg.Filter, out bool result))
+                {
+                    filterEmailConfirmed = result;
+                }
+            }
+        }
+        else if (arg.ColumnName == "IsLockedOut")
+        {
+            if (arg.Filter == null)
+            {
+                filterIsLockedOut = null;
+            }
+            else
+            {
+                if (bool.TryParse(arg.Filter, out bool result))
+                {
+                    filterIsLockedOut = result;
+                }
+            }
+        }
+        else if (arg.ColumnName == "Roles")
+        {
+            filterRoles = arg.Filter;
+        }
+    }
+
+    // paginated
+    int currentPageNumber = 1;
+    int totalItems;
+    int itemsPerPage = 10;
+    int showPages = 5;
+    void OnPageChange(PaginationEventsArg arg)
+    {
+        currentPageNumber = arg.PageNumber;
+        itemsPerPage = arg.ItemsPerPage;
+    }
+
+}

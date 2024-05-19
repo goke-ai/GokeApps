@@ -60,6 +60,8 @@
     <ProjectReference Include="..\..\Goke.Web.LinuxMigrations\Goke.Web.LinuxMigrations.csproj" />
     <ProjectReference Include="..\..\Goke.Web.WindowsMigrations\Goke.Web.WindowsMigrations.csproj" />
     <ProjectReference Include="..\Goke.Web.Client\Goke.Web.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />

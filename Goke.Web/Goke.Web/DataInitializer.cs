@@ -55,6 +55,15 @@ internal class DataInitializer
 
     static async Task SeedUsers(UserManager<ApplicationUser> userManager)
     {
+        string sysAdminEmail = "sysadmin@ark.com";
+        string sysAdminPassword = "admin@ARK#11";
+        if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
+        {
+            var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(sysAdminUser, sysAdminPassword);
+            await userManager.AddToRolesAsync(sysAdminUser, ["Administrators","SystemAdministrators"]);
+        }
+
         string adminEmail = "admin@ark.com";
         string adminPassword = "admin@ARK#1";
         if (await userManager.FindByEmailAsync(adminEmail) == null)

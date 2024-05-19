@@ -15,4 +15,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pagination.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

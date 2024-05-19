@@ -1,0 +1,109 @@
+<button type="button" class="no-border" title="Search">
+    <label for=@("openSearch" + ColumnName) style="cursor: pointer;">
+        <svg class="icon">
+            <use xlink:href="sprites.svg#magnifying-glass-solid"></use>
+        </svg>
+        <input type="checkbox" id=@("openSearch" + ColumnName) @bind="FilterReset" @bind:event="oninput">
+    </label>
+</button>
+<span class="sort" @onclick=HandleSort>
+    @Title
+    @if (ActiveSortColumn == ColumnName)
+    {
+        if (IsSortedAscending)
+        {
+            <span>&#x2b9f;</span>
+        }
+        else
+        {
+            <span>&#x2b9d;</span>
+        }
+    }
+</span>
+<div class="search">
+    @switch (SearchType)
+    {
+        case GridHeadContentSearchType.Text:
+            <input type="text" autofocus @bind="FilterText" @bind:event="oninput" placeholder="@Title..." />
+            break;
+        case GridHeadContentSearchType.CheckBox:
+            <input type="checkbox" autofocus @bind="FilterBoolean" @bind:event="oninput" placeholder="@Title..." />
+            break;
+        case GridHeadContentSearchType.Number:
+            <input type="number" autofocus @bind="FilterText" @bind:event="oninput" placeholder="@Title..." />
+            break;
+        case GridHeadContentSearchType.Search:
+        default:
+            <input type="search" autofocus @bind="FilterText" @bind:event="oninput" placeholder="@Title..." />
+            break;
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public string? ColumnName { get; set; }
+    [Parameter]
+    public string? ActiveSortColumn { get; set; }
+    [Parameter]
+    public bool IsSortedAscending { get; set; }
+    [Parameter]
+    public GridHeadContentSearchType SearchType { get; set; }
+
+    [Parameter]
+    public EventCallback<GridHeadContentEventsArg> OnSort { get; set; }
+    [Parameter]
+    public EventCallback<GridHeadContentEventsArg> OnFilterChange { get; set; }
+
+    string? _filterText;
+    public string? FilterText
+    {
+        get { return _filterText; }
+        set
+        {
+            _filterText = value;
+            FilterChange();
+        }
+    }
+
+    bool? _filterBoolean;
+    public bool? FilterBoolean
+    {
+        get { return _filterBoolean; }
+        set
+        {
+            _filterBoolean = value;
+            FilterText = _filterBoolean?.ToString();
+        }
+    }
+
+    bool _filterReset;
+    public bool FilterReset
+    {
+        get { return _filterReset; }
+        set
+        {
+            _filterReset = value;
+            if (!_filterReset)
+            {
+                FilterBoolean = null;
+            }
+        }
+    }
+
+    void HandleSort()
+    {
+        GridHeadContentEventsArg arg = new() { ColumnName = ColumnName, Filter = FilterText };
+        OnSort.InvokeAsync(arg);
+        IsSortedAscending = !IsSortedAscending;
+    }
+
+    void FilterChange()
+    {
+        GridHeadContentEventsArg arg = new() { ColumnName = ColumnName, Filter = FilterText };
+        OnFilterChange.InvokeAsync(arg);
+    }
+
+
+}

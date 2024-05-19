@@ -64,7 +64,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddTransient<IEmailSender<ApplicationUser>, EmailSender>();
 
-
+builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 var app = builder.Build();
 
