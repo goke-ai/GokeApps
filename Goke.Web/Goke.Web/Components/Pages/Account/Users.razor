@@ -202,20 +202,20 @@
     }
 </div>
 
-@if (message is not null)
+@* @if (message is not null)
 {
     <div class="message @(message.Type.ToString().ToLower())" style="top: calc(4em * 1); position: fixed;">
         @message.Text
     </div>
 }
-
+ *@
 @if (messageList is not null)
 {
     int k = 0;
     foreach (var m in messageList)
     {
         ++k;
-        <div class="message @(m.Type.ToString().ToLower())" style="top: calc(4em * @k); right: 50em; left: 0; position: fixed;">
+        <div class="message @(m.Type.ToString().ToLower())" style="top: calc(4em * @k); position: fixed;">
             @m.Text
         </div>
     }
@@ -235,7 +235,7 @@
 
     Queue<Message>? messages = new();
     List<Message>? messageList = new();
-    static System.Timers.Timer _timer = new(2500);
+    static System.Timers.Timer _timer = new(3000);
     void StartTimer()
     {
         _timer.Elapsed += (o, e) =>
