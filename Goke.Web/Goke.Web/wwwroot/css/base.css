@@ -226,6 +226,8 @@ button {
     align-items: center;
     gap: .5em;
     --_clr-icon-fg: var(--_clr-fg);
+    min-width: 2rem;
+    /*min-height: 2rem;*/
 }
 
     button.default {

@@ -58,7 +58,7 @@
                                              OnSort="OnSort" />
                         </th>
                         <th>
-                            <GridHeadContent Title="EmailConfirmed" ColumnName="EmailConfirmed"
+                            <GridHeadContent Title="Email Confirmed" ColumnName="EmailConfirmed"
                                              ActiveSortColumn="@activeSortColumn"
                                              IsSortedAscending="isSortedAscending"
                                              OnFilterChange="OnFilterChange"
@@ -66,7 +66,7 @@
                                              SearchType="GridHeadContentSearchType.CheckBox" />
                         </th>
                         <th>
-                            <GridHeadContent Title="IsLockedOut" ColumnName="IsLockedOut"
+                            <GridHeadContent Title="Is Locked Out" ColumnName="IsLockedOut"
                                              ActiveSortColumn="@activeSortColumn"
                                              IsSortedAscending="isSortedAscending"
                                              OnFilterChange="OnFilterChange"
@@ -125,37 +125,42 @@
                         <ValidationSummary />
                         <div class="form-row">
                             <label for="username">UserName</label>
-                            <InputText @bind-Value="Model!.UserName" id="username" />
+                            <InputText @bind-Value="Model!.UserName" id="username" required disabled />
                         </div>
 
                         <div class="form-row">
                             <label for="email">Email</label>
-                            <InputText @bind-Value="Model!.Email" id="email" />
+                            <InputText @bind-Value="Model!.Email" id="email" type="email" required />
                         </div>
 
                         <div class="form-row">
                             <label for="PasswordHash">PasswordHash</label>
-                            <InputText @bind-Value="Model!.PasswordHash" id="PasswordHash" />
+                            <InputText @bind-Value="Model!.PasswordHash" id="PasswordHash" type="password" required disabled />
                         </div>
 
                         <div class="form-row">
                             <label for="EmailConfirmed">EmailConfirmed</label>
-                            <InputCheckbox @bind-Value="Model!.EmailConfirmed" id="EmailConfirmed" />
+                            <InputCheckbox @bind-Value="Model!.EmailConfirmed" id="EmailConfirmed" required disabled />
                         </div>
 
                         <div class="form-row">
                             <label for="PhoneNumber">PhoneNumber</label>
-                            <InputText @bind-Value="Model!.PhoneNumber" id="PhoneNumber" />
+                            <InputText @bind-Value="Model!.PhoneNumber" id="PhoneNumber" required disabled />
                         </div>
 
                         <div class="form-row">
                             <label for="PhoneNumberConfirmed">PhoneNumberConfirmed</label>
-                            <InputCheckbox @bind-Value="Model!.PhoneNumberConfirmed" id="PhoneNumberConfirmed" />
+                            <InputCheckbox @bind-Value="Model!.PhoneNumberConfirmed" id="PhoneNumberConfirmed" required disabled />
                         </div>
 
                         <div class="form-row">
                             <label for="AccessFailedCount">AccessFailedCount</label>
-                            <InputNumber @bind-Value="Model!.AccessFailedCount" id="AccessFailedCount" />
+                            <InputNumber @bind-Value="Model!.AccessFailedCount" id="AccessFailedCount" disabled />
+                        </div>
+
+                        <div class="form-row">
+                            <label for="IsLockedOut">IsLockedOut</label>
+                            <InputCheckbox @bind-Value="Model!.IsLockedOut" id="IsLockedOut" />
                         </div>
 
                         <div class="form-row">
@@ -186,7 +191,7 @@
                                         <button class="primary" type="submit">Submit</button>
                                         break;
                                     case Action.Delete:
-                                        <button class="primary" type="button" @onclick=Remove>Delete</button>
+                                        <button class="primary" type="button" @onclick=Delete>Delete</button>
                                         break;
                                     case Action.Read:
                                     default:
@@ -439,6 +444,19 @@
     {
         Roles = GetRoles();
 
+        await DataRefreshAsync();
+
+        OnPageChange(new PaginationEventsArg { PageNumber = 1, ItemsPerPage = itemsPerPage });
+
+        AddMessage(new Message { Text = "Data loaded.", Type = MessageType.Info });
+        AddMessage(new Message { Text = "Data 2 loaded.", Type = MessageType.Error });
+        AddMessage(new Message { Text = "Data 3 loaded.", Type = MessageType.Primary });
+
+        StartTimer();
+    }
+
+    async Task DataRefreshAsync()
+    {
         var userList = UserManager.Users.Select(x => new ApplicationUser
             {
                 Id = x.Id,
@@ -473,13 +491,7 @@
         users = userList.AsQueryable();
 
         totalItems = users.Count();
-        OnPageChange(new PaginationEventsArg { PageNumber = 1, ItemsPerPage = itemsPerPage });
 
-        AddMessage(new Message { Text = "Data loaded.", Type = MessageType.Info });
-        AddMessage(new Message { Text = "Data 2 loaded.", Type = MessageType.Error });
-        AddMessage(new Message { Text = "Data 3 loaded.", Type = MessageType.Primary });
-
-        StartTimer();
     }
 
     List<ApplicationRole> GetRoles()
@@ -547,31 +559,125 @@
         Model = null;
     }
 
-    void Save()
+    async void Save()
     {
-        if (Model!.Id == null)
+        if (Model != null)
         {
-            // new
-            // create user
+            if (Model!.Id == null)
+            {
+                // new
+                // create user
 
-            // add user to roles
 
+                // add user to roles
+
+            }
+            else
+            {
+                // update user
+                var user = await UserManager.FindByIdAsync(Model.Id);
+
+                // // update username
+                // if (!string.IsNullOrWhiteSpace(Model.UserName))
+                // {
+                //     if (string.Compare(user.UserName, Model.UserName, StringComparison.CurrentCultureIgnoreCase) != 0)
+                //     {
+                //         var identityResult = await UserManager.SetUserNameAsync(user, Model.UserName);
+                //         if (identityResult.Succeeded)
+                //         {
+                //             AddMessage(new Message { Text = $"{user.UserName} user name updated to {Model.UserName}.", Type = MessageType.Success });
+                //         }
+                //     }
+                // }
+                
+                // update email
+                if (!string.IsNullOrWhiteSpace(Model.Email))
+                {
+                    if (string.Compare(user.Email, Model.Email, StringComparison.CurrentCultureIgnoreCase) != 0)
+                    {
+                        var identityResult = await UserManager.SetEmailAsync(user, Model.Email);
+                        if (identityResult.Succeeded)
+                        {
+                            AddMessage(new Message { Text = $"{user.UserName} email updated to {Model.UserName}.", Type = MessageType.Success });
+                        }
+                    }
+                }
+
+                
+
+                // update IsLockedOut
+                if(Model.IsLockedOut)
+                {
+                    if(!(await UserManager.IsLockedOutAsync(user)))
+                    {
+                        var identityResult = await UserManager.SetLockoutEnabledAsync(user, true);
+                        if (identityResult.Succeeded)
+                        {
+                            identityResult = await UserManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddYears(100));
+                            if (identityResult.Succeeded)
+                            {
+                                AddMessage(new Message { Text = $"{user.UserName} is locked out.", Type = MessageType.Success });
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ((await UserManager.IsLockedOutAsync(user)))
+                    {
+                        var identityResult = await UserManager.SetLockoutEnabledAsync(user, false);
+                        if (identityResult.Succeeded)
+                        {
+                            AddMessage(new Message { Text = $"{user.UserName} is unlocked out.", Type = MessageType.Success });
+                        }
+                    }
+                }
+
+                // update user to roles
+                foreach (var role in Model.Roles)
+                {
+                    if(role.IsSelected)
+                    {
+                        if(!(await UserManager.IsInRoleAsync(Model, role.Name)))                        {
+                            
+                            var identityResult = await UserManager.AddToRoleAsync(user, role.Name);
+                            if(identityResult.Succeeded)
+                            {
+                                AddMessage(new Message { Text = $"{user.UserName} added to {role.Name}.", Type = MessageType.Success });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ((await UserManager.IsInRoleAsync(Model, role.Name)))
+                        {
+                            var identityResult = await UserManager.RemoveFromRoleAsync(user, role.Name);
+                            if (identityResult.Succeeded)
+                            {
+                                AddMessage(new Message { Text = $"{user.UserName} removed to {role.Name}.", Type = MessageType.Success });
+                            }
+                        }
+                    }
+                }
+            }
+            AddMessage(new Message { Text = "Save record.", Type = MessageType.Success });
+            await DataRefreshAsync();
         }
-        else
-        {
-            // update
-            // update user
-
-            // update user to roles
-        }
-        AddMessage(new Message { Text = "Save record.", Type = MessageType.Success });
-
         Close();
     }
 
-    void Remove()
+    async void Delete()
     {
-        AddMessage(new Message { Text = "Remove record.", Type = MessageType.Error });
+        if (Model is not null)
+        {
+            var user = await UserManager.FindByIdAsync(Model.Id);
+            var identityResult = await UserManager.DeleteAsync(user);
+            if (identityResult.Succeeded)
+            {
+                AddMessage(new Message { Text = "Deleted record.", Type = MessageType.Error });
+                await DataRefreshAsync();
+            }
+        }
         Close();
     }
 
