@@ -5,14 +5,12 @@
 @code {
     protected override void OnInitialized()
     {
-        var baseUri = NavigationManager.BaseUri;
+        // var baseUri = NavigationManager.BaseUri;
 
-        Logger.LogInformation(baseUri);
+        // Logger.LogInformation(baseUri);
         
-        var logger = LoggerFactory.CreateLogger("RedirectToLogin");
-        logger.LogWarning($"LoggerFactory: {baseUri}");
-
-
-        NavigationManager.NavigateTo($"Account/Login2?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+        // var logger = LoggerFactory.CreateLogger("RedirectToLogin");
+        // logger.LogWarning($"LoggerFactory: {baseUri}");
+        NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
     }
 }

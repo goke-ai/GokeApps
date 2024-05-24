@@ -2,6 +2,8 @@
 
 @using Microsoft.AspNetCore.Authorization
 
+@inject NavigationManager NavigationManager
+
 @attribute [Authorize]
 @rendermode InteractiveAuto
 
@@ -12,3 +14,24 @@
 <AuthorizeView>
     Hello @context.User.Identity?.Name!
 </AuthorizeView>
+
+@code{
+    // [CascadingParameter]
+    // private Task<AuthenticationState>? authenticationState { get; set; }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     if (authenticationState is not null)
+    //     {
+    //         var authState = await authenticationState;
+    //         var user = authState?.User;
+
+    //         if (user?.Identity is null || !user.Identity.IsAuthenticated)
+    //         {
+    //             var baseUri = NavigationManager.BaseUri;
+
+    //             NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+    //         }
+    //     }
+    // }
+}
