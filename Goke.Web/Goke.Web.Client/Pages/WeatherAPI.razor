@@ -1,0 +1,94 @@
+﻿@page "/weatherapi"
+@using Goke.Web.Client.Services
+
+@rendermode InteractiveAuto
+
+@inject HttpClient Http
+@inject WeatherForecastService WeatherForecastService
+@inject State State
+
+<PageTitle>Weather |@State["Name"]</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data.</p>
+
+<button @onclick="OnChangeState">Change State</button>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts2!)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @Message
+}
+
+@code {
+    string? Message => State["Name"]?.ToString();
+    
+    private WeatherForecast[]? forecasts, forecasts2;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var uri = "api/WeatherForecast";
+
+        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>(uri);
+
+        forecasts2 = await WeatherForecastService.GetWeatherForecast();
+    }
+
+
+    private void OnChangeState(MouseEventArgs e)
+    {
+        State["Name"] = "Lola";
+        StateHasChanged();
+    }
+}

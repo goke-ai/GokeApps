@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5d3ca0721b4648eea19918a99deec088" Name="Diagram1" >
+        <EntityTypeShape EntityType="Model.BaseEntity" Width="1.5" PointX="3.375" PointY="1" />
+        <EntityTypeShape EntityType="Model.NameEntity" Width="1.5" PointX="5.625" PointY="0.875" />
+        <InheritanceConnector EntityType="Model.NameEntity" />
+        <EntityTypeShape EntityType="Model.Person" Width="1.5" PointX="1.5" PointY="2.75" />
+        <InheritanceConnector EntityType="Model.Person" />
+        <EntityTypeShape EntityType="Model.Follow" Width="1.5" PointX="7.75" PointY="2.75" />
+        <InheritanceConnector EntityType="Model.Follow" />
+        <AssociationConnector Association="Model.PersonFollowed" />
+        <AssociationConnector Association="Model.PersonFollower" />
+        <EntityTypeShape EntityType="Model.Blog" Width="1.5" PointX="3.625" PointY="2.75" />
+        <InheritanceConnector EntityType="Model.Blog" />
+        <EntityTypeShape EntityType="Model.BlogPost" Width="1.5" PointX="5.75" PointY="2.75" />
+        <InheritanceConnector EntityType="Model.BlogPost" />
+        <AssociationConnector Association="Model.BlogBlogPost" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

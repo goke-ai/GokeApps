@@ -55,7 +55,6 @@
     <Compile Include="DbContextOptions.cs" />
     <Compile Include="DbContextOptionsBuilder.cs" />
     <Compile Include="DbUpdateConcurrencyException.cs" />
-    <Compile Include="EmailAddressAttribute.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="FromFormAttribute.cs" />
     <Compile Include="HttpDeleteAttribute.cs" />

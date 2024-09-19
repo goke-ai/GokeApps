@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="69d6934c17284195bc0022bf4688cf82" Name="Diagram1" >
+        <EntityTypeShape EntityType="Model.BaseEntity" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.NameEntity" Width="1.5" PointX="2.75" PointY="0.75" />
+        <InheritanceConnector EntityType="Model.NameEntity" />
+        <EntityTypeShape EntityType="Model.Card" Width="1.5" PointX="1.5" PointY="2.875" />
+        <InheritanceConnector EntityType="Model.Card" />
+        <EntityTypeShape EntityType="Model.Payment" Width="1.5" PointX="3.75" PointY="2.875" />
+        <InheritanceConnector EntityType="Model.Payment" />
+        <AssociationConnector Association="Model.PaymentCard" />
+        <EntityTypeShape EntityType="Model.Person" Width="1.5" PointX="5.875" PointY="2.75" />
+        <InheritanceConnector EntityType="Model.Person" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

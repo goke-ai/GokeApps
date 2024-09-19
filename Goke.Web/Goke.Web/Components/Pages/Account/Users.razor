@@ -480,7 +480,7 @@
         foreach (var u in userList)
         {
             var userRoles = await UserManager.GetRolesAsync(u);
-            u.Roles = Roles.Select(s => new ApplicationRole
+            u.Roles = Roles?.Select(s => new ApplicationRole
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -577,6 +577,13 @@
                 // update user
                 var user = await UserManager.FindByIdAsync(Model.Id);
 
+                if (user is null)
+                {
+                    AddMessage(new Message { Text = "Update unsuccessful.", Type = MessageType.Error });
+                    Close();
+                    return;
+                }
+
                 // // update username
                 // if (!string.IsNullOrWhiteSpace(Model.UserName))
                 // {
@@ -589,7 +596,7 @@
                 //         }
                 //     }
                 // }
-                
+
                 // update email
                 if (!string.IsNullOrWhiteSpace(Model.Email))
                 {
@@ -603,7 +610,7 @@
                     }
                 }
 
-                
+
 
                 // update IsLockedOut
                 if(Model.IsLockedOut)
@@ -634,27 +641,31 @@
                 }
 
                 // update user to roles
-                foreach (var role in Model.Roles)
+                if (Model.Roles is not null)
                 {
-                    if(role.IsSelected)
+                    foreach (var role in Model.Roles)
                     {
-                        if(!(await UserManager.IsInRoleAsync(Model, role.Name)))                        {
-                            
-                            var identityResult = await UserManager.AddToRoleAsync(user, role.Name);
-                            if(identityResult.Succeeded)
+                        if (role.IsSelected)
+                        {
+                            if (!(await UserManager.IsInRoleAsync(Model, role.Name!)))
                             {
-                                AddMessage(new Message { Text = $"{user.UserName} added to {role.Name}.", Type = MessageType.Success });
+
+                                var identityResult = await UserManager.AddToRoleAsync(user, role.Name!);
+                                if (identityResult.Succeeded)
+                                {
+                                    AddMessage(new Message { Text = $"{user.UserName} added to {role.Name}.", Type = MessageType.Success });
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        if ((await UserManager.IsInRoleAsync(Model, role.Name)))
+                        else
                         {
-                            var identityResult = await UserManager.RemoveFromRoleAsync(user, role.Name);
-                            if (identityResult.Succeeded)
+                            if ((await UserManager.IsInRoleAsync(Model, role.Name!)))
                             {
-                                AddMessage(new Message { Text = $"{user.UserName} removed to {role.Name}.", Type = MessageType.Success });
+                                var identityResult = await UserManager.RemoveFromRoleAsync(user, role.Name!);
+                                if (identityResult.Succeeded)
+                                {
+                                    AddMessage(new Message { Text = $"{user.UserName} removed to {role.Name}.", Type = MessageType.Success });
+                                }
                             }
                         }
                     }
@@ -671,6 +682,14 @@
         if (Model is not null)
         {
             var user = await UserManager.FindByIdAsync(Model.Id);
+
+            if (user is null)
+            {
+                AddMessage(new Message { Text = "Delete unsuccessful.", Type = MessageType.Error });
+                Close();
+                return;
+            }
+
             var identityResult = await UserManager.DeleteAsync(user);
             if (identityResult.Succeeded)
             {

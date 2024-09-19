@@ -77,7 +77,7 @@ main {
     }
 }
 
-article:has(section#hero) {
+article:has(section#hero, .hero) {
     padding: 0 !important;
 }
 

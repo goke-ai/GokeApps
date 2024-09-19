@@ -1,8 +1,10 @@
 using Goke.Web;
 using Goke.Web.Client.Pages;
+using Goke.Web.Client.Services;
 using Goke.Web.Components;
 using Goke.Web.Components.Account;
 using Goke.Web.Data;
+using Goke.Web.Shared.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -66,6 +68,26 @@ builder.Services.AddTransient<IEmailSender<ApplicationUser>, EmailSender>();
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
+builder.Services.AddHttpClient();
+builder.Services.AddScoped(sp =>
+    new HttpClient
+    {
+        BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? "https://localhost:7221")
+    });
+
+builder.Services.AddScoped<WeatherForecastService>();
+builder.Services.AddScoped<State>( sp =>
+    {
+        var x = new State();
+        x["Name"] = "Olugbolade Oladokun";
+        return x;
+    });
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
+
+
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILoggerFactory>()
@@ -86,6 +108,12 @@ else
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+};
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
@@ -98,6 +126,23 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+app.MapGet("/api/WeatherForecast", () =>
+{
+    var startDate = DateOnly.FromDateTime(DateTime.Now);
+    var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+    var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+    {
+        Date = startDate.AddDays(index),
+        TemperatureC = Random.Shared.Next(-20, 55),
+        Summary = summaries[Random.Shared.Next(summaries.Length)]
+    }).ToArray();
+
+    return forecasts;
+})
+//.RequireAuthorization()
+.WithName("GetWeatherForecast")
+.WithOpenApi();
 
 // Initialize Database
 await DataInitializer.Initialize(app);

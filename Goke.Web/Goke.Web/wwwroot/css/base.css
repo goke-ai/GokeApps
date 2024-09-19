@@ -195,7 +195,7 @@ select {
     padding: calc(var(--size-100) / 2);
     border: 1px solid var(--clr-text);
     border-color: var(--_form-border-color);
-    /* border-radius: 0.2em; */
+    border-radius: var(--border-radius);
 }
 
     input:disabled,
@@ -229,6 +229,10 @@ button {
     min-width: 2rem;
     /*min-height: 2rem;*/
 }
+    button.link {
+        border: 0;
+        padding: 0;
+    }
 
     button.default {
         --_clr-bg: var(--clr-accent);
@@ -261,6 +265,12 @@ button {
         /*--_clr-bg: var(--clr-text);*/
         /*--_clr-fg: var(--clr-secondary);*/
         filter: invert(1);
+    }
+
+    button > svg{
+        max-height: 100%;
+        width: 1em;
+        aspect-ratio: 1;
     }
 
 /*button:disabled,
@@ -1148,8 +1158,10 @@ a:has(> .tile) {
         border-radius: 5px;
         z-index: 1002;
         overflow: auto;
-        /* width: clamp(50%, 70vw, 90%); */
-        /* height: clamp(50%, 70vh, 90%); */
+        width: clamp(50%, 85vw, 90%);
+        height: clamp(50%, 85vh, 90%);
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 2em;
     }
 
     .overlay .edit {

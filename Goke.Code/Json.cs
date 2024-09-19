@@ -16,5 +16,9 @@ namespace System.Text.Json
         {
             throw new NotImplementedException();
         }
+        public static T Deserialize<T>(string type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

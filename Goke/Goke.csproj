@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CB540097-85D2-4F0C-9178-3FECC3357297}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Goke</RootNamespace>
+    <AssemblyName>Goke</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <LangVersion>11.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\EVirtualLab\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\EVirtualLab\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Enttities\BaseEntity.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\Card.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\Gender.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\NameEntity.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\Payment.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\PaymentStatus.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\Person.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\Title.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Enttities\_Entities.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Core\Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\Entities\BaseEntity.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\Blog.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\BlogPost.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\Follow.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\Gender.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\NameEntity.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\Person.cs">
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Entities\_Entities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EntityDeploy Include="Web\Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <EntityDeploy Include="Core\Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Core\Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Web\Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Core\Enttities\_Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>_Entities.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web\Entities\_Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>_Entities.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Goke.Code\Goke.Code.csproj">
+      <Project>{a6a89176-8a32-4d30-bfd4-d87f30f8c848}</Project>
+      <Name>Goke.Code</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
