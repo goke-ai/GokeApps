@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Goke.Core.Enttities
+namespace Goke.Core.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -17,7 +17,8 @@ namespace Goke.Core.Enttities
     public enum Gender : int
     {
         None = 0,
-        Male = 1,
-        Female = 2
+        Female = 1,
+        Male = 2,
+        Others = 3
     }
 }

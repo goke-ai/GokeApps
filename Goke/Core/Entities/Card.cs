@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Goke.Core.Enttities
+namespace Goke.Core.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -26,8 +26,6 @@ namespace Goke.Core.Enttities
         [Required(ErrorMessage = "The Pin is a mandatory Field.")]
     	[Display(Name = "Pin")]
     	public string Pin { get; set; }
-        [Display(Name = "Permissions")]
-    	public byte Permissions { get; set; }
         [Required(ErrorMessage = "The From is a mandatory Field.")]
     	[DataType(DataType.Date)]
     	[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -38,21 +36,18 @@ namespace Goke.Core.Enttities
     	[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     	[Display(Name = "To")]
     	public System.DateTime To { get; set; }
-        [Display(Name = "Pin User")]
-    	public string? PinUser { get; set; }
-    
-        public virtual Payment? Payment { get; set; }
+        [Required(ErrorMessage = "The Permission is a mandatory Field.")]
+    	[Display(Name = "Permission")]
+    	public short Permission { get; set; }
         
         public new string ToRecord()
         {
             var str = $@"Card {{ 
                 {base.ToRecord()},
                 Pin = {Pin}, 
-                Permissions = {Permissions}, 
                 From = {From}, 
                 To = {To}, 
-                PinUser = {PinUser}, 
-                Payment = {Payment.ToRecord()},
+                Permission = {Permission}, 
             ";
          
             OnToRecord(ref str);
@@ -67,17 +62,10 @@ namespace Goke.Core.Enttities
     
         public string ToJson()
         {
+            OnToJson();
             return System.Text.Json.JsonSerializer.Serialize(this);
         }
-    
-        public Card? FromJson(string json)
-        {
-            if (json == null)
-                return null;
-    
-            return System.Text.Json.JsonSerializer.Deserialize<Card>(json);
-        }
-    
+        partial void OnToJson();   
     
     }
 }

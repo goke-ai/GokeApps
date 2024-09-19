@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke", "Goke\Goke.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Core", "..\goke\cs\Goke.Core\Goke.Core.csproj", "{EF78E8B6-5846-4EF5-ADCF-CD504473D4AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bible.Entities", "..\Bible\BibleApp\Bible.Entities\Bible.Entities.csproj", "{4B17B957-FF2E-4CAB-8117-8B091A8D63EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Bible.Entities", "..\Bible\BibleApp\Goke.Bible.Entities\Goke.Bible.Entities.csproj", "{1A832590-FBC1-4A9F-A528-59B69A71DF25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,10 +93,10 @@ Global
 		{EF78E8B6-5846-4EF5-ADCF-CD504473D4AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF78E8B6-5846-4EF5-ADCF-CD504473D4AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF78E8B6-5846-4EF5-ADCF-CD504473D4AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B17B957-FF2E-4CAB-8117-8B091A8D63EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B17B957-FF2E-4CAB-8117-8B091A8D63EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B17B957-FF2E-4CAB-8117-8B091A8D63EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B17B957-FF2E-4CAB-8117-8B091A8D63EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A832590-FBC1-4A9F-A528-59B69A71DF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A832590-FBC1-4A9F-A528-59B69A71DF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A832590-FBC1-4A9F-A528-59B69A71DF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A832590-FBC1-4A9F-A528-59B69A71DF25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,7 +110,7 @@ Global
 		{A6A89176-8A32-4D30-BFD4-D87F30F8C848} = {6DA22F39-07A4-48AD-8F27-9DA5CCCAE054}
 		{CB540097-85D2-4F0C-9178-3FECC3357297} = {6DA22F39-07A4-48AD-8F27-9DA5CCCAE054}
 		{EF78E8B6-5846-4EF5-ADCF-CD504473D4AC} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
-		{4B17B957-FF2E-4CAB-8117-8B091A8D63EC} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
+		{1A832590-FBC1-4A9F-A528-59B69A71DF25} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {82EC32E6-DB82-48E7-A2B5-762D6A22AAA3}

@@ -56,7 +56,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Bible\BibleApp\Bible.Entities\Bible.Entities.csproj" />
+    <ProjectReference Include="..\..\..\Bible\BibleApp\Goke.Bible.Entities\Goke.Bible.Entities.csproj" />
+    <ProjectReference Include="..\..\..\goke\cs\Goke.Core\Goke.Core.csproj" />
     <ProjectReference Include="..\..\Goke.Web.Data\Goke.Web.Data.csproj" />
     <ProjectReference Include="..\..\Goke.Web.LinuxMigrations\Goke.Web.LinuxMigrations.csproj" />
     <ProjectReference Include="..\..\Goke.web.Shared\Goke.Web.Shared.csproj" />

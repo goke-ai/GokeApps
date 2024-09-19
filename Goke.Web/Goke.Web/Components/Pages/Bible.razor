@@ -2,7 +2,7 @@
 
 @using System.Text.Json
 @using System.Text.RegularExpressions
-@using global::Bible.Entities
+@using Goke.Bible.Entities
 
 @inject IWebHostEnvironment Env
 @inject NavigationManager NavigationManager
@@ -19,6 +19,7 @@
         i::after {
             content: attr(text);
             color: blueviolet;
+            font-style: italic;
         }
 
         i[wordsofjesus="True"]::after {
@@ -261,9 +262,4 @@ else
         }
         NavigationManager.NavigateTo($"bible/{Translation}/{Book}/{ChapterNumber}");
     }
-
-    
-
-
-    
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Goke.Core.Enttities
+namespace Goke.Core.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -15,26 +15,23 @@ namespace Goke.Core.Enttities
     using System.ComponentModel.DataAnnotations.Schema;
     // using Microsoft.EntityFrameworkCore;
     
-    public partial class NameEntity : BaseEntity
+    public partial class BaseEntity
     {
-        public NameEntity() : base()
+        public BaseEntity() 
         {
     		Initialize();
         }
     	partial void Initialize();
     
-        [Required(ErrorMessage = "The Name is a mandatory Field.")]
-    	[Display(Name = "Name")]
-    	public string Name { get; set; }
-        [Display(Name = "Description")]
-    	public string? Description { get; set; }
+        [Key]
+    	[Required(ErrorMessage = "The Id is a mandatory Field.")]
+    	[Display(Name = "Id")]
+    	public System.Guid Id { get; set; }
         
-        public new string ToRecord()
+        public  string ToRecord()
         {
-            var str = $@"NameEntity {{ 
-                {base.ToRecord()},
-                Name = {Name}, 
-                Description = {Description}, 
+            var str = $@"BaseEntity {{ 
+                Id = {Id}, 
             ";
          
             OnToRecord(ref str);
@@ -49,17 +46,10 @@ namespace Goke.Core.Enttities
     
         public string ToJson()
         {
+            OnToJson();
             return System.Text.Json.JsonSerializer.Serialize(this);
         }
-    
-        public NameEntity? FromJson(string json)
-        {
-            if (json == null)
-                return null;
-    
-            return System.Text.Json.JsonSerializer.Deserialize<NameEntity>(json);
-        }
-    
+        partial void OnToJson();   
     
     }
 }

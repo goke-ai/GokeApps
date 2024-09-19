@@ -180,17 +180,10 @@ foreach (var entity in typeMapper.GetItemsToGenerate<EntityType>(itemCollection)
 
     public string ToJson()
     {
+        OnToJson();
         return System.Text.Json.JsonSerializer.Serialize(this);
     }
-
-    public <#= code.Escape(entity) #>? FromJson(string json)
-    {
-        if (json == null)
-            return null;
-
-        return System.Text.Json.JsonSerializer.Deserialize<<#= code.Escape(entity) #>>(json);
-    }
-
+    partial void OnToJson();   
 
 }
 <#
@@ -542,7 +535,7 @@ public class CodeStringGenerator
         var endType = _typeMapper.GetTypeName(navProp.ToEndMember.GetEntityType());
         return string.Format(
             CultureInfo.InvariantCulture,
-            "{0} {1}? {2} {{ {3}get; {4}set; }}",
+            "{0} {1} {2} {{ {3}get; {4}set; }}",
             AccessibilityAndVirtual(Accessibility.ForNavigationProperty(navProp)),
             navProp.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many ? ("ICollection<" + endType + ">") : endType,
             _code.Escape(navProp),
@@ -990,11 +983,7 @@ public class TypeMapper
 
             typeName = FixNamespaces(typeName);
 
-            //return clrType.IsValueType && isNullable == true ?
-            //    String.Format(CultureInfo.InvariantCulture, "Nullable<{0}>", typeName) :
-            //    typeName;
-
-            return isNullable == true ?
+            return /*clrType.IsValueType &&*/ isNullable == true ?
                 String.Format(CultureInfo.InvariantCulture, "{0}?", typeName) :
                 typeName;
         }

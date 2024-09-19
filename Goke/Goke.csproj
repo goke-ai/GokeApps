@@ -51,39 +51,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Enttities\BaseEntity.cs">
+    <Compile Include="Core\Entities\BaseEntity.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Enttities\Card.cs">
+    <Compile Include="Core\Entities\Base\BaseEntity.cs" />
+    <Compile Include="Core\Entities\Card.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Enttities\Gender.cs">
+    <Compile Include="Core\Entities\Gender.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Enttities\NameEntity.cs">
+    <Compile Include="Core\Entities\NameEntity.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Enttities\Payment.cs">
+    <Compile Include="Core\Entities\Person.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Enttities\PaymentStatus.cs">
+    <Compile Include="Core\Entities\User.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Enttities\Person.cs">
-      <DependentUpon>_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Core\Enttities\Title.cs">
-      <DependentUpon>_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Core\Enttities\_Entities.cs">
+    <Compile Include="Core\Entities\_Entities.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Core\Model.Designer.cs">
+      <DependentUpon>Model.edmx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Entities\BaseEntity.cs">
@@ -140,7 +135,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Core\Enttities\_Entities.tt">
+    <Content Include="Core\Entities\_Entities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>_Entities.cs</LastGenOutput>
     </Content>

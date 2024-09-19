@@ -1,7 +1,9 @@
 ﻿
+using Goke.Core;
 using Goke.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Encodings.Web;
 
 internal class DataInitializer
 {
@@ -55,23 +57,7 @@ internal class DataInitializer
 
     static async Task SeedUsers(UserManager<ApplicationUser> userManager)
     {
-        string sysAdminEmail = "sysadmin@ark.com";
-        string sysAdminPassword = "admin@ARK#11";
-        if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
-        {
-            var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };
-            await userManager.CreateAsync(sysAdminUser, sysAdminPassword);
-            await userManager.AddToRolesAsync(sysAdminUser, ["Administrators","SystemAdministrators"]);
-        }
-
-        string adminEmail = "admin@ark.com";
-        string adminPassword = "admin@ARK#1";
-        if (await userManager.FindByEmailAsync(adminEmail) == null)
-        {
-            var adminUser = new ApplicationUser { Email = adminEmail, UserName = adminEmail, EmailConfirmed = true };
-            await userManager.CreateAsync(adminUser, adminPassword);
-            await userManager.AddToRolesAsync(adminUser, ["Administrators"]);
-        }
+        await SeedAdmins(userManager);
 
         string managerEmail = "manager@ark.com";
         string managerPassword = "Secure3Pa$$word!";
@@ -100,5 +86,158 @@ internal class DataInitializer
             await userManager.AddToRoleAsync(userUser, "Users");
         }
     }
+
+    private static async Task SeedAdmins(UserManager<ApplicationUser> userManager)
+    {
+        string sysAdminEmail = "sysadmin@ark.com";
+        string sysAdminPassword = "admin@ARK#11";
+        if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
+        {
+            var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(sysAdminUser, sysAdminPassword);
+            await userManager.AddToRolesAsync(sysAdminUser, ["Administrators", "SystemAdministrators"]);
+        }
+
+        string adminEmail = "admin@ark.com";
+        string adminPassword = "admin@ARK#1";
+        if (await userManager.FindByEmailAsync(adminEmail) == null)
+        {
+            var adminUser = new ApplicationUser { Email = adminEmail, UserName = adminEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(adminUser, adminPassword);
+            await userManager.AddToRolesAsync(adminUser, ["Administrators"]);
+        }
+    }
+
+    public static async Task SeedAdmins(UserManager<ApplicationUser> userManager, IEmailSender<ApplicationUser>? emailSender = null)
+    {
+        string gokeEmail = "goke@ark.com";
+        string gokePassword = emailSender is null ? "goke@ARK#246800" : Text.GeneratePin();
+        if (await userManager.FindByEmailAsync(gokeEmail) == null)
+        {
+            var gokeUser = new ApplicationUser { Email = gokeEmail, UserName = gokeEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(gokeUser, gokePassword);
+            await userManager.AddToRolesAsync(gokeUser, ["Administrators", "SystemAdministrators"]);
+
+            if (emailSender != null)
+            {
+                await emailSender.SendPasswordResetCodeAsync(gokeUser, "gokeladokun@gmail.com", HtmlEncoder.Default.Encode($"G|{gokePassword}"));
+            }
+        }
+
+        string sysAdminEmail = "sysadmin@ark.com";
+        string sysAdminPassword = emailSender is null ? "sysadmin@ARK#789" : Text.GeneratePin();
+        if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
+        {
+            var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(sysAdminUser, sysAdminPassword);
+            await userManager.AddToRolesAsync(sysAdminUser, ["Administrators", "SystemAdministrators"]);
+
+            if (emailSender != null)
+            {
+                await emailSender.SendPasswordResetCodeAsync(sysAdminUser, "admin@evirtuallab.com", HtmlEncoder.Default.Encode($"1|{sysAdminPassword}"));
+            }
+        }
+
+        string adminEmail = "admin@ark.com";
+        string adminPassword = emailSender is null ? "admin@ARK#135" : Text.GeneratePin();
+        if (await userManager.FindByEmailAsync(adminEmail) == null)
+        {
+            var adminUser = new ApplicationUser { Email = adminEmail, UserName = adminEmail, EmailConfirmed = true };
+            await userManager.CreateAsync(adminUser, adminPassword);
+            await userManager.AddToRolesAsync(adminUser, ["Administrators"]);
+
+            if (emailSender != null)
+            {
+                await emailSender.SendPasswordResetCodeAsync(adminUser, "admin@evirtuallab.com", HtmlEncoder.Default.Encode($"2|{adminPassword}"));
+            }
+        }
+    }
+
+    public static async Task SeedResetAdmins(UserManager<ApplicationUser> userManager, IEmailSender<ApplicationUser>? emailSender = null)
+    {
+        string gokeEmail = "goke@ark.com";
+        var gokeUser = await userManager.FindByEmailAsync(gokeEmail);
+        if (gokeUser != null)
+        {
+            await userManager.DeleteAsync(gokeUser);
+        }
+
+        string sysAdminEmail = "sysadmin@ark.com";
+        var sysAdminUser = await userManager.FindByEmailAsync(sysAdminEmail);
+        if (sysAdminUser != null)
+        {
+            await userManager.DeleteAsync(sysAdminUser);
+        }
+
+        string adminEmail = "admin@ark.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser != null)
+        {
+            await userManager.DeleteAsync(adminUser);
+        }
+
+        await SeedAdmins(userManager, emailSender);
+    }
+
+    /*
+    public static async Task<bool> ReadyToLoginWithPinAsync(IConfiguration configuration, ApplicationDbContext db, UserManager<ApplicationUser> userManager, string username, string pin)
+    {
+        bool result = false;
+
+        var emails = configuration["Emails"];
+        var users = emails?.Split(",", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        if (users?.Any(a => a == username) == true)
+        {
+            return result = true;
+        }
+
+        var card = await db.Cards.FirstOrDefaultAsync(f => f.Pin == pin);
+
+        // card exist
+        if (card != null)
+        {
+            if (card.To > DateTime.UtcNow)
+            {
+                // new card
+                if (string.IsNullOrWhiteSpace(card.PinUser))
+                {
+                    // existing user
+                    var user = await userManager.FindByNameAsync(username);
+                    if (user != null)
+                    {
+                        await userManager.DeleteAsync(user);
+                    }
+
+                    await CreateUserWithPinAsync(db, userManager, username, pin);
+
+                    result = true;
+                }
+                else
+                {
+                    result = card.PinUser == username;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    private static async Task CreateUserWithPinAsync(ApplicationDbContext db, UserManager<ApplicationUser> userManager, string username, string pin)
+    {
+        var user = new ApplicationUser { Email = username, UserName = username, EmailConfirmed = true };
+        var result = await userManager.CreateAsync(user, pin);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(user, "Users");
+        }
+
+        var entity = await db.Cards.FirstAsync(f => f.Pin == pin);
+        entity.PinUser = user.UserName;
+        db.Cards.Update(entity);
+        var row = await db.SaveChangesAsync();
+    }
+    */
 
 }

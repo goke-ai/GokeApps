@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Goke.Core.Enttities
+namespace Goke.Core.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -19,12 +19,13 @@ namespace Goke.Core.Enttities
     {
         public Person() : base()
         {
+            this.Users = new HashSet<User>();
     		Initialize();
         }
     	partial void Initialize();
     
         [Required(ErrorMessage = "The Surname is a mandatory Field.")]
-    	[Display(Name = "Surname")]
+        [Display(Name = "Surname")]
     	public string Surname { get; set; }
         [Required(ErrorMessage = "The Firstname is a mandatory Field.")]
     	[Display(Name = "Firstname")]
@@ -36,13 +37,10 @@ namespace Goke.Core.Enttities
     	public Gender Gender { get; set; }
         [DataType(DataType.Date)]
     	[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-    	[Display(Name = "Birth Date")]
-    	public System.DateTime? BirthDate { get; set; }
-        [EmailAddress]/* [DataType(DataType.EmailAddress)] */
-    	[Display(Name = "Email")]
-    	public string? Email { get; set; }
-        [Display(Name = "Phone")]
-    	public string? Phone { get; set; }
+    	[Display(Name = "Birthdate")]
+    	public System.DateTime? Birthdate { get; set; }
+    
+        public virtual ICollection<User> Users { get; set; }
         
         public new string ToRecord()
         {
@@ -52,9 +50,8 @@ namespace Goke.Core.Enttities
                 Firstname = {Firstname}, 
                 Middlename = {Middlename}, 
                 Gender = {Gender}, 
-                BirthDate = {BirthDate}, 
-                Email = {Email}, 
-                Phone = {Phone}, 
+                Birthdate = {Birthdate}, 
+                Users = Count[{Users?.Count}]|{Users?.ToString()},
             ";
          
             OnToRecord(ref str);
@@ -69,17 +66,10 @@ namespace Goke.Core.Enttities
     
         public string ToJson()
         {
+            OnToJson();
             return System.Text.Json.JsonSerializer.Serialize(this);
         }
-    
-        public Person? FromJson(string json)
-        {
-            if (json == null)
-                return null;
-    
-            return System.Text.Json.JsonSerializer.Deserialize<Person>(json);
-        }
-    
+        partial void OnToJson();   
     
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Goke.Core.Enttities
+namespace Goke.Core.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -15,23 +15,27 @@ namespace Goke.Core.Enttities
     using System.ComponentModel.DataAnnotations.Schema;
     // using Microsoft.EntityFrameworkCore;
     
-    public partial class BaseEntity
+    public partial class NameEntity : BaseEntity
     {
-        public BaseEntity() 
+        public NameEntity() : base()
         {
     		Initialize();
         }
     	partial void Initialize();
     
-        [Key]
-    	[Required(ErrorMessage = "The Id is a mandatory Field.")]
-    	[Display(Name = "Id")]
-    	public System.Guid Id { get; set; }
+        [Required(ErrorMessage = "The Name is a mandatory Field.")]
+    	[Display(Name = "Name")]
+    	public string Name { get; set; }
+        [Required(ErrorMessage = "The Description is a mandatory Field.")]
+    	[Display(Name = "Description")]
+    	public string Description { get; set; }
         
-        public  string ToRecord()
+        public new string ToRecord()
         {
-            var str = $@"BaseEntity {{ 
-                Id = {Id}, 
+            var str = $@"NameEntity {{ 
+                {base.ToRecord()},
+                Name = {Name}, 
+                Description = {Description}, 
             ";
          
             OnToRecord(ref str);
@@ -46,17 +50,10 @@ namespace Goke.Core.Enttities
     
         public string ToJson()
         {
+            OnToJson();
             return System.Text.Json.JsonSerializer.Serialize(this);
         }
-    
-        public BaseEntity? FromJson(string json)
-        {
-            if (json == null)
-                return null;
-    
-            return System.Text.Json.JsonSerializer.Deserialize<BaseEntity>(json);
-        }
-    
+        partial void OnToJson();   
     
     }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/bibletoc/{translation?}"
 @using System.Text.Json
-@using global::Bible.Entities
+@using global::Goke.Bible.Entities
 
 @inject IWebHostEnvironment Env
 @inject NavigationManager NavigationManager
@@ -45,7 +45,7 @@
     public string? Translation { get; set; } = "eng_kjv";
 
     string? _jsonText;
-    global::Bible.Entities.Bible? _bible;
+    global::Goke.Bible.Entities.Bible? _bible;
 
     protected override async Task OnInitializedAsync()
     {
@@ -60,7 +60,7 @@
                     PropertyNameCaseInsensitive = true
                 };
 
-            _bible = JsonSerializer.Deserialize<global::Bible.Entities.Bible>(_jsonText, options);
+            _bible = JsonSerializer.Deserialize<global::Goke.Bible.Entities.Bible>(_jsonText, options);
         }
         catch (FileNotFoundException ex)
         {
@@ -81,7 +81,7 @@
     }
 
     string? _selectedBook;
-    private void OnSelectedBook(global::Bible.Entities.Book book)
+    private void OnSelectedBook(global::Goke.Bible.Entities.Book book)
     {
         if (_selectedBook == book.Id)
         {

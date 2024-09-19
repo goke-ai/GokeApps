@@ -14,76 +14,60 @@
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="ModelContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BaseEntities" EntityType="Model.BaseEntity" />
-          <AssociationSet Name="PaymentCard" Association="Model.PaymentCard">
-            <End Role="Payment" EntitySet="BaseEntities" />
-            <End Role="Card" EntitySet="BaseEntities" />
+          <AssociationSet Name="PersonUser" Association="Model.PersonUser">
+            <End Role="Person" EntitySet="BaseEntities" />
+            <End Role="User" EntitySet="BaseEntities" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="BaseEntity">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           </EntityType>
-        <EntityType Name="NameEntity" BaseType="Model.BaseEntity">
+        <EntityType Name="NameEntity" BaseType="Model.BaseEntity" >
           <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="true" />
+          <Property Name="Description" Type="String" Nullable="false" />
         </EntityType>
-        <EntityType Name="Card" BaseType="Model.BaseEntity" >
-          <Property Name="Pin" Type="String" Nullable="false" />
-          <Property Name="Permissions" Type="Byte" Nullable="false" />
-          <Property Name="From" Type="DateTime" Nullable="false" />
-          <Property Name="To" Type="DateTime" Nullable="false" />
-          <Property Name="PinUser" Type="String" Nullable="true" />
-          <NavigationProperty Name="Payment" Relationship="Model.PaymentCard" FromRole="Card" ToRole="Payment" />
-        </EntityType>
-        <EntityType Name="Payment" BaseType="Model.BaseEntity" >
-          <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Reference" Type="String" Nullable="false" />
-          <Property Name="PaidBy" Type="String" Nullable="false" />
-          <Property Name="Amount" Type="Decimal" Nullable="false" />
-          <NavigationProperty Name="Card" Relationship="Model.PaymentCard" FromRole="Payment" ToRole="Card" />
-          <Property Name="Status" Type="Model.PaymentStatus" Nullable="false" />
-          <Property Name="Details" Type="String" Nullable="true" />
-        </EntityType>
-        <Association Name="PaymentCard">
-          <End Type="Model.Payment" Role="Payment" Multiplicity="0..1" />
-          <End Type="Model.Card" Role="Card" Multiplicity="1" />
-        </Association>
-        <EnumType Name="PaymentStatus">
-          <Member Name="None" />
-          <Member Name="Incomplete" />
-          <Member Name="Paid" />
-          <Member Name="Failed" />
-          <Member Name="Insufficient" />
-        </EnumType>
-        <EnumType Name="Gender">
-          <Member Name="None" />
-          <Member Name="Male" />
-          <Member Name="Female" />
-        </EnumType>
-        <EnumType Name="Title" >
-          <Member Name="None" />
-          <Member Name="Mr" />
-          <Member Name="Mrs" />
-          <Member Name="Miss" />
-          <Member Name="Ms" />
-          <Member Name="Dr" />
-          <Member Name="Prof" />
-          <Member Name="Pastor" />
-          <Member Name="Rev" />
-          <Member Name="Immam" />
-        </EnumType>
         <EntityType Name="Person" BaseType="Model.BaseEntity" >
           <Property Name="Surname" Type="String" Nullable="false" />
           <Property Name="Firstname" Type="String" Nullable="false" />
           <Property Name="Middlename" Type="String" Nullable="true" />
           <Property Name="Gender" Type="Model.Gender" Nullable="false" />
-          <Property Name="BirthDate" Type="DateTime" Nullable="true" />
-          <Property Name="Email" Type="String" Nullable="true" />
-          <Property Name="Phone" Type="String" Nullable="true" />
+          <Property Name="Birthdate" Type="DateTime" Nullable="true" />
+          <NavigationProperty Name="Users" Relationship="Model.PersonUser" FromRole="Person" ToRole="User" />
+          </EntityType>
+        <EnumType Name="Gender">
+          <Member Name="None" />
+          <Member Name="Female" />
+          <Member Name="Male" />
+          <Member Name="Others" />
+        </EnumType>
+        <EntityType Name="User" BaseType="Model.NameEntity" >
+          <Property Name="Email" Type="String" Nullable="false" />
+          <Property Name="Location" Type="String" Nullable="true" />
+          <NavigationProperty Name="Person" Relationship="Model.PersonUser" FromRole="User" ToRole="Person" />
+          <Property Name="PersonId" Type="Guid" Nullable="true" />
         </EntityType>
-      </Schema>
+        <EntityType Name="Card" BaseType="Model.BaseEntity" >
+          <Property Name="Pin" Type="String" Nullable="false" />
+          <Property Name="From" Type="DateTime" Nullable="false" />
+          <Property Name="To" Type="DateTime" Nullable="false" />
+          <Property Name="Permission" Type="Int16" Nullable="false" />
+        </EntityType>
+        <Association Name="PersonUser">
+          <End Type="Model.Person" Role="Person" Multiplicity="0..1" />
+          <End Type="Model.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>

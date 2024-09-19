@@ -48,9 +48,9 @@ namespace Goke.Web
                 message.To.Add(new MailAddress(email));
                 message.Subject = subject;
                 message.Body = htmlMessage;
-                message.IsBodyHtml = true; 
+                message.IsBodyHtml = true;
 
-                using (var client = new SmtpClient
+                using var client = new SmtpClient
                 {
                     Port = MAIL_PORT,
                     Host = MAIL_SERVER!, // Replace with your SMTP host
@@ -58,10 +58,8 @@ namespace Goke.Web
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(MAIL_USERNAME, MAIL_PASSWORD),
-                })
-                {
-                    await client.SendMailAsync(message);
-                }
+                };
+                await client.SendMailAsync(message);
             }
         }
 
