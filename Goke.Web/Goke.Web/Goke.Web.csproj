@@ -5,64 +5,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Goke.Web-0d91df50-fb68-4e0e-8858-0324ed442ead</UserSecretsId>
-  </PropertyGroup>
+  </PropertyGroup>  
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\img\apple-touch-icon.png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\favicon.png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\20160716_125925.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\20180322_101519.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\2021-04-12 (1).png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\2021-04-12 (10).png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\2021-04-12 (2).png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\2021-04-12 (4).png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\2021-04-12 (7).png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\biomanetics.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\biomanetics2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\child.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\church.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\church2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\hm.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\isabiam.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\plotly.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-1.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-3.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-4.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-5.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-6.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-7.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-8.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-9.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-details-1.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-details-2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\portfolio-details-3.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\smartstudent.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\smartstudent2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\zoom.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\zoom.png" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\portfolio\_portfolio-1.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\lola2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\testimonials-1.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\testimonials-2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\testimonials-3.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\testimonials-4.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\testimonials-5.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\_testimonials-1.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\_testimonials-2.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\_testimonials-3.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\_testimonials-4.jpg" />
-    <_ContentIncludedByDefault Remove="wwwroot\img\testimonials\_testimonials-5.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\Goke.Bible.Entities\Goke.Bible.Entities.csproj" />
     <ProjectReference Include="..\..\Goke.Web.Data\Goke.Web.Data.csproj" />
     <ProjectReference Include="..\..\Goke.Web.LinuxMigrations\Goke.Web.LinuxMigrations.csproj" />
     <ProjectReference Include="..\..\Goke.web.Shared\Goke.Web.Shared.csproj" />
     <ProjectReference Include="..\..\Goke.Web.WindowsMigrations\Goke.Web.WindowsMigrations.csproj" />
     <ProjectReference Include="..\Goke.Web.Client\Goke.Web.Client.csproj" />
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
-    <PackageReference Include="Goke.Bible.Entities" Version="1.0.0" />
     <PackageReference Include="Goke.Core" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.8" />
@@ -78,40 +30,6 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
     <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Components\Pages\Bible.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="wwwroot\images\apparatus\default.png">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\img\hero-bg.jpg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\img\hero-bg0.jpg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\img\hero-bg1.jpg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\img\profile-img.jpg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\img\profile-img0.jpg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\img\profile-img2.jpg">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

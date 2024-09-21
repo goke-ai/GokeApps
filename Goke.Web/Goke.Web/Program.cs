@@ -84,9 +84,7 @@ builder.Services.AddScoped<State>( sp =>
     });
 
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

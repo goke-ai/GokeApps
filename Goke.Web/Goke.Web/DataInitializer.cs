@@ -36,6 +36,7 @@ internal class DataInitializer
                 db.Database.Migrate();
 
                 await SeedRoles(roleManager);
+                await SeedAdmins(userManager);
 
             }
 
@@ -90,7 +91,7 @@ internal class DataInitializer
     private static async Task SeedAdmins(UserManager<ApplicationUser> userManager)
     {
         string sysAdminEmail = "sysadmin@ark.com";
-        string sysAdminPassword = "admin@ARK#11";
+        string sysAdminPassword = "admin@ARK#77";
         if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
         {
             var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };

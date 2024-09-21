@@ -7,6 +7,7 @@
 @inject IWebHostEnvironment Env
 @inject NavigationManager NavigationManager
 @inject ILogger<Bible> Logger
+@inject State State
 
 @attribute [StreamRendering]
 @rendermode InteractiveServer
@@ -43,17 +44,29 @@
     ::selection {
         color: gold;
         background-color: red;
-    }
-
-    
+    }    
 </style>
+
+@if (showTranslations)
+{
+    <div class="overlay">
+        <div>
+            <button style="float:right;" @onclick="@(() => showTranslations=false)">X</button>
+            <BibleTranslation Translations="Translations" 
+                Translation=@Translation 
+                OnChangeTranslation="HandleChangeTranslation" />           
+        </div>
+    </div>
+}
 
 @if (showTOC)
 {
     <div class="overlay">
         <div>
-            <button @onclick="@(() => showTOC=false)">X</button>
-            <BibleToc></BibleToc>
+            <button style="float:right;" @onclick="@(() => showTOC=false)">X</button>
+            <BibleToc Books="Books" Translation="@Translation"
+                      OnChangeBook="OnChangeBook"
+                      OnChangeChapter="OnChangeChapter"/>
         </div>
     </div>
 }
@@ -62,7 +75,7 @@
 {
     <div class="overlay">
         <div>
-            <button @onclick="@(() => showSettings=false)">X</button>
+            <button style="float:right;" @onclick="@(() => showSettings=false)">X</button>
 
             <div>
                 <button @onclick=@(()=> fontSize -= 0.25f)>-</button> Font Size <button @onclick=@(()=>fontSize+=0.2f)>+</button>
@@ -85,7 +98,11 @@
             @chapter?.Book?.Name @chapter?.Chapter?.Number
         </div>
         |
-        <div style="cursor:pointer;" title="@chapter?.Translation?.Name">@chapter?.Translation?.ShortName</div>
+        <div @onclick="OnTranslations"
+             style="cursor:pointer;" 
+             title="@chapter?.Translation?.LanguageEnglishName">
+            @chapter?.Translation?.ShortName
+        </div>
     </div>
     <div>
         <button @onclick="OnPrevious">
@@ -112,7 +129,6 @@
         </button>
     </div>
 </div>
-
 
 
 @if (chapter is null)
@@ -146,11 +162,12 @@ else
         </ul>
 
     </div>
+
+    <div>License Url: <a href="@chapter.Translation?.LicenseUrl" target="_blank"> @chapter.Translation?.LicenseUrl </a></div>
+
     <button type="button" onclick="document.getElementById('@VerseNumber').scrollIntoView({behavior:'smooth'})">Scroll To</button>
 
 }
-
-
 
 @code {
     [Parameter]
@@ -165,40 +182,99 @@ else
     string? jsonText;
     BookChapter? chapter;
     private MarkupString markupString;
+    bool showTranslations = false;
     bool showTOC = false;
     bool showSettings = false;
     float fontSize = 1;
     float[] fontSizes = { .1f, .2f, .3f, .4f, .5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f };
 
+    public List<Translation>? Translations { get; set; }
+    public List<Book>? Books { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            Translation ??= "eng_kjv";
-            Book ??= "JHN";
-            ChapterNumber ??= 1;
-            VerseNumber ??= 1;
+            Translation ??= State["Bible.Translation.Id"]?.ToString() ?? "eng_kjv";
+            Book ??= State["Bible.Book.Id"]?.ToString() ?? "JHN";
+            ChapterNumber ??= int.TryParse(State["Bible.Chapter.Number"]?.ToString(), out int c) ? c:1;
+            VerseNumber ??= int.TryParse(State["Bible.Verse.Number"]?.ToString(), out int v) ? v : 1;
 
-            var jsonText = await ReadData();
+            await LoadChapter();
+            await LoadTranslations();
+            await LoadBooks();
+        }
+        catch (FileNotFoundException ex)
+        {
+            jsonText = "Data file not found.";
+            Logger.LogError(ex, $"'wwwroot/api/{Translation}/{Book}/{ChapterNumber}.json' not found.");
+        }
+    }
+
+    async Task LoadChapter()
+    {
+        string jsonFilePath = Path.Combine(Env.WebRootPath, $"api/{Translation}/{Book}/{ChapterNumber}.json");
+        var jsonText = await ReadData(jsonFilePath);
+
+        var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+        chapter = JsonSerializer.Deserialize<BookChapter>(jsonText, options);
+
+        State["Bible.Translation.Id"] = Translation;
+        State["Bible.Book.Id"] = Book;
+        State["Bible.Chapter.Number"] = ChapterNumber;
+        State["Bible.Verse.Number"] = VerseNumber;
+    }
+
+    async Task LoadTranslations()
+    {
+        try
+        {
+            string jsonFilePath = Path.Combine(Env.WebRootPath, $"api/translations.json");
+
+            var jsonText = await ReadData(jsonFilePath);
 
             var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 };
 
-            chapter = JsonSerializer.Deserialize<BookChapter>(jsonText, options);
-
+            Translations = JsonSerializer.Deserialize<List<Translation>>(jsonText, options);
         }
         catch (FileNotFoundException ex)
         {
             jsonText = "Data file not found.";
-            Logger.LogError(ex, $"'wwwroot/{Translation}/{Book}/{ChapterNumber}.json' not found.");
+            Logger.LogError(ex, "'wwwroot/api/translations.json' not found.");
         }
     }
 
-    private async Task<string> ReadData()
+    async Task LoadBooks()
     {
-        string jsonFilePath = Path.Combine(Env.WebRootPath, $"data/{Translation}/{Book}/{ChapterNumber}.json");
+        try
+        {
+            string jsonFilePath = Path.Combine(Env.WebRootPath, $"api/{Translation}/books.json");
+            var jsonText = await ReadData(jsonFilePath);
+
+            var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+            var bible = JsonSerializer.Deserialize<global::Goke.Bible.Entities.Bible>(jsonText, options);
+            Books = bible?.Books;
+        }
+        catch (FileNotFoundException ex)
+        {
+            jsonText = "Data file not found.";
+            Logger.LogError(ex, $"'wwwroot/api/{Translation}/books.json' not found.");
+        }
+    }
+
+    private async Task<string> ReadData(string jsonFilePath)
+    {
         return await File.ReadAllTextAsync(jsonFilePath);
 
         //using var stream = await FileSystem.OpenAppPackageFileAsync($"wwwroot/{Bible}/{Book}/{ChapterNumber}.json");
@@ -249,7 +325,6 @@ else
     {
         if (ChapterNumber == chapter?.Book?.NumberOfChapters)
         {
-
             (string? translation, string? book, int chapterNum) = FromChapterLink(chapter?.NextChapterApiLink);
 
             Translation = translation ?? Translation;
@@ -261,5 +336,38 @@ else
             ChapterNumber += 1;
         }
         NavigationManager.NavigateTo($"bible/{Translation}/{Book}/{ChapterNumber}");
+    }
+
+    async Task HandleChangeTranslation(string value)
+    {
+        State["Bible.Translation.Id"] = value;
+        Translation = value;
+
+        await LoadChapter();
+
+        showTranslations = false;
+
+        StateHasChanged();
+    }
+    private async Task OnTranslations(MouseEventArgs e)
+    {
+        showTranslations = true;
+        await LoadTranslations();
+    }
+
+    async Task OnChangeBook(string value)
+    {
+        State["Bible.Book.Id"] = value;
+        Book = value;
+
+        await LoadChapter();
+    }
+
+    async Task OnChangeChapter(int value)
+    {
+        State["Bible.Chapter.Number"] = value;
+        ChapterNumber = value;
+
+        await LoadChapter();
     }
 }

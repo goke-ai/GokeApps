@@ -25,7 +25,7 @@ namespace Goke.Core.Entities
     	partial void Initialize();
     
         [Required(ErrorMessage = "The Surname is a mandatory Field.")]
-        [Display(Name = "Surname")]
+    	[Display(Name = "Surname")]
     	public string Surname { get; set; }
         [Required(ErrorMessage = "The Firstname is a mandatory Field.")]
     	[Display(Name = "Firstname")]
