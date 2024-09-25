@@ -1,4 +1,4 @@
-using Goke.Web;
+﻿using Goke.Web;
 using Goke.Web.Client.Pages;
 using Goke.Web.Client.Services;
 using Goke.Web.Components;
@@ -11,12 +11,12 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.DependencyInjection;
 
 
 bool isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 bool isLinux = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 bool isOSX = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,22 +37,37 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-if (isWindows)
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-        ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString, b=>b.MigrationsAssembly("Goke.Web.WindowsMigrations")));
-}
-if(isLinux)
-{
-    var connectionString = builder.Configuration.GetConnectionString("MariaDBDefaultConnection") 
-        ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//
+DatabaseType? databaseType = DatabaseType.MSSQL;
 
-    var serverVersion = new MariaDbServerVersion(new Version(8, 0, 2));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+switch (databaseType)
+{
+    case DatabaseType.MSSQL:
+        connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>        
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Goke.Web.WindowsMigrations")));
+        break;
+    case DatabaseType.MySQL:
+        connectionString = builder.Configuration.GetConnectionString("MariaDBDefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseMySql(connectionString, serverVersion, b => b.MigrationsAssembly("Goke.Web.LinuxMigrations")));
+        var serverVersion = new MariaDbServerVersion(new Version(8, 0, 2));
+
+        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+            options.UseMySql(connectionString, serverVersion, b => b.MigrationsAssembly("Goke.Web.LinuxMigrations")));
+
+        break;
+    case DatabaseType.Sqlite:
+        builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+            options.UseSqlite($"Data Source={nameof(Goke.Web)}.db"));
+
+        break;
+    default:
+        break;
 }
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -104,6 +119,7 @@ else
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    app.UseMigrationsEndPoint();
 }
 
 if (app.Environment.IsDevelopment())

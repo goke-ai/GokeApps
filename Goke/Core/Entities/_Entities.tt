@@ -122,7 +122,7 @@ foreach (var entity in typeMapper.GetItemsToGenerate<EntityType>(itemCollection)
     }
 #>
     
-    public <#= hasParent ? "new" : "" #> string ToRecord()
+    public <#= hasParent ? "override" : "virtual" #> string ToRecord()
     {
         var str = $@"<#= code.Escape(entity) #> {{ 
 <#
@@ -178,7 +178,7 @@ foreach (var entity in typeMapper.GetItemsToGenerate<EntityType>(itemCollection)
     partial void OnToRecord(ref string str);
         
 
-    public string ToJson()
+    public <#= hasParent ? "override" : "virtual" #> string ToJson()
     {
         OnToJson();
         return System.Text.Json.JsonSerializer.Serialize(this);

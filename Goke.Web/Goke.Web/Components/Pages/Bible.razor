@@ -90,19 +90,25 @@
             border-block-end:solid 1px lightgray;
             padding-block:0.2em;
             margin-block-end:1em;
+  position: sticky;
+  top: 0; /* You can adjust this value to control the offset from the top */
+  background-color: var(--clr-body-bg); /* Optional: for visibility */
+  padding: 10px; /* Optional: for spacing */
+  
+filter:invert();
             ">
-    <div style="display: flex; gap:0.5em;">
-        <div @onclick="@(()=> showTOC = true)"
+    <div style="display: flex; gap:0.5em; align-items:center;">
+        <button @onclick="@(()=> showTOC = true)"
              style="cursor:pointer;"
              title="@(chapter?.Book?.Title  + ", Chapter " + @chapter?.Chapter?.Number + " #" + chapter?.Chapter?.Verses?.Count(w => w.Type == "verse"))">
             @chapter?.Book?.Name @chapter?.Chapter?.Number
-        </div>
+        </button>
         |
-        <div @onclick="OnTranslations"
+        <button @onclick="OnTranslations"
              style="cursor:pointer;" 
              title="@chapter?.Translation?.LanguageEnglishName">
             @chapter?.Translation?.ShortName
-        </div>
+        </button>
     </div>
     <div>
         <button @onclick="OnPrevious">
@@ -117,11 +123,11 @@
         </button>
     </div>
     <div>
-        <button>
+        @* <button>
             <svg aria-hidden="true">
                 <use xlink:href="sprites.svg#magnifying-glass-solid"></use>
             </svg>
-        </button>
+        </button> *@
         <button @onclick="@(()=> showSettings = true)">
             <svg aria-hidden="true">
                 <use xlink:href="sprites.svg#gear-solid"></use>
@@ -166,7 +172,6 @@ else
     <div>License Url: <a href="@chapter.Translation?.LicenseUrl" target="_blank"> @chapter.Translation?.LicenseUrl </a></div>
 
     <button type="button" onclick="document.getElementById('@VerseNumber').scrollIntoView({behavior:'smooth'})">Scroll To</button>
-
 }
 
 @code {
@@ -179,9 +184,7 @@ else
     [Parameter]
     public int? VerseNumber { get; set; } = 1;
 
-    string? jsonText;
     BookChapter? chapter;
-    private MarkupString markupString;
     bool showTranslations = false;
     bool showTOC = false;
     bool showSettings = false;
@@ -206,7 +209,7 @@ else
         }
         catch (FileNotFoundException ex)
         {
-            jsonText = "Data file not found.";
+            //jsonText = "Data file not found.";
             Logger.LogError(ex, $"'wwwroot/api/{Translation}/{Book}/{ChapterNumber}.json' not found.");
         }
     }
@@ -246,7 +249,7 @@ else
         }
         catch (FileNotFoundException ex)
         {
-            jsonText = "Data file not found.";
+            //jsonText = "Data file not found.";
             Logger.LogError(ex, "'wwwroot/api/translations.json' not found.");
         }
     }
@@ -268,7 +271,7 @@ else
         }
         catch (FileNotFoundException ex)
         {
-            jsonText = "Data file not found.";
+            //jsonText = "Data file not found.";
             Logger.LogError(ex, $"'wwwroot/api/{Translation}/books.json' not found.");
         }
     }

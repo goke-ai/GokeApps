@@ -79,6 +79,7 @@ function navSystem(selector) {
             navLinks.forEach(item => {
                 if (item !== event.target) {
                     item.classList.remove('active');
+                    item.classList.remove('active-child');
                 }
             });
 

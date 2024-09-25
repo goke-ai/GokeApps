@@ -1,0 +1,130 @@
+﻿@page "/products/maths"
+
+@inject ILogger<Maths> Logger
+
+@rendermode InteractiveAuto
+
+<PageTitle>Maths</PageTitle>
+
+<h1>Chemistry</h1>
+
+<div class="card">
+    <div class="card-header">Calculator</div>
+    <div class="card-body">
+        <div style="border: solid 1px gray; 
+                min-height:6em; 
+                display:flex; 
+                flex-direction:column; justify-content:space-between;
+                padding-inline:0.5em;">
+            <div>@expressionText</div>
+            <div style="font-size:2em; text-align:right;">@inputText</div>
+        </div>
+
+        <div style="padding-block:0.5em;">
+            <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
+                @foreach(var k in numbers)
+                {
+                    <button @onclick="()=>OnKeyPress(k, KeyType.Number)"
+                            style="padding:0;width:2em; aspect-ratio:1;"
+                            title="@k">
+                        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
+                            <div style="font-size:1em;">@k</div>
+                        </div>
+                    </button>
+                }
+                @foreach (var k in operators)
+                {
+                    <button @onclick="()=>OnKeyPress(k,KeyType.Operator)"
+                            style="padding:0;width:2em; aspect-ratio:1;"
+                            title="@k">
+                        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
+                            <div style="font-size:1em;">@k</div>
+                        </div>
+                    </button>
+                }
+                <button @onclick="OnClear"
+                        style="padding:0;width:2em; aspect-ratio:1;"
+                        title="C">
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
+                        <div style="font-size:1em;">C</div>
+                    </div>
+                </button>
+                <button @onclick="OnAnswer"
+                        style="padding:0;width:2em; aspect-ratio:1;"
+                        title="ans">
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
+                        <div style="font-size:1em;">ans</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    enum KeyType{None, Number, Operator, Element}
+    char[] numbers = "1234567890.".ToCharArray();
+    char[] operators = "+-*/=".ToCharArray();
+
+    string expressionText = string.Empty;
+    string inputText = "0";
+    bool firstKey = true;
+    double answer = 0f;
+
+    string lastKey = string.Empty;
+    KeyType lastKeyType = KeyType.None;
+
+    void OnKeyPress(string key, KeyType keyType)
+    {
+        switch (keyType)
+        {
+            case KeyType.Number:
+                if (firstKey)
+                {
+                    inputText = key;
+                    firstKey = false;
+                }
+                else
+                {
+                    inputText += key;
+                }
+                break;
+            case KeyType.Operator:
+                switch (key)
+                {
+                    case "+":
+                        break;
+
+                    case "-": break;
+                    case "*": break;
+                    case "/": break;
+                    default: break;
+                }
+                break;
+            default:break;
+        }
+
+        lastKey = key;
+        lastKeyType = keyType;
+    }
+
+    void OnKeyPress(char key, KeyType keyType)
+    {
+        OnKeyPress(key.ToString(), keyType);
+    }
+
+    void OnClear()
+    {
+        inputText = "0";
+        firstKey = true;
+    }
+
+    void OnAnswer()
+    {
+        inputText = answer.ToString();
+        firstKey = true;
+    }
+
+}

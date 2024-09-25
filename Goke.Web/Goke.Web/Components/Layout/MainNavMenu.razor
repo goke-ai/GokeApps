@@ -16,77 +16,48 @@
         <ul class="primary-nav-list flex">
             <li>
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span aria-hidden="true">🏡</span> Home
+                    <span class="nav-item-wrapper">
+                        <span class="icon">🏡</span>
+                        <span class="nav-item-text">
+                            Home
+                        </span>
+                    </span>
                 </NavLink>
             </li>
             <li>
                 <NavLink class="nav-link" href="Bible">
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="sprites.svg#book-solid"></use>
-                    </svg> Bible
-                </NavLink>
-            </li> <li>
-                <NavLink class="nav-link" href="products">
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="sprites.svg#cubes-solid"></use>
-                    </svg> Products
+                    <span class="nav-item-wrapper">
+                        <span class="icon">
+                            <svg class="icon" aria-hidden="true" style="--icon-sz:0.5em">
+                                <use xlink:href="sprites.svg#book-bible-solid"></use>
+                            </svg>
+                        </span><span class="nav-item-text">
+                            Bible
+                        </span>
+                    </span>
                 </NavLink>
             </li>
+            <ProductNavMenu />
             <li>
                 <NavLink class="nav-link" href="blogs">
-                    <svg class="icon">
-                        <use xlink:href="sprites.svg#blog-solid"></use>
-                    </svg> Blogs
+                    <span class="nav-item-wrapper">
+                        <span class="icon">
+                            <svg class="icon" aria-hidden="true" style="--icon-sz:0.5em">
+                                <use xlink:href="sprites.svg#blog-solid"></use>
+                            </svg>
+                        </span>
+                        <span class="nav-item-text">
+                            Blogs
+                        </span>
+                    </span>
                 </NavLink>
-            </li>
-            <li>
-                <NavLink class="nav-link" href="chemistry">
-                    <svg class="icon">
-                        <use xlink:href="sprites.svg#controller"></use>
-                    </svg> Game
-                </NavLink>
-            </li>
-            <li>
-                <NavLink class="nav-link" href="ux">
-                    <svg class="icon">
-                        <use xlink:href="sprites.svg#face-smile-wink-solid"></use>
-                    </svg> UX
-                </NavLink>
-            </li>
-            <li class="dropdown">
-                <a href="#" disabled>
-                    <svg class="icon">
-                        <use xlink:href="sprites.svg#icons-solid"></use>
-                    </svg> Components
-                    <svg class="icon">
-                        <use xlink:href="sprites.svg#caret-down-solid"></use>
-                    </svg>
-                </a>
-                <ul class="dropdown-list pop-down-left">
-                    <li>
-                        <NavLink class="nav-link" href="components/forms">
-                            Forms
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink class="nav-link" href="components/layout">
-                            Layouts
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink class="nav-link" href="components/Data">
-                            Data
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink class="nav-link" href="components/Screens">
-                            Screens
-                        </NavLink>
-                    </li>
-                </ul>
             </li>
 
-            <li class="dropdown">
+            <GameNavMenu />
+            
+            <UxNavMenu />
+
+            @* <li class="dropdown">
                 <a href="#" disabled>
                     Account
                     <svg class="icon">
@@ -119,6 +90,20 @@
                                 </NavLink>
                             </li>
                             <li>
+                                <NavLink class="nav-link" href="Account/Register">
+                                    <span class="nav-item-wrapper">
+                                        <span class="icon">
+                                            <svg class="icon" aria-hidden="true" style="--icon-sz:0.5em">
+                                                <use xlink:href="sprites.svg#id-card-solid"></use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav-item-text">
+                                            Register
+                                        </span>
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li>
                                 <NavLink class="nav-link" href="Account/Login">
                                     Login
                                 </NavLink>
@@ -126,13 +111,18 @@
                         </NotAuthorized>
                     </AuthorizeView>
                 </ul>
-            </li>
+            </li> *@
+
+            <AccountNavMenu CurrentUrl="@currentUrl" />
 
         </ul>
     </nav>
 </header>
 
 @code {
+    string popStyle = "pop-down";
+    string navOrientation = "Horizontal";
+
     private string? currentUrl;
 
     protected override void OnInitialized()

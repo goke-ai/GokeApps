@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Goke.Core" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.8" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
@@ -18,6 +19,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Goke.Razor.Components\Goke.Razor.Components.csproj" />
     <ProjectReference Include="..\..\Goke.web.Shared\Goke.Web.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\Products\Maths.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
   </ItemGroup>
 
 </Project>

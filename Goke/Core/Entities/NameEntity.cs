@@ -26,11 +26,10 @@ namespace Goke.Core.Entities
         [Required(ErrorMessage = "The Name is a mandatory Field.")]
     	[Display(Name = "Name")]
     	public string Name { get; set; }
-        [Required(ErrorMessage = "The Description is a mandatory Field.")]
-    	[Display(Name = "Description")]
-    	public string Description { get; set; }
+        [Display(Name = "Description")]
+    	public string? Description { get; set; }
         
-        public new string ToRecord()
+        public override string ToRecord()
         {
             var str = $@"NameEntity {{ 
                 {base.ToRecord()},
@@ -48,7 +47,7 @@ namespace Goke.Core.Entities
         partial void OnToRecord(ref string str);
             
     
-        public string ToJson()
+        public override string ToJson()
         {
             OnToJson();
             return System.Text.Json.JsonSerializer.Serialize(this);

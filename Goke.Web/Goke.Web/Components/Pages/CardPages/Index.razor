@@ -1,0 +1,50 @@
+﻿@page "/cards"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Goke.Core.Entities
+@using Goke.Web.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+
+@attribute [Authorize]
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="cards/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Cards">
+    <PropertyColumn Property="card => card.Pin" />
+    <PropertyColumn Property="card => card.From" />
+    <PropertyColumn Property="card => card.To" />
+    <PropertyColumn Property="card => card.Permission" />
+    <PropertyColumn Property="card => card.UserDetailId" />
+    <PropertyColumn Property="card => card.LastBy" />
+    <PropertyColumn Property="card => card.LastDate" />
+    <PropertyColumn Property="card => card.AddedBy" />
+    <PropertyColumn Property="card => card.AddedDate" />
+    <PropertyColumn Property="card => card.EditedBy" />
+    <PropertyColumn Property="card => card.EditedDate" />
+    <PropertyColumn Property="card => card.Version" />
+
+    <TemplateColumn Context="card">
+        <a href="@($"cards/edit?id={card.Id}")">Edit</a> |
+        <a href="@($"cards/details?id={card.Id}")">Details</a> |
+        <a href="@($"cards/delete?id={card.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private ApplicationDbContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

@@ -1,0 +1,146 @@
+﻿@page "/cards/edit"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Goke.Core.Entities
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize(Roles = "SystemAdministrators, Administrators")]
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Card</h2>
+<hr />
+@if (Card is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Card" OnValidSubmit="UpdateCard" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Card.Id" value="@Card.Id" />
+                <div class="mb-3">
+                    <label for="pin" class="form-label">Pin:</label>
+                    <InputText id="pin" @bind-Value="Card.Pin" class="form-control" />
+                    <ValidationMessage For="() => Card.Pin" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="from" class="form-label">From:</label>
+                    <InputDate id="from" @bind-Value="Card.From" class="form-control" />
+                    <ValidationMessage For="() => Card.From" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="to" class="form-label">To:</label>
+                    <InputDate id="to" @bind-Value="Card.To" class="form-control" />
+                    <ValidationMessage For="() => Card.To" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="permission" class="form-label">Permission:</label>
+                    <InputNumber id="permission" @bind-Value="Card.Permission" class="form-control" />
+                    <ValidationMessage For="() => Card.Permission" class="text-danger" />
+                </div>
+                @* <div class="mb-3">
+                    <label for="userdetailid" class="form-label">UserDetailId:</label>
+                    <InputText id="userdetailid" @bind-Value="Card.UserDetailId" class="form-control" />
+                    <ValidationMessage For="() => Card.UserDetailId" class="text-danger" />
+                </div> *@
+                <div class="mb-3">
+                    <label for="lastby" class="form-label">LastBy:</label>
+                    <InputText id="lastby" @bind-Value="Card.LastBy" class="form-control" />
+                    <ValidationMessage For="() => Card.LastBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="lastdate" class="form-label">LastDate:</label>
+                    <InputDate id="lastdate" @bind-Value="Card.LastDate" class="form-control" />
+                    <ValidationMessage For="() => Card.LastDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="addedby" class="form-label">AddedBy:</label>
+                    <InputText id="addedby" @bind-Value="Card.AddedBy" class="form-control" />
+                    <ValidationMessage For="() => Card.AddedBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="addeddate" class="form-label">AddedDate:</label>
+                    <InputDate id="addeddate" @bind-Value="Card.AddedDate" class="form-control" />
+                    <ValidationMessage For="() => Card.AddedDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="editedby" class="form-label">EditedBy:</label>
+                    <InputText id="editedby" @bind-Value="Card.EditedBy" class="form-control" />
+                    <ValidationMessage For="() => Card.EditedBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="editeddate" class="form-label">EditedDate:</label>
+                    <InputDate id="editeddate" @bind-Value="Card.EditedDate" class="form-control" />
+                    <ValidationMessage For="() => Card.EditedDate" class="text-danger" />
+                </div>
+               
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/cards">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Card? Card { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        var entity = await context.Cards.FirstOrDefaultAsync(m => m.Id == Id);
+        Card ??= entity;
+
+        Card!.Version = entity?.Version;
+
+        if (Card is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateCard()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Card!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!CardExists(Card!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/cards");
+    }
+
+    private bool CardExists(Guid id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Cards.Any(e => e.Id == id);
+    }
+}

@@ -15,34 +15,26 @@ namespace Goke.Core.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     // using Microsoft.EntityFrameworkCore;
     
-    public partial class User : NameEntity
+    public partial class NameEntity : BaseEntity
     {
-        public User() : base()
+        public NameEntity() : base()
         {
     		Initialize();
         }
     	partial void Initialize();
     
-        [Required(ErrorMessage = "The Email is a mandatory Field.")]
-    	[EmailAddress]/* [DataType(DataType.EmailAddress)] */
-    	[Display(Name = "Email")]
-    	public string Email { get; set; }
-        [Display(Name = "Location")]
-    	public string? Location { get; set; }
-        [ForeignKey("Person")]
-    	[Display(Name = "Person")]
-    	public System.Guid? PersonId { get; set; }
-    
-        public virtual Person Person { get; set; }
+        [Required(ErrorMessage = "The Name is a mandatory Field.")]
+    	[Display(Name = "Name")]
+    	public string Name { get; set; }
+        [Display(Name = "Description")]
+    	public string? Description { get; set; }
         
-        public new string ToRecord()
+        public override string ToRecord()
         {
-            var str = $@"User {{ 
+            var str = $@"NameEntity {{ 
                 {base.ToRecord()},
-                Email = {Email}, 
-                Location = {Location}, 
-                PersonId = {PersonId}, 
-                Person = {Person.ToRecord()},
+                Name = {Name}, 
+                Description = {Description}, 
             ";
          
             OnToRecord(ref str);
@@ -55,7 +47,7 @@ namespace Goke.Core.Entities
         partial void OnToRecord(ref string str);
             
     
-        public string ToJson()
+        public override string ToJson()
         {
             OnToJson();
             return System.Text.Json.JsonSerializer.Serialize(this);

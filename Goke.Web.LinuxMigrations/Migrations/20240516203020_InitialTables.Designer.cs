@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Goke.Web.Data.Migrations
+namespace Goke.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240516203020_InitialTables")]

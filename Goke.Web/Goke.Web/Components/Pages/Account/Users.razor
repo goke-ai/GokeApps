@@ -468,12 +468,16 @@
                 PhoneNumberConfirmed = x.PhoneNumberConfirmed,
                 AccessFailedCount = x.AccessFailedCount,
 
+                UserDetailId = x.UserDetailId,
+                UserDetail = x.UserDetail,
+
                 IsLockedOut = UserManager.IsLockedOutAsync(x).Result
                 // Roles = roles.Select(s => new ApplicationRole
                 // {
                 //     Id = s.Id,
                 //     Name = s.Name,
                 // }).ToList()
+                
             }).ToList();
 
 

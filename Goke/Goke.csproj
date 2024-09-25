@@ -67,7 +67,7 @@
     <Compile Include="Core\Entities\Person.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\Entities\User.cs">
+    <Compile Include="Core\Entities\UserDetail.cs">
       <DependentUpon>_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Core\Entities\_Entities.cs">
@@ -113,7 +113,9 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Data\" />
+  </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Web\Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -126,6 +128,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="Core\copyit.bat" />
     <None Include="Core\Model.edmx.diagram">
       <DependentUpon>Model.edmx</DependentUpon>
     </None>
@@ -135,6 +138,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Core\copyit-xlist.txt" />
     <Content Include="Core\Entities\_Entities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>_Entities.cs</LastGenOutput>

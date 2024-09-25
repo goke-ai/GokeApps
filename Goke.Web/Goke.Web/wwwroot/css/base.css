@@ -117,7 +117,7 @@ video {
 
 body {
     font-family: var(--ff-base);
-    font-size: var(--fs-400);
+    font-size: var(--size, var(--fs-300));
     color: var(--clr-body);
     background-color: var(--clr-body-bg);
     line-height: 1.5;
@@ -184,6 +184,10 @@ a {
 }
 
 /* form */
+form {
+    font-size: var(--size);
+}
+
 input,
 button,
 textarea,
@@ -196,6 +200,7 @@ select {
     border: 1px solid var(--clr-text);
     border-color: var(--_form-border-color);
     border-radius: var(--border-radius);
+    font-size: var(--size);
 }
 
     input:disabled,
@@ -323,6 +328,8 @@ nav {
     nav li {
         white-space: nowrap;
         /* margin: 0.25rem; */
+
+        font-size: var(--size);
     }
 
     nav a.active {
@@ -332,19 +339,28 @@ nav {
         cursor: default;
     }
 
-    nav a {
+    nav a, .nav-link {
         text-decoration: none;
         display: block;
         padding: var(--padding, var(--size-100));
         color: var(--clr-text);
-        /* font-size: var(--size-400); */
+
+        font-size: var(--size);
     }
+
+    /*nav button {
+        color: var(--clr-body-bg) !important;*/
+        /*padding: var(--size-100);*/
+        /*border: 0;*/
+    /*}*/
 
 /* table */
 table {
     border-collapse: collapse;
     width: 100%;
-    --_clr-icon-fg: var(--clr-accent)
+    --_clr-icon-fg: var(--clr-accent);
+
+    font-size: var(--size);
 }
 
 .grid-table {
@@ -355,16 +371,23 @@ table {
     width: fit-content;
     background-color: var(--clr-secondary);
     border: 1px solid var(--clr-secondary);
+
+    font-size: var(--size);
 }
 
 .grid-row-wrapper {
     display: contents;
 }
 
+tr {
+    font-size: var(--size);
+}
+
 td,
 th {
     border: 1px solid var(--clr-secondary);
     padding: var(--size-100);
+    font-size: var(--size);
 }
 
 th > *{
@@ -531,7 +554,7 @@ table:has(input[type="checkbox"].column-controller:checked) .column-control {
 .wrapper {
     width: min(100% - 3rem, 90vw);
     margin-inline: auto;
-    padding: var(--size-600);
+    padding-inline: var(--size-600);
 }
 
     .wrapper:has(.max-screen) {

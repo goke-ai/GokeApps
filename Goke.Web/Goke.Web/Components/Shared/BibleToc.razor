@@ -44,6 +44,10 @@
     [Parameter]
     public string? Translation { get; set; }
     [Parameter]
+    public string? Book { get; set; }
+    [Parameter]
+    public int? ChapterNumber { get; set; }
+    [Parameter]
     public List<Book>? Books { get; set; }
     [Parameter]
     public EventCallback<string> OnChangeBook { get; set; }

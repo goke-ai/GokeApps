@@ -18,6 +18,10 @@
             <End Role="Person" EntitySet="BaseEntities" />
             <End Role="User" EntitySet="BaseEntities" />
           </AssociationSet>
+          <AssociationSet Name="UserDetailCard" Association="Model.UserDetailCard">
+            <End Role="UserDetail" EntitySet="BaseEntities" />
+            <End Role="Card" EntitySet="BaseEntities" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="BaseEntity">
           <Key>
@@ -27,7 +31,7 @@
           </EntityType>
         <EntityType Name="NameEntity" BaseType="Model.BaseEntity" >
           <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="true" />
         </EntityType>
         <EntityType Name="Person" BaseType="Model.BaseEntity" >
           <Property Name="Surname" Type="String" Nullable="false" />
@@ -43,27 +47,42 @@
           <Member Name="Male" />
           <Member Name="Others" />
         </EnumType>
-        <EntityType Name="User" BaseType="Model.NameEntity" >
+        <EntityType Name="UserDetail" BaseType="Model.NameEntity" >
           <Property Name="Email" Type="String" Nullable="false" />
           <Property Name="Location" Type="String" Nullable="true" />
           <NavigationProperty Name="Person" Relationship="Model.PersonUser" FromRole="User" ToRole="Person" />
           <Property Name="PersonId" Type="Guid" Nullable="true" />
+          <NavigationProperty Name="Cards" Relationship="Model.UserDetailCard" FromRole="UserDetail" ToRole="Card" />
         </EntityType>
         <EntityType Name="Card" BaseType="Model.BaseEntity" >
           <Property Name="Pin" Type="String" Nullable="false" />
           <Property Name="From" Type="DateTime" Nullable="false" />
           <Property Name="To" Type="DateTime" Nullable="false" />
           <Property Name="Permission" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="UserDetail" Relationship="Model.UserDetailCard" FromRole="Card" ToRole="UserDetail" />
+          <Property Name="UserDetailId" Type="Guid" Nullable="true" />
         </EntityType>
         <Association Name="PersonUser">
           <End Type="Model.Person" Role="Person" Multiplicity="0..1" />
-          <End Type="Model.User" Role="User" Multiplicity="*" />
+          <End Type="Model.UserDetail" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserDetailCard">
+          <End Type="Model.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+          <End Type="Model.Card" Role="Card" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Card">
+              <PropertyRef Name="UserDetailId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

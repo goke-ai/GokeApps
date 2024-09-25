@@ -1,0 +1,71 @@
+﻿@page "/cards/details"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Goke.Core.Entities
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize(Roles = "SystemAdministrators, Administrators")]
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Card</h2>
+    <hr />
+    @if (card is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Pin</dt>
+            <dd class="col-sm-10">@card.Pin</dd>
+            <dt class="col-sm-2">From</dt>
+            <dd class="col-sm-10">@card.From</dd>
+            <dt class="col-sm-2">To</dt>
+            <dd class="col-sm-10">@card.To</dd>
+            <dt class="col-sm-2">Permission</dt>
+            <dd class="col-sm-10">@card.Permission</dd>
+            <dt class="col-sm-2">UserDetailId</dt>
+            <dd class="col-sm-10">@card.UserDetailId</dd>
+            <dt class="col-sm-2">LastBy</dt>
+            <dd class="col-sm-10">@card.LastBy</dd>
+            <dt class="col-sm-2">LastDate</dt>
+            <dd class="col-sm-10">@card.LastDate</dd>
+            <dt class="col-sm-2">AddedBy</dt>
+            <dd class="col-sm-10">@card.AddedBy</dd>
+            <dt class="col-sm-2">AddedDate</dt>
+            <dd class="col-sm-10">@card.AddedDate</dd>
+            <dt class="col-sm-2">EditedBy</dt>
+            <dd class="col-sm-10">@card.EditedBy</dd>
+            <dt class="col-sm-2">EditedDate</dt>
+            <dd class="col-sm-10">@card.EditedDate</dd>
+            <dt class="col-sm-2">Version</dt>
+            <dd class="col-sm-10">@card.Version</dd>
+        </dl>
+        <div>
+            <a href="@($"/cards/edit?id={card.Id}")">Edit</a> |
+            <a href="@($"/cards")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Card? card;
+
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        card = await context.Cards.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (card is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

@@ -1,9 +1,11 @@
 ﻿
 using Goke.Core;
+using Goke.Core.Entities;
 using Goke.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
+
 
 internal class DataInitializer
 {
@@ -64,7 +66,13 @@ internal class DataInitializer
         string managerPassword = "Secure3Pa$$word!";
         if (await userManager.FindByEmailAsync(managerEmail) == null)
         {
-            var managerUser = new ApplicationUser { Email = managerEmail, UserName = managerEmail, EmailConfirmed = true };
+            var managerUser = new ApplicationUser { Email = managerEmail, UserName = managerEmail, EmailConfirmed = true,
+                UserDetail = new()
+                {
+                    Name = managerEmail,
+                    Email = managerEmail,
+                }
+            };
             await userManager.CreateAsync(managerUser, managerPassword);
             await userManager.AddToRoleAsync(managerUser, "Managers");
         }
@@ -73,7 +81,17 @@ internal class DataInitializer
         string officerPassword = "Secure2Pa$$word!";
         if (await userManager.FindByEmailAsync(officerEmail) == null)
         {
-            var officerUser = new ApplicationUser { Email = officerEmail, UserName = officerEmail, EmailConfirmed = true };
+            var officerUser = new ApplicationUser
+            {
+                Email = officerEmail,
+                UserName = officerEmail,
+                EmailConfirmed = true,
+                UserDetail = new()
+                {
+                    Name = officerEmail,
+                    Email = officerEmail,
+                }
+            };
             await userManager.CreateAsync(officerUser, officerPassword);
             await userManager.AddToRoleAsync(officerUser, "Officers");
         }
@@ -82,30 +100,19 @@ internal class DataInitializer
         string userPassword = "Secure1Pa$$word!";
         if (await userManager.FindByEmailAsync(userEmail) == null)
         {
-            var userUser = new ApplicationUser { Email = userEmail, UserName = userEmail, EmailConfirmed = true };
+            var userUser = new ApplicationUser
+            {
+                Email = userEmail,
+                UserName = userEmail,
+                EmailConfirmed = true,
+                UserDetail = new()
+                {
+                    Name = userEmail,
+                    Email = userEmail,
+                }
+            };
             await userManager.CreateAsync(userUser, userPassword);
             await userManager.AddToRoleAsync(userUser, "Users");
-        }
-    }
-
-    private static async Task SeedAdmins(UserManager<ApplicationUser> userManager)
-    {
-        string sysAdminEmail = "sysadmin@ark.com";
-        string sysAdminPassword = "admin@ARK#77";
-        if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
-        {
-            var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };
-            await userManager.CreateAsync(sysAdminUser, sysAdminPassword);
-            await userManager.AddToRolesAsync(sysAdminUser, ["Administrators", "SystemAdministrators"]);
-        }
-
-        string adminEmail = "admin@ark.com";
-        string adminPassword = "admin@ARK#1";
-        if (await userManager.FindByEmailAsync(adminEmail) == null)
-        {
-            var adminUser = new ApplicationUser { Email = adminEmail, UserName = adminEmail, EmailConfirmed = true };
-            await userManager.CreateAsync(adminUser, adminPassword);
-            await userManager.AddToRolesAsync(adminUser, ["Administrators"]);
         }
     }
 
@@ -115,7 +122,17 @@ internal class DataInitializer
         string gokePassword = emailSender is null ? "goke@ARK#246800" : Text.GeneratePin();
         if (await userManager.FindByEmailAsync(gokeEmail) == null)
         {
-            var gokeUser = new ApplicationUser { Email = gokeEmail, UserName = gokeEmail, EmailConfirmed = true };
+            var gokeUser = new ApplicationUser
+            {
+                Email = gokeEmail,
+                UserName = gokeEmail,
+                EmailConfirmed = true,
+                UserDetail = new()
+                {
+                    Name = gokeEmail,
+                    Email = gokeEmail,
+                }
+            };
             await userManager.CreateAsync(gokeUser, gokePassword);
             await userManager.AddToRolesAsync(gokeUser, ["Administrators", "SystemAdministrators"]);
 
@@ -129,7 +146,17 @@ internal class DataInitializer
         string sysAdminPassword = emailSender is null ? "sysadmin@ARK#789" : Text.GeneratePin();
         if (await userManager.FindByEmailAsync(sysAdminEmail) == null)
         {
-            var sysAdminUser = new ApplicationUser { Email = sysAdminEmail, UserName = sysAdminEmail, EmailConfirmed = true };
+            var sysAdminUser = new ApplicationUser
+            {
+                Email = sysAdminEmail,
+                UserName = sysAdminEmail,
+                EmailConfirmed = true,
+                UserDetail = new()
+                {
+                    Name = sysAdminEmail,
+                    Email = sysAdminEmail,
+                }
+            };
             await userManager.CreateAsync(sysAdminUser, sysAdminPassword);
             await userManager.AddToRolesAsync(sysAdminUser, ["Administrators", "SystemAdministrators"]);
 
@@ -143,7 +170,17 @@ internal class DataInitializer
         string adminPassword = emailSender is null ? "admin@ARK#135" : Text.GeneratePin();
         if (await userManager.FindByEmailAsync(adminEmail) == null)
         {
-            var adminUser = new ApplicationUser { Email = adminEmail, UserName = adminEmail, EmailConfirmed = true };
+            var adminUser = new ApplicationUser
+            {
+                Email = adminEmail,
+                UserName = adminEmail,
+                EmailConfirmed = true,
+                UserDetail = new()
+                {
+                    Name = adminEmail,
+                    Email = adminEmail,
+                }
+            };
             await userManager.CreateAsync(adminUser, adminPassword);
             await userManager.AddToRolesAsync(adminUser, ["Administrators"]);
 
@@ -180,7 +217,7 @@ internal class DataInitializer
         await SeedAdmins(userManager, emailSender);
     }
 
-    /*
+    
     public static async Task<bool> ReadyToLoginWithPinAsync(IConfiguration configuration, ApplicationDbContext db, UserManager<ApplicationUser> userManager, string username, string pin)
     {
         bool result = false;
@@ -201,7 +238,7 @@ internal class DataInitializer
             if (card.To > DateTime.UtcNow)
             {
                 // new card
-                if (string.IsNullOrWhiteSpace(card.PinUser))
+                if (card.UserDetailId is null)
                 {
                     // existing user
                     var user = await userManager.FindByNameAsync(username);
@@ -216,7 +253,7 @@ internal class DataInitializer
                 }
                 else
                 {
-                    result = card.PinUser == username;
+                    result = card.UserDetail.Email == username;
                 }
             }
         }
@@ -227,18 +264,25 @@ internal class DataInitializer
 
     private static async Task CreateUserWithPinAsync(ApplicationDbContext db, UserManager<ApplicationUser> userManager, string username, string pin)
     {
-        var user = new ApplicationUser { Email = username, UserName = username, EmailConfirmed = true };
+        var user = new ApplicationUser
+        {
+            Email = username,
+            UserName = username,
+            EmailConfirmed = true,
+            UserDetail = new UserDetail { Email = username }
+        };
+
         var result = await userManager.CreateAsync(user, pin);
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(user, "Users");
         }
 
-        var entity = await db.Cards.FirstAsync(f => f.Pin == pin);
-        entity.PinUser = user.UserName;
+        var entity = await db.Cards.Include(i=>i.UserDetail).FirstAsync(f => f.Pin == pin);
+        entity.UserDetail.Email = user.UserName;
         db.Cards.Update(entity);
         var row = await db.SaveChangesAsync();
     }
-    */
+    
 
 }

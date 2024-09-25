@@ -1,3 +1,4 @@
+using Goke.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,7 +9,11 @@ namespace Goke.Web.Data
     {
         [NotMapped]
         public bool IsLockedOut { get; set; }
+        [NotMapped]
         public List<ApplicationRole>? Roles { get; set; }
+
+        public Guid? UserDetailId { get; set; }
+        public UserDetail? UserDetail { get; set; }
     }
 
 }
