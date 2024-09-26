@@ -16,14 +16,14 @@
 
 <style>
     i {
-    }
-        i::after {
-            content: attr(text);
-            color: blueviolet;
             font-style: italic;
+    }
+
+        i[poem] {
+            color: blueviolet;
         }
 
-        i[wordsofjesus="True"]::after {
+        i[wordsofjesus="True"], i[wordsofjesus="True"]::after  {
             color: red !important;
         }
 
@@ -49,87 +49,101 @@
 
 @if (showTranslations)
 {
-    <div class="overlay">
-        <div>
-            <button style="float:right;" @onclick="@(() => showTranslations=false)">X</button>
-            <BibleTranslation Translations="Translations" 
-                Translation=@Translation 
-                OnChangeTranslation="HandleChangeTranslation" />           
+        <div class="overlay">
+            <div>
+                <button class="primary" style="float:right;" @onclick="@(() => showTranslations=false)">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="sprites.svg#xmark-solid"></use>
+                    </svg>
+                </button>
+                <BibleTranslation Translations="Translations" 
+                    Translation=@Translation 
+                    OnChangeTranslation="HandleChangeTranslation" />           
+            </div>
         </div>
-    </div>
 }
 
 @if (showTOC)
 {
-    <div class="overlay">
-        <div>
-            <button style="float:right;" @onclick="@(() => showTOC=false)">X</button>
-            <BibleToc Books="Books" Translation="@Translation"
-                      OnChangeBook="OnChangeBook"
-                      OnChangeChapter="OnChangeChapter"/>
+        <div class="overlay">
+            <div>
+                <button class="primary" style="float:right;" @onclick="@(() => showTOC=false)">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="sprites.svg#xmark-solid"></use>
+                    </svg>
+                </button>
+                <BibleToc Books="Books" Translation="@Translation"
+                          OnChangeBook="OnChangeBook"
+                          OnChangeChapter="OnChangeChapter"/>
+            </div>
         </div>
-    </div>
 }
 
 @if (showSettings)
 {
-    <div class="overlay">
-        <div>
-            <button style="float:right;" @onclick="@(() => showSettings=false)">X</button>
-
+        <div class="overlay">
             <div>
-                <button @onclick=@(()=> fontSize -= 0.25f)>-</button> Font Size <button @onclick=@(()=>fontSize+=0.2f)>+</button>
+                <button class="primary" style="float:right;" @onclick="@(() => showSettings=false)">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="sprites.svg#xmark-solid"></use>
+                    </svg>
+                </button>
+                <ul style="display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;">
+                    <li>
+                        <div>
+                            <button class="primary" @onclick=@(()=> fontSize -= 0.25f)>
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="sprites.svg#minus-solid"></use>
+                                </svg>
+                            </button> 
+                            Font Size 
+                            <button class="primary" @onclick=@(()=>fontSize+=0.2f)>
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="sprites.svg#plus-solid"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
 }
 
-<div style="display: flex; flex-flow:row;
-            gap:0.2em; justify-content:space-between;
-            align-items:center;
-            border-block-end:solid 1px lightgray;
-            padding-block:0.2em;
-            margin-block-end:1em;
-  position: sticky;
-  top: 0; /* You can adjust this value to control the offset from the top */
-  background-color: var(--clr-body-bg); /* Optional: for visibility */
-  padding: 10px; /* Optional: for spacing */
-  
-filter:invert();
-            ">
-    <div style="display: flex; gap:0.5em; align-items:center;">
-        <button @onclick="@(()=> showTOC = true)"
-             style="cursor:pointer;"
+<div class="toolbar | page-top-0" style="--gap:1px;">
+    <div class="horizontal-group" style="--gap:0.5em;">
+        <button class="primary" @onclick="@(()=> showTOC = true)"
              title="@(chapter?.Book?.Title  + ", Chapter " + @chapter?.Chapter?.Number + " #" + chapter?.Chapter?.Verses?.Count(w => w.Type == "verse"))">
             @chapter?.Book?.Name @chapter?.Chapter?.Number
         </button>
         |
-        <button @onclick="OnTranslations"
-             style="cursor:pointer;" 
+        <button class="primary" @onclick="OnTranslations"
              title="@chapter?.Translation?.LanguageEnglishName">
             @chapter?.Translation?.ShortName
         </button>
     </div>
-    <div>
-        <button @onclick="OnPrevious">
-            <svg aria-hidden="true">
+    <div class="horizontal-group">
+        <button class="primary" @onclick="OnPrevious">
+            <svg class="icon" aria-hidden="true">
                 <use xlink:href="sprites.svg#angle-left-solid"></use>
             </svg>
         </button>
-        <button @onclick="OnNext">
-            <svg aria-hidden="true">
+        <button class="primary" @onclick="OnNext">
+            <svg class="icon" aria-hidden="true">
                 <use xlink:href="sprites.svg#angle-right-solid"></use>
             </svg>
         </button>
     </div>
-    <div>
-        @* <button>
-            <svg aria-hidden="true">
+    <div class="horizontal-group">
+        @* <button class="primary" @onclick="OnSearch">
+            <svg class="icon" aria-hidden="true">
                 <use xlink:href="sprites.svg#magnifying-glass-solid"></use>
             </svg>
         </button> *@
-        <button @onclick="@(()=> showSettings = true)">
-            <svg aria-hidden="true">
+        <button class="primary" @onclick="@(()=> showSettings = true)">
+            <svg class="icon" aria-hidden="true">
                 <use xlink:href="sprites.svg#gear-solid"></use>
             </svg>
         </button>
@@ -139,39 +153,33 @@ filter:invert();
 
 @if (chapter is null)
 {
-    <div>Loading...</div>
+        <div>Loading...</div>
 }
 else
 {
-    <div style="font-size: @(fontSize)em;">
-        <div style="display:none; text-align:center;">
-            <h1>@chapter.Translation?.Name</h1>
-            <h3>@chapter.Book?.Title</h3>
-            <h2>@chapter.Book?.Name @chapter.Chapter?.Number</h2>
-        </div>
-
+        <div style="font-size: @(fontSize)em;">
         @foreach (var item in chapter.Chapter?.Verses!/*?.Where(w => w.Type == "verse")!*/)
         {
-        <div id="@item.Number" data-type="@item.Type">
-            <sup>@item.Number</sup>
-            <span>@((MarkupString)item.Verse!) </span>
-        </div>
+                <div id="@item.Number" data-type="@item.Type">
+                    <sup>@item.Number</sup>
+                    <span>@((MarkupString)item.Verse!) </span>
+                </div>
         }
 
-        <hr />
+            <hr />
 
-        <ul style="font-size:0.7em; list-style-type: none; margin: 0; padding: 0;">
+            <ul style="font-size:0.7em; list-style-type: none; margin: 0; padding: 0;">
             @foreach (var item in chapter.Chapter?.Footnotes!)
             {
-                <li>@item.DisplayText</li>
+                        <li>@item.DisplayText</li>
             }
-        </ul>
+            </ul>
 
-    </div>
+        </div>
 
-    <div>License Url: <a href="@chapter.Translation?.LicenseUrl" target="_blank"> @chapter.Translation?.LicenseUrl </a></div>
+        <div>License Url: <a href="@chapter.Translation?.LicenseUrl" target="_blank"> @chapter.Translation?.LicenseUrl </a></div>
 
-    <button type="button" onclick="document.getElementById('@VerseNumber').scrollIntoView({behavior:'smooth'})">Scroll To</button>
+        <button type="button" onclick="document.getElementById('@VerseNumber').scrollIntoView({behavior:'smooth'})">Scroll To</button>
 }
 
 @code {
@@ -200,7 +208,7 @@ else
         {
             Translation ??= State["Bible.Translation.Id"]?.ToString() ?? "eng_kjv";
             Book ??= State["Bible.Book.Id"]?.ToString() ?? "JHN";
-            ChapterNumber ??= int.TryParse(State["Bible.Chapter.Number"]?.ToString(), out int c) ? c:1;
+            ChapterNumber ??= int.TryParse(State["Bible.Chapter.Number"]?.ToString(), out int c) ? c : 1;
             VerseNumber ??= int.TryParse(State["Bible.Verse.Number"]?.ToString(), out int v) ? v : 1;
 
             await LoadChapter();
@@ -372,5 +380,10 @@ else
         ChapterNumber = value;
 
         await LoadChapter();
+    }
+
+    private void OnSearch()
+    {
+
     }
 }

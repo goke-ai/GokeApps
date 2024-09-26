@@ -1,0 +1,28 @@
+﻿@page "/Account/ResetAdmins"
+@using Goke.Web.Services
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> UserManager
+@inject IEmailSender<ApplicationUser> EmailSender
+@inject NavigationManager NavigationManager
+
+@rendermode InteractiveServer
+
+<PageTitle>Reset Admins</PageTitle>
+
+<h3>Reset Admins</h3>
+
+
+<button class="primary" @onclick="OnResetAdmins" >Reset Admins</button>
+
+
+@code {
+
+    private async Task OnResetAdmins()
+    {
+        await DataInitializer.SeedResetAdmins(UserManager, EmailSender);
+
+        NavigationManager.NavigateTo("");
+    }
+}

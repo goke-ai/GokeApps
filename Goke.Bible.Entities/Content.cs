@@ -3,6 +3,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace Goke.Bible.Entities;
 
@@ -38,20 +39,10 @@ public class Content
                 }
                 sb.Append("></i>");
 
-                //return sb.ToString().Trim('¶', ' ');
-                return TrimWhitespace(sb.ToString()!);
+                var w = ConvertTag(sb.ToString());
+
+                return TrimWhitespace(w);
             }
-            //if (keyValues?.TryGetValue("text", out object? v) == true)
-            //{
-            //    if (keyValues?.TryGetValue("wordsOfJesus", out object? b) == true)
-            //    {
-            //        if (b.ToString() == "True")
-            //        {
-            //            return $"<i>{v}</i>";
-            //        }
-            //        return v.ToString()!;
-            //    }
-            //}
             else
             {
                 return string.Empty;
@@ -67,6 +58,19 @@ public class Content
         return s.Trim('¶', ' ');
         // Using regex to remove all whitespace characters
         //return Regex.Replace(s, @"\s+", "");
+    }
+
+    static string ConvertTag(string input)
+    {
+        // Use regex to capture the text and color attributes
+        var match = Regex.Match(input, "<i text=\"(.*?)\" (.*?) ></i>");
+        if (match.Success)
+        {
+            string text = match.Groups[1].Value;
+            string rest = match.Groups[2].Value;
+            return $"<i {rest}>{text}</i>";
+        }
+        return input; // Return the original input if no match is found
     }
 
 }

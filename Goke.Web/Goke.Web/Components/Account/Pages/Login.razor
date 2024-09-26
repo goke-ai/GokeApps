@@ -1,6 +1,7 @@
 ﻿@page "/Account/Login"
 
 @using System.ComponentModel.DataAnnotations
+@using Goke.Web.Services
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using Goke.Web.Data
@@ -93,7 +94,7 @@
     public async Task LoginUser()
     {
         using var context = DbFactory.CreateDbContext();
-        var success = await DataInitializer.ReadyToLoginWithPinAsync(Configuration, context, UserManager, Input.Email, Input.Password);
+        var success = await UserRoleService.ReadyToLoginWithPinAsync(Configuration, context, UserManager, Input.Email, Input.Password);
         if (success == false)
         {
             NavigationManager.NavigateTo("/Account/Buy");

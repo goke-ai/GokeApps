@@ -588,3 +588,40 @@ footer {
             --hsl-text: 140, 44%, 95%;
             --hsl-background: 140, 44%, 7%;
         }
+
+
+.toolbar {
+    display: flex; 
+    flex-flow:row; 
+    gap:0.2em;
+    justify-content: space-between;
+    align-items: center;
+    border-block-end: solid 1px lightgray;
+    padding-block: 0.2em;
+    margin-block-end: 1em;
+    position: sticky;
+    top: 0; /* You can adjust this value to control the offset from the top */
+    background-color: var(--clr-body-bg); /* Optional: for visibility */
+    padding: 10px; /* Optional: for spacing */
+
+    filter: invert();
+   
+}
+
+.page-top-0 {
+    margin-top: calc(-1 * var(--size-600));
+}
+
+.horizontal-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap);
+}
+
+.vertical-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--gap);
+}

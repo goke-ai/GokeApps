@@ -1,5 +1,4 @@
-﻿using Goke.Web;
-using Goke.Web.Client.Pages;
+﻿using Goke.Web.Client.Pages;
 using Goke.Web.Client.Services;
 using Goke.Web.Components;
 using Goke.Web.Components.Account;
@@ -12,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
+using Goke.Web.Services;
 
 
 bool isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);

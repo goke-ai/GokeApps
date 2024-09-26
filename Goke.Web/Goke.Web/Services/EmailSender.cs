@@ -6,7 +6,7 @@ using Goke.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Encodings.Web;
 
-namespace Goke.Web
+namespace Goke.Web.Services
 {
     public class EmailSender : IEmailSender<ApplicationUser>
     {
@@ -32,10 +32,10 @@ namespace Goke.Web
         public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) =>
             SendEmailAsync(email, "Reset your password", $"Please reset your password using the following code: {resetCode}");
 
-        
+
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            
+
             var MAIL_SERVER = _configuration["MAIL_SERVER"];
             var MAIL_PORT = int.Parse(_configuration["MAIL_PORT"] ?? "0");
             var MAIL_USERNAME = _configuration["MAIL_USERNAME"];
