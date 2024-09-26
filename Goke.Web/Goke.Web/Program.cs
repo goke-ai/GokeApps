@@ -39,6 +39,14 @@ builder.Services.AddAuthentication(options =>
 
 //
 DatabaseType? databaseType = DatabaseType.MSSQL;
+if (isWindows)
+{
+    databaseType = DatabaseType.MSSQL;
+}
+if (isLinux)
+{
+    databaseType = DatabaseType.MySQL;
+}
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 switch (databaseType)
