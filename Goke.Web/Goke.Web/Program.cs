@@ -48,7 +48,7 @@ if (isLinux)
     databaseType = DatabaseType.MySQL;
 }
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = string.Empty;
 switch (databaseType)
 {
     case DatabaseType.MSSQL:
@@ -58,6 +58,7 @@ switch (databaseType)
         builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>        
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Goke.Web.WindowsMigrations")));
         break;
+
     case DatabaseType.MySQL:
         connectionString = builder.Configuration.GetConnectionString("MariaDBDefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -70,9 +71,8 @@ switch (databaseType)
 
         break;
     case DatabaseType.Sqlite:
-        builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-            options.UseSqlite($"Data Source={nameof(Goke.Web)}.db"));
-
+        //builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+        //    options.UseSqlite($"Data Source={nameof(Goke.Web)}.db"));
         break;
     default:
         break;

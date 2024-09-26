@@ -592,7 +592,7 @@ table:has(input[type="checkbox"].column-controller:checked) .column-control {
     .wrapper {
         width: 100%;
         margin-inline: auto;
-        padding: var(--size-600);
+        padding-inline: var(--size-600);
     }
 
     .flex-group {
