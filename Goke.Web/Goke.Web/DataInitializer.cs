@@ -283,6 +283,4 @@ internal class DataInitializer
         db.Cards.Update(entity);
         var row = await db.SaveChangesAsync();
     }
-    
-
 }
