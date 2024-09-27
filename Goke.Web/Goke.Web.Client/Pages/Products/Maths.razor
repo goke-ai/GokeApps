@@ -6,14 +6,14 @@
 
 <PageTitle>Maths</PageTitle>
 
-<h1>Chemistry</h1>
+<h1>Maths</h1>
 
 <div class="card">
     <div class="card-header">Calculator</div>
     <div class="card-body">
-        <div style="border: solid 1px gray; 
-                min-height:6em; 
-                display:flex; 
+        <div style="border: solid 1px gray;
+                min-height:6em;
+                display:flex;
                 flex-direction:column; justify-content:space-between;
                 padding-inline:0.5em;">
             <div>@expressionText</div>
@@ -22,9 +22,9 @@
 
         <div style="padding-block:0.5em;">
             <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
-                @foreach(var k in numbers)
+                @foreach (var k in numbers)
                 {
-                    <button @onclick="()=>OnKeyPress(k, KeyType.Number)"
+                    <button class="primary" @onclick="()=>OnKeyPress(k, KeyType.Number)"
                             style="padding:0;width:2em; aspect-ratio:1;"
                             title="@k">
                         <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
@@ -32,9 +32,11 @@
                         </div>
                     </button>
                 }
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
                 @foreach (var k in operators)
                 {
-                    <button @onclick="()=>OnKeyPress(k,KeyType.Operator)"
+                    <button class="primary" @onclick="()=>OnKeyPress(k,KeyType.Operator)"
                             style="padding:0;width:2em; aspect-ratio:1;"
                             title="@k">
                         <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
@@ -42,14 +44,14 @@
                         </div>
                     </button>
                 }
-                <button @onclick="OnClear"
+                <button class="primary" @onclick="OnClear"
                         style="padding:0;width:2em; aspect-ratio:1;"
                         title="C">
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
                         <div style="font-size:1em;">C</div>
                     </div>
                 </button>
-                <button @onclick="OnAnswer"
+                <button class="primary" @onclick="OnAnswer"
                         style="padding:0;width:2em; aspect-ratio:1;"
                         title="ans">
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
@@ -64,27 +66,45 @@
 
 
 @code {
-    enum KeyType{None, Number, Operator, Element}
+    enum KeyType { None, Number, Operator, Element }
+    enum OperatorType { None, Plus, Minus, Multiply, Divide, Equal, Negate, Percent, Power }
+    char[] operators = " +-*/=~%^sct".ToCharArray();
     char[] numbers = "1234567890.".ToCharArray();
-    char[] operators = "+-*/=".ToCharArray();
 
     string expressionText = string.Empty;
     string inputText = "0";
-    bool firstKey = true;
+    bool isFirstKey = true;
     double answer = 0f;
 
     string lastKey = string.Empty;
     KeyType lastKeyType = KeyType.None;
+    double prevValue = 0;
+    double currentValue = 0;
+    OperatorType prevOperator = OperatorType.None;
+    OperatorType currentOperator = OperatorType.None;
 
     void OnKeyPress(string key, KeyType keyType)
     {
+        if (inputText == "0" && key == "0")
+        {
+            return;
+        }
+        double y = 0;
+
         switch (keyType)
         {
             case KeyType.Number:
-                if (firstKey)
+                if (isFirstKey)
                 {
-                    inputText = key;
-                    firstKey = false;
+                    if (key == ".")
+                    {
+                        inputText = "0" + key;
+                    }
+                    else
+                    {
+                        inputText = key;
+                    }
+                    isFirstKey = false;
                 }
                 else
                 {
@@ -94,20 +114,112 @@
             case KeyType.Operator:
                 switch (key)
                 {
-                    case "+":
+                    case "s":
+                        y = (float)Math.Sin(Math.PI * (double.Parse(inputText) / 180.0));
+                        inputText = y.ToString();
+                        isFirstKey = true; 
                         break;
+                    case "c":
+                        y = (float)Math.Cos(Math.PI * (double.Parse(inputText) / 180.0));
+                        inputText = y.ToString();
+                        isFirstKey = true;
+                        break;
+                    case "t":
+                        y = (float)Math.Tan(Math.PI * (double.Parse(inputText) / 180.0));
+                        inputText = y.ToString();
+                        isFirstKey = true; 
+                        break;
+                    case "%":
+                        y = double.Parse(inputText) / 100.0;
+                        inputText = y.ToString();
+                        break;
+                    case "~":
+                        y = double.Parse(inputText) * -1;
+                        inputText = y.ToString();
+                        break;
+                    case "^":
+                        if (lastKey != key)
+                        {
+                            OnOperator(OperatorType.Power);
+                            if (prevOperator != OperatorType.None)
+                            {
+                                y = Compute(prevOperator);
+                                currentValue = y;
 
-                    case "-": break;
-                    case "*": break;
-                    case "/": break;
+                                inputText = currentValue.ToString();
+                            }
+                        }
+                        break;
+                    case "+":
+                        if (lastKey != key)
+                        {
+                            OnOperator(OperatorType.Plus);
+                            if (prevOperator != OperatorType.None)
+                            {
+                                y = Compute(prevOperator);
+                                currentValue = y;
+
+                                inputText = currentValue.ToString();
+                            }
+                        }
+                        break;
+                    case "-":
+                        if (lastKey != key)
+                        {
+                            OnOperator(OperatorType.Minus);
+                            if (prevOperator != OperatorType.None)
+                            {
+                                y = Compute(prevOperator);
+                                currentValue = y;
+
+                                inputText = currentValue.ToString();
+                            }
+                        }
+                        break;
+                    case "*":
+                        if (lastKey != key)
+                        {
+                            OnOperator(OperatorType.Multiply);
+                            if (prevOperator != OperatorType.None)
+                            {
+                                y = Compute(prevOperator);
+                                currentValue = y;
+
+                                inputText = currentValue.ToString();
+                            }
+                        }
+                        break;
+                    case "/":
+                        if (lastKey != key)
+                        {
+                            OnOperator(OperatorType.Divide);
+                            if (prevOperator != OperatorType.None)
+                            {
+                                y = Compute(prevOperator);
+                                currentValue = y;
+
+                                inputText = currentValue.ToString();
+                            }
+                        }
+                        break;
+                    case "=":
+                        OnOperator(OperatorType.Equal);
+
+                        answer = Compute(prevOperator);
+
+                        OnAnswer();
+                        break;
                     default: break;
                 }
                 break;
-            default:break;
+            default: break;
         }
 
         lastKey = key;
         lastKeyType = keyType;
+
+        expressionText += key;
+
     }
 
     void OnKeyPress(char key, KeyType keyType)
@@ -115,16 +227,65 @@
         OnKeyPress(key.ToString(), keyType);
     }
 
+    void Initialize()
+    {
+        lastKey = string.Empty;
+        lastKeyType = KeyType.None;
+        prevValue = 0;
+        currentValue = 0;
+        prevOperator = OperatorType.None;
+        currentOperator = OperatorType.None;
+
+        isFirstKey = true;
+    }
+
     void OnClear()
     {
         inputText = "0";
-        firstKey = true;
+
+        Initialize();
     }
 
     void OnAnswer()
     {
         inputText = answer.ToString();
-        firstKey = true;
+
+        Initialize();
+    }
+
+    void OnOperator(OperatorType operatorType)
+    {
+        prevValue = currentValue;
+        currentValue = double.Parse(inputText);
+        prevOperator = currentOperator;
+        currentOperator = operatorType;
+
+        isFirstKey = true;
+    }
+
+    double Compute(OperatorType operatorType)
+    {
+        double result = 0;
+        switch (operatorType)
+        {
+            case OperatorType.Power:
+                result = Math.Pow(prevValue, currentValue);
+                break;
+            case OperatorType.Plus:
+                result = prevValue + currentValue;
+                break;
+            case OperatorType.Minus:
+                result = prevValue - currentValue;
+                break;
+            case OperatorType.Multiply:
+                result = prevValue * currentValue;
+                break;
+            case OperatorType.Divide:
+                result = prevValue / currentValue;
+                break;
+            default: break;
+        }
+        return result;
     }
 
 }

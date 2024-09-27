@@ -30,6 +30,7 @@
                     </div>
                 </button>
             </div>
+
             <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
                 @foreach(var k in numbers)
                 {
@@ -66,18 +67,38 @@
                     </div>
                 </button>
             </div>
+
             <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
+                <button @onclick="@(() => isBigSize = !isBigSize)"
+                        style="padding:0;width:2em;aspect-ratio:1;@(isBigSize ? "width:4em":"width:2em")">
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
+                        @if (isBigSize)
+                        {
+                            <div style="font-size:1em;">Small</div>
+                        }
+                        else
+                        {
+                            <div style="font-size:1em;">Big</div>
+                        }
+
+                    </div>
+                </button>
                 @foreach (var c in elements)
                 {
-                    <button @onclick="()=>OnKeyPress(c.Symbol!, KeyType.Element)"
-                            style="padding:0;width:2em;aspect-ratio:1;"
+                    <button class="primary" @onclick="()=>OnKeyPress(c.Symbol!, KeyType.Element)"
+                            style='padding:0;aspect-ratio:1;@(isBigSize ? "width:4em":"width:2em")'
                             title='@($"#{c.AtomicNumber} | {c.Name} | {c.AtomicWeight}" )'>
                         <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
-                            @* <div style="font-size:0.6em;line-height:0;">@c.AtomicNumber</div> *@
+                            @if (isBigSize)
+                            {
+                                <div style="font-size:0.6em;line-height:1;">@c.AtomicNumber</div> 
+                            }
                             <div style="font-size:1em;">@c.Symbol</div>
-                            @* <div style="font-size:0.6em;">@c.Name</div> *@
-                            @* <div style="font-size:0.6em;line-height:0;">@c.AtomicWeight</div> *@
-
+                            @if (isBigSize)
+                            {
+                                <div style="font-size:0.6em;">@c.Name</div>
+                                <div style="font-size:0.6em;line-height:1;">@c.AtomicWeight</div>
+                            }
                         </div>
                     </button>
                 }
@@ -90,6 +111,7 @@
 
 
 @code {
+    bool isBigSize = true;
     enum KeyType{None, Number, Operator, Element}
     List<Goke.Core.Chemistry.Element> elements = Goke.Core.Chemistry.AllElements.OrderBy(o => o.AtomicNumber).ToList();
     char[] numbers = "1234567890.".ToCharArray();
