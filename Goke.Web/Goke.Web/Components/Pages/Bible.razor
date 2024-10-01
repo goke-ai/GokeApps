@@ -56,9 +56,9 @@
                         <use xlink:href="sprites.svg#xmark-solid"></use>
                     </svg>
                 </button>
-                <BibleTranslation Translations="Translations" 
+                <BibleTranslation Translations="@Translations" 
                     Translation=@Translation 
-                    OnChangeTranslation="HandleChangeTranslation" />           
+                    OnChangeTranslation="@OnChangeTranslation" />           
             </div>
         </div>
 }
@@ -72,9 +72,9 @@
                         <use xlink:href="sprites.svg#xmark-solid"></use>
                     </svg>
                 </button>
-                <BibleToc Books="Books" Translation="@Translation"
-                          OnChangeBook="OnChangeBook"
-                          OnChangeChapter="OnChangeChapter"/>
+                <BibleToc Books="@Books" Translation="@Translation"
+                          OnChangeBook="@OnChangeBook"
+                          OnChangeChapter="@OnChangeChapter"/>
             </div>
         </div>
 }
@@ -119,7 +119,7 @@
             @chapter?.Book?.Name @chapter?.Chapter?.Number
         </button>
         |
-        <button class="primary" @onclick="OnTranslations"
+        <button class="primary" @onclick="@(()=>showTranslations = true)"
              title="@chapter?.Translation?.LanguageEnglishName">
             @chapter?.Translation?.ShortName
         </button>
@@ -349,12 +349,13 @@ else
         NavigationManager.NavigateTo($"bible/{Translation}/{Book}/{ChapterNumber}");
     }
 
-    async Task HandleChangeTranslation(string value)
+    async Task OnChangeTranslation(string value)
     {
         State["Bible.Translation.Id"] = value;
         Translation = value;
 
         await LoadChapter();
+        await LoadBooks();
 
         showTranslations = false;
 
@@ -363,7 +364,7 @@ else
     private async Task OnTranslations(MouseEventArgs e)
     {
         showTranslations = true;
-        await LoadTranslations();
+        //await LoadTranslations();
     }
 
     async Task OnChangeBook(string value)
