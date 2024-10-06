@@ -48,7 +48,7 @@ namespace Goke.Calculator
 
             new(){Key=Calculator.Key.Clear, Symbol="C"},
             new(){Key=Calculator.Key.ClearExpression, Symbol="CE"},
-            new(){Key=Calculator.Key.Backspace, Symbol="<="},
+            new(){Key=Calculator.Key.Backspace, Symbol="&#x21d0;"},
 
             new(){Key=Calculator.Key.Equal, Symbol="&#x003d;"},
             new(){Key=Calculator.Key.BracketOpen, Symbol="("},

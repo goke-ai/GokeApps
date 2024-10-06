@@ -27,9 +27,10 @@
                     @foreach (var k in operators)
                     {
                         int count = inputs.Count;
+
                         <button class="primary calc-key" 
                             @onclick="()=>OnOperatorPress(k.Key)"                              
-                            title="@k.Symbol">
+                            title="@k.Key">
                             <div class="calc-key-wrapper">
                                 <div class="calc-key-content">
                                     @if (k.Italic)
