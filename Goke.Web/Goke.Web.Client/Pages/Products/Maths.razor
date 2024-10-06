@@ -16,48 +16,31 @@
                 display:flex;
                 flex-direction:column; justify-content:space-between;
                 padding-inline:0.5em;">
-            <div>@expressionText</div>
-            <div style="font-size:2em; text-align:right;">@inputText</div>
+            <div>@input.ExpressionText</div>
+            <div style="font-size:2em; text-align:right;">@input.Text</div>
         </div>
 
         <div style="padding-block:0.5em;">
-            <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
-                @foreach (var k in numbers)
-                {
-                    <button class="primary" @onclick="()=>OnKeyPress(k, KeyType.Number)"
-                            style="padding:0;width:2em; aspect-ratio:1;"
-                            title="@k">
-                        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
-                            <div style="font-size:1em;">@k</div>
-                        </div>
-                    </button>
-                }
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
+            <div>(<sub>@inputs.Count</sub></div>
+        </div>
+        <div style="padding-block:0.5em;">
+            <div class="operators | " style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
                 @foreach (var k in operators)
                 {
-                    <button class="primary" @onclick="()=>OnKeyPress(k,KeyType.Operator)"
-                            style="padding:0;width:2em; aspect-ratio:1;"
-                            title="@k">
+                    <button class="primary" @onclick="()=>OnOperatorPress(k.Operator)"
+                            style="
+                            /*
+                            padding:0;
+                            width:2em; 
+                            aspect-ratio:1;
+                            */
+                            "
+                            title="@k.Symbol">
                         <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
-                            <div style="font-size:1em;">@k</div>
+                            <div style="font-size:1em;">@k.Symbol</div>
                         </div>
                     </button>
-                }
-                <button class="primary" @onclick="OnClear"
-                        style="padding:0;width:2em; aspect-ratio:1;"
-                        title="C">
-                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
-                        <div style="font-size:1em;">C</div>
-                    </div>
-                </button>
-                <button class="primary" @onclick="OnAnswer"
-                        style="padding:0;width:2em; aspect-ratio:1;"
-                        title="ans">
-                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
-                        <div style="font-size:1em;">ans</div>
-                    </div>
-                </button>
+                }               
             </div>
         </div>
     </div>
@@ -66,226 +49,50 @@
 
 
 @code {
-    enum KeyType { None, Number, Operator, Element }
-    enum OperatorType { None, Plus, Minus, Multiply, Divide, Equal, Negate, Percent, Power }
-    char[] operators = " +-*/=~%^sct".ToCharArray();
-    char[] numbers = "1234567890.".ToCharArray();
+    List<Calculator.KeySymbol> operators = Calculator.Input.KEYS;
 
-    string expressionText = string.Empty;
-    string inputText = "0";
-    bool isFirstKey = true;
-    double answer = 0f;
+    Goke.Calculator.Input input = new();
 
-    string lastKey = string.Empty;
-    KeyType lastKeyType = KeyType.None;
-    double prevValue = 0;
-    double currentValue = 0;
-    OperatorType prevOperator = OperatorType.None;
-    OperatorType currentOperator = OperatorType.None;
+    Stack<Calculator.Input> inputs = new();
+    Calculator.Input? child;
 
-    void OnKeyPress(string key, KeyType keyType)
+    private void OnOperatorPress(Calculator.Key op)
     {
-        if (inputText == "0" && key == "0")
+        if (op == Calculator.Key.BracketOpen )
         {
-            return;
+            var active = inputs.LastOrDefault() ?? input;
+            child = active.BracketOpen();
+            child.OnBracketClose += (o,e) =>
+            {
+                child = inputs.Pop();
+                child.BracketClose();
+                child = inputs.LastOrDefault();
+            };
+            inputs.Push(child);
         }
-        double y = 0;
-
-        switch (keyType)
+        else if (op == Calculator.Key.BracketClose)
         {
-            case KeyType.Number:
-                if (isFirstKey)
-                {
-                    if (key == ".")
-                    {
-                        inputText = "0" + key;
-                    }
-                    else
-                    {
-                        inputText = key;
-                    }
-                    isFirstKey = false;
-                }
-                else
-                {
-                    inputText += key;
-                }
-                break;
-            case KeyType.Operator:
-                switch (key)
-                {
-                    case "s":
-                        y = (float)Math.Sin(Math.PI * (double.Parse(inputText) / 180.0));
-                        inputText = y.ToString();
-                        isFirstKey = true; 
-                        break;
-                    case "c":
-                        y = (float)Math.Cos(Math.PI * (double.Parse(inputText) / 180.0));
-                        inputText = y.ToString();
-                        isFirstKey = true;
-                        break;
-                    case "t":
-                        y = (float)Math.Tan(Math.PI * (double.Parse(inputText) / 180.0));
-                        inputText = y.ToString();
-                        isFirstKey = true; 
-                        break;
-                    case "%":
-                        y = double.Parse(inputText) / 100.0;
-                        inputText = y.ToString();
-                        break;
-                    case "~":
-                        y = double.Parse(inputText) * -1;
-                        inputText = y.ToString();
-                        break;
-                    case "^":
-                        if (lastKey != key)
-                        {
-                            OnOperator(OperatorType.Power);
-                            if (prevOperator != OperatorType.None)
-                            {
-                                y = Compute(prevOperator);
-                                currentValue = y;
-
-                                inputText = currentValue.ToString();
-                            }
-                        }
-                        break;
-                    case "+":
-                        if (lastKey != key)
-                        {
-                            OnOperator(OperatorType.Plus);
-                            if (prevOperator != OperatorType.None)
-                            {
-                                y = Compute(prevOperator);
-                                currentValue = y;
-
-                                inputText = currentValue.ToString();
-                            }
-                        }
-                        break;
-                    case "-":
-                        if (lastKey != key)
-                        {
-                            OnOperator(OperatorType.Minus);
-                            if (prevOperator != OperatorType.None)
-                            {
-                                y = Compute(prevOperator);
-                                currentValue = y;
-
-                                inputText = currentValue.ToString();
-                            }
-                        }
-                        break;
-                    case "*":
-                        if (lastKey != key)
-                        {
-                            OnOperator(OperatorType.Multiply);
-                            if (prevOperator != OperatorType.None)
-                            {
-                                y = Compute(prevOperator);
-                                currentValue = y;
-
-                                inputText = currentValue.ToString();
-                            }
-                        }
-                        break;
-                    case "/":
-                        if (lastKey != key)
-                        {
-                            OnOperator(OperatorType.Divide);
-                            if (prevOperator != OperatorType.None)
-                            {
-                                y = Compute(prevOperator);
-                                currentValue = y;
-
-                                inputText = currentValue.ToString();
-                            }
-                        }
-                        break;
-                    case "=":
-                        OnOperator(OperatorType.Equal);
-
-                        answer = Compute(prevOperator);
-
-                        OnAnswer();
-                        break;
-                    default: break;
-                }
-                break;
-            default: break;
+            if (inputs.Count > 0)
+            {
+                child = inputs.Pop();
+                child.BracketClose();
+                child = inputs.LastOrDefault();
+            }
+        }
+        else
+        {
+            if (child != null)
+            {
+                child.SendKey(op);
+            }
+            else
+            {
+                input.SendKey(op);
+            }
         }
 
-        lastKey = key;
-        lastKeyType = keyType;
-
-        expressionText += key;
-
+        StateHasChanged();
     }
 
-    void OnKeyPress(char key, KeyType keyType)
-    {
-        OnKeyPress(key.ToString(), keyType);
-    }
-
-    void Initialize()
-    {
-        lastKey = string.Empty;
-        lastKeyType = KeyType.None;
-        prevValue = 0;
-        currentValue = 0;
-        prevOperator = OperatorType.None;
-        currentOperator = OperatorType.None;
-
-        isFirstKey = true;
-    }
-
-    void OnClear()
-    {
-        inputText = "0";
-
-        Initialize();
-    }
-
-    void OnAnswer()
-    {
-        inputText = answer.ToString();
-
-        Initialize();
-    }
-
-    void OnOperator(OperatorType operatorType)
-    {
-        prevValue = currentValue;
-        currentValue = double.Parse(inputText);
-        prevOperator = currentOperator;
-        currentOperator = operatorType;
-
-        isFirstKey = true;
-    }
-
-    double Compute(OperatorType operatorType)
-    {
-        double result = 0;
-        switch (operatorType)
-        {
-            case OperatorType.Power:
-                result = Math.Pow(prevValue, currentValue);
-                break;
-            case OperatorType.Plus:
-                result = prevValue + currentValue;
-                break;
-            case OperatorType.Minus:
-                result = prevValue - currentValue;
-                break;
-            case OperatorType.Multiply:
-                result = prevValue * currentValue;
-                break;
-            case OperatorType.Divide:
-                result = prevValue / currentValue;
-                break;
-            default: break;
-        }
-        return result;
-    }
-
+    
 }

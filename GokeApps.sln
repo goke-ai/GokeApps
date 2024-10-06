@@ -39,11 +39,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Core.Entities", "Goke.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Core.Dtos", "Goke.Core.Dtos\Goke.Core.Dtos.csproj", "{0A3B7B54-35C5-4A40-8410-721A8DC184AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Maths", "Goke.Maths\Goke.Maths.csproj", "{38B60E3E-1E25-4599-A30A-A0F9CD5A2DE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Maths", "Goke.Maths\Goke.Maths.csproj", "{38B60E3E-1E25-4599-A30A-A0F9CD5A2DE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Maths.Tests", "Goke.Maths.Tests\Goke.Maths.Tests.csproj", "{89A2208F-D88A-4BD2-9E24-CA387F59B668}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Maths.Tests", "Goke.Maths.Tests\Goke.Maths.Tests.csproj", "{89A2208F-D88A-4BD2-9E24-CA387F59B668}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goke.Biomass", "Goke.Biomass\Goke.Biomass.csproj", "{8CC544D1-6E95-42A8-A179-17FB58C017FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Biomass", "Goke.Biomass\Goke.Biomass.csproj", "{8CC544D1-6E95-42A8-A179-17FB58C017FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Calculator", "Goke.Calculator\Goke.Calculator.csproj", "{40142833-D6D5-4858-AE54-CF4426F46AFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goke.Calculator.Tests", "Goke.Calculator.Tests\Goke.Calculator.Tests.csproj", "{845A1587-11DB-4E77-AF2C-AF14EACFEA53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +119,14 @@ Global
 		{8CC544D1-6E95-42A8-A179-17FB58C017FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CC544D1-6E95-42A8-A179-17FB58C017FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CC544D1-6E95-42A8-A179-17FB58C017FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40142833-D6D5-4858-AE54-CF4426F46AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40142833-D6D5-4858-AE54-CF4426F46AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40142833-D6D5-4858-AE54-CF4426F46AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40142833-D6D5-4858-AE54-CF4426F46AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{845A1587-11DB-4E77-AF2C-AF14EACFEA53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{845A1587-11DB-4E77-AF2C-AF14EACFEA53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{845A1587-11DB-4E77-AF2C-AF14EACFEA53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{845A1587-11DB-4E77-AF2C-AF14EACFEA53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +144,8 @@ Global
 		{38B60E3E-1E25-4599-A30A-A0F9CD5A2DE1} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
 		{89A2208F-D88A-4BD2-9E24-CA387F59B668} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
 		{8CC544D1-6E95-42A8-A179-17FB58C017FE} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
+		{40142833-D6D5-4858-AE54-CF4426F46AFC} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
+		{845A1587-11DB-4E77-AF2C-AF14EACFEA53} = {ABFE2ABC-33C6-4343-9DFD-FC3FC851200A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {82EC32E6-DB82-48E7-A2B5-762D6A22AAA3}
