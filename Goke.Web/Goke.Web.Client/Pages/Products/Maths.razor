@@ -6,42 +6,53 @@
 
 <PageTitle>Maths</PageTitle>
 
+
 <h1>Maths</h1>
 
 <div class="card">
     <div class="card-header">Calculator</div>
     <div class="card-body">
-        <div style="border: solid 1px gray;
-                min-height:6em;
-                display:flex;
-                flex-direction:column; justify-content:space-between;
-                padding-inline:0.5em;">
-            <div>@input.ExpressionText</div>
-            <div style="font-size:2em; text-align:right;">@input.Text</div>
-        </div>
 
-        <div style="padding-block:0.5em;">
-            <div>(<sub>@inputs.Count</sub></div>
-        </div>
-        <div style="padding-block:0.5em;">
-            <div class="operators | " style="display:flex; flex-wrap:wrap; gap:0.1em; padding-bottom:0.2em;">
-                @foreach (var k in operators)
-                {
-                    <button class="primary" @onclick="()=>OnOperatorPress(k.Operator)"
-                            style="
-                            /*
-                            padding:0;
-                            width:2em; 
-                            aspect-ratio:1;
-                            */
-                            "
-                            title="@k.Symbol">
-                        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%;">
-                            <div style="font-size:1em;">@k.Symbol</div>
-                        </div>
-                    </button>
-                }               
+        <div class="calc">
+            <div class="calc-screen">
+                <div class="calc-input-top">@input.ExpressionText</div>
+                <div class="calc-input">@input.Text</div>
             </div>
+
+            <div style="padding-block:0.5em;">
+            </div>
+
+            <div style="padding-block:0.5em;">
+                <div class="keys | calc-keys">
+                    @foreach (var k in operators)
+                    {
+                        int count = inputs.Count;
+                        <button class="primary calc-key" 
+                            @onclick="()=>OnOperatorPress(k.Key)"                              
+                            title="@k.Symbol">
+                            <div class="calc-key-wrapper">
+                                <div class="calc-key-content">
+                                    @if (k.Italic)
+                                    {
+                                        <i>
+                                            @((MarkupString)k.Symbol!)
+                                        </i>
+                                    }
+                                    else
+                                    {
+                                        @((MarkupString)k.Symbol!)
+                                    }
+                                    @if (k.Key == Calculator.Key.BracketOpen && count > 0)
+                                    {
+                                        <sub style="font-size:0.6em;">@count</sub>
+                                    }
+                                </div>
+                            </div>
+                        </button>
+                    }
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -58,11 +69,11 @@
 
     private void OnOperatorPress(Calculator.Key op)
     {
-        if (op == Calculator.Key.BracketOpen )
+        if (op == Calculator.Key.BracketOpen)
         {
             var active = inputs.LastOrDefault() ?? input;
             child = active.BracketOpen();
-            child.OnBracketClose += (o,e) =>
+            child.OnBracketClose += (o, e) =>
             {
                 child = inputs.Pop();
                 child.BracketClose();
@@ -94,5 +105,5 @@
         StateHasChanged();
     }
 
-    
+
 }
