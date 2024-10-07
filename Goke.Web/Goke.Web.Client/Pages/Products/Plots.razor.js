@@ -77,7 +77,6 @@ export function plot4(element, data) {
         { letter: "A", frequency: 3 },
         { letter: "B", frequency: 4 },
         { letter: "C", frequency: 1 },
-
     ];
 
     const plot = Plot.plot({

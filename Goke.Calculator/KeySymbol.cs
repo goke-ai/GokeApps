@@ -14,7 +14,8 @@
         Secant, Cosecant, Cotangent, ArcSecant, ArcCosecant, ArcCotangent,
         Sinh, Cosh, Tanh, ArcSinh, ArcCosh, ArcTanh,
         XPowerY = 151, YRootX, XModY,
-        COMPUTE = 200, Quadratic,
+        COMPUTE = 200, Quadratic, Polynomial3, Polynomial4, Polynomial5, Polynomial6, Polynomial7, 
+        Centigrade, Farenheit, 
     }
 
     public enum KeyType { None, Numeric, Arithmethic, Binary, Unary, Trigonometric, Storage, Parametric }
@@ -58,6 +59,20 @@
             new(){Key=Calculator.Key.Equal, Symbol="&#x003d;"},
             new(){Key=Calculator.Key.BracketOpen, Symbol="("},
             new(){Key=Calculator.Key.BracketClose, Symbol=")"},
+
+            new(){Key=Calculator.Key.Plus, Symbol="&#x002b;"},
+            new(){Key=Calculator.Key.Minus, Symbol="&#x2212;"},
+            new(){Key=Calculator.Key.Multiply, Symbol="&#x00d7;"},
+            new(){Key=Calculator.Key.Divide, Symbol="&#x00f7;"},
+
+            new(){Key=Calculator.Key.Pi, Symbol="&#x03c0;", Italic=true},
+            new(){Key=Calculator.Key.e, Symbol="&#x0435;", Italic=true},
+
+            new(){Key=Calculator.Key.Negate, Symbol="&#x00b1;"},
+            new(){Key=Calculator.Key.Percent, Symbol="&#x0025;"},
+            new(){Key=Calculator.Key.Reciprocal, Symbol="&#x00b9;/x"},
+            new(){Key=Calculator.Key.Abs, Symbol="&#x2223;x&#x2223;"},
+
             new(){Key=Calculator.Key.Answer, Symbol="ans"},
             new(){Key=Calculator.Key.STORE, Symbol="STO"},
             new(){Key=Calculator.Key.A, Symbol="A"},
@@ -82,19 +97,6 @@
             new(){Key=Calculator.Key.X, Symbol="X"},
             new(){Key=Calculator.Key.Y, Symbol="Y"},
             new(){Key=Calculator.Key.Z, Symbol="Z"},
-
-            new(){Key=Calculator.Key.Plus, Symbol="&#x002b;"},
-            new(){Key=Calculator.Key.Minus, Symbol="&#x2212;"},
-            new(){Key=Calculator.Key.Multiply, Symbol="&#x00d7;"},
-            new(){Key=Calculator.Key.Divide, Symbol="&#x00f7;"},
-
-            new(){Key=Calculator.Key.Negate, Symbol="&#x00b1;"},
-            new(){Key=Calculator.Key.Percent, Symbol="&#x0025;"},
-            new(){Key=Calculator.Key.Reciprocal, Symbol="&#x00b9;/x"},
-            new(){Key=Calculator.Key.Abs, Symbol="&#x2223;x&#x2223;"},
-            new(){Key=Calculator.Key.Pi, Symbol="&#x03c0;", Italic=true},
-            new(){Key=Calculator.Key.e, Symbol="&#x0435;", Italic=true},
-
 
             new(){Key=Calculator.Key.Square, Symbol="x&#x00b2;"},
             new(){Key=Calculator.Key.Cube, Symbol="x&#x00b3;"},
@@ -134,6 +136,10 @@
 
             new(){Key=Calculator.Key.COMPUTE, Symbol="=>"},
             new(){Key=Calculator.Key.Quadratic, Symbol="Quadratic"},
+            new(){Key=Calculator.Key.Polynomial3, Symbol="Poly3"},
+            new(){Key=Calculator.Key.Polynomial4, Symbol="Poly4"},
+            new(){Key=Calculator.Key.Polynomial5, Symbol="Poly5"},
+            new(){Key=Calculator.Key.Polynomial6, Symbol="Poly6"},
 
     ];
         
@@ -145,7 +151,7 @@
 
         public static bool IsUnary(Key key)
         {
-            return GetKeyType(key) == KeyType.Unary;
+            return GetKeyType(key) == KeyType.Unary || GetKeyType(key) == KeyType.Trigonometric;
         }
 
         public static bool IsArithmetic(Key key)

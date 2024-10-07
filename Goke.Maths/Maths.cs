@@ -14,7 +14,7 @@ namespace Goke.Maths
         }
         public static double RadianToDegree(double radian)
         {
-            return radian / Math.PI * radian;
+            return radian / Math.PI * 180;
         }
 
         public static double FahrenheitToCentigrade(double fahrenheit)

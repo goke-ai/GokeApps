@@ -315,39 +315,7 @@ namespace Goke.Calculator
                 switch (key)
                 {
                     case Key.Quadratic:
-                        if (CanCompute)
-                        {
-                            double value = 0;
-                            var a = STORE.TryGetValue("A", out value) ? value : 0;
-                            var b = STORE.TryGetValue("B", out value) ? value : 0;
-                            var c = STORE.TryGetValue("C", out value) ? value : 0;
-
-                            (var r1, var r2, var i1, var i2) = Maths.Roots.Formula(a, b, c);
-
-                            if (i1 == 0 && i2 == 0)
-                            {
-                                STORE["D"] = r1;
-                                STORE["E"] = r2;
-
-                                Text = $"{r1}, {r2}";
-                            }
-                            else
-                            {
-                                STORE["D"] = r1;
-                                STORE["E"] = r2;
-                                STORE["F"] = i1;
-                                STORE["G"] = i2;
-
-                                Text = $"{r1}+{i1}, {r2}+{i2}";
-                            }
-                            CanCompute = false;
-
-                            GraphData = Roots.Quadratic(a, b, c);
-                        }
-                        else
-                        {
-                            Text = $"STO(A, B, C) => D, E";
-                        }
+                        OnQuadratic();
                         break;
                     default:
                         break;
@@ -357,6 +325,43 @@ namespace Goke.Calculator
             catch (Exception ex)
             {
                 Text = ex.Message;
+            }
+        }
+
+        private void OnQuadratic()
+        {
+            if (CanCompute)
+            {
+                double value = 0;
+                var a = STORE.TryGetValue("A", out value) ? value : 0;
+                var b = STORE.TryGetValue("B", out value) ? value : 0;
+                var c = STORE.TryGetValue("C", out value) ? value : 0;
+
+                (var r1, var r2, var i1, var i2) = Maths.Roots.Formula(a, b, c);
+
+                if (i1 == 0 && i2 == 0)
+                {
+                    STORE["D"] = r1;
+                    STORE["E"] = r2;
+
+                    Text = $"{r1}, {r2}";
+                }
+                else
+                {
+                    STORE["D"] = r1;
+                    STORE["E"] = r2;
+                    STORE["F"] = i1;
+                    STORE["G"] = i2;
+
+                    Text = $"{r1}+{i1}, {r2}+{i2}";
+                }
+                CanCompute = false;
+
+                GraphData = Roots.Quadratic(a, b, c);
+            }
+            else
+            {
+                Text = $"STO(A, B, C) => D, E";
             }
         }
 
@@ -718,92 +723,92 @@ namespace Goke.Calculator
                     break;
                 case Key.Sine:
                     var angle = TrigonometryConvert();
-                    Answer = Math.Sin(angle);
+                    Answer = (float)Math.Sin(angle);
                     ExpressionListAdd($"sin({CurrentValue})|");
                     break;
                 case Key.Cosine:
                     angle = TrigonometryConvert();
-                    Answer = Math.Cos(angle);
+                    Answer = (float)Math.Cos(angle);
                     ExpressionListAdd($"cos({CurrentValue})|");
                     break;
                 case Key.Tangent:
                     angle = TrigonometryConvert();
-                    Answer = Math.Tan(angle);
+                    Answer = (float)Math.Tan(angle);
                     ExpressionListAdd($"tan({CurrentValue})|");
                     break;
                 case Key.ArcSine:
-                    angle = TrigonometryConvert();
-                    Answer = Math.Asin(angle);
+                    angle = Math.Asin(CurrentValue);
+                    Answer = (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arcsin({CurrentValue})|");
                     break;
                 case Key.ArcCosine:
-                    angle = TrigonometryConvert();
-                    Answer = Math.Acos(angle);
+                    angle = Math.Acos(CurrentValue);
+                    Answer = (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arccos({CurrentValue})|");
                     break;
                 case Key.ArcTangent:
-                    angle = TrigonometryConvert();
-                    Answer = Math.Atan(angle);
+                    angle = Math.Atan(CurrentValue);
+                    Answer = (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arctan({CurrentValue})|");
                     break;
                 case Key.Secant:
                     angle = TrigonometryConvert();
-                    Answer = 1/Math.Cos(angle);
+                    Answer = 1 / (float)Math.Cos(angle);
                     ExpressionListAdd($"sec({CurrentValue})|");
                     break;
                 case Key.Cosecant:
                     angle = TrigonometryConvert();
-                    Answer = 1/ Math.Sin(angle);
+                    Answer = 1 / (float)Math.Sin(angle);
                     ExpressionListAdd($"csc({CurrentValue})|");
                     break;
                 case Key.Cotangent:
                     angle = TrigonometryConvert();
-                    Answer = 1/Math.Tan(angle);
+                    Answer = 1 / (float)Math.Tan(angle);
                     ExpressionListAdd($"cot({CurrentValue})|");
                     break;
                 case Key.ArcSecant:
-                    angle = TrigonometryConvert();
-                    Answer = 1/Math.Acos(angle);
+                    angle = Math.Acos(CurrentValue);
+                    Answer = 1 / (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arcsec({CurrentValue})|");
                     break;
                 case Key.ArcCosecant:
-                    angle = TrigonometryConvert();
-                    Answer = 1/Math.Asin(angle);
+                    angle = Math.Asin(CurrentValue);
+                    Answer = 1 / (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arccsc({CurrentValue})|");
                     break;
                 case Key.ArcCotangent:
-                    angle = TrigonometryConvert();
-                    Answer = 1/ Math.Atan(angle);
+                    angle = Math.Atan(CurrentValue);
+                    Answer = 1 / (float)TrigonometryAConvert(angle); 
                     ExpressionListAdd($"arccot({CurrentValue})|");
                     break;
                 case Key.Sinh:
                     angle = TrigonometryConvert();
-                    Answer = Math.Sinh(angle);
+                    Answer = (float)Math.Sinh(angle);
                     ExpressionListAdd($"sinh({CurrentValue})|");
                     break;
                 case Key.Cosh:
                     angle = TrigonometryConvert();
-                    Answer = Math.Cosh(angle);
+                    Answer = (float)Math.Cosh(angle);
                     ExpressionListAdd($"cosh({CurrentValue})|");
                     break;
                 case Key.Tanh:
                     angle = TrigonometryConvert();
-                    Answer = Math.Tanh(angle);
+                    Answer = (float)Math.Tanh(angle);
                     ExpressionListAdd($"tanh({CurrentValue})|");
                     break;
                 case Key.ArcSinh:
-                    angle = TrigonometryConvert();
-                    Answer = Math.Asinh(angle);
+                    angle = Math.Asinh(CurrentValue);
+                    Answer = (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arcsinh({CurrentValue})|");
                     break;
                 case Key.ArcCosh:
-                    angle = TrigonometryConvert();
-                    Answer = Math.Acosh(angle);
+                    angle = Math.Acosh(CurrentValue);
+                    Answer = (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arccosh({CurrentValue})|");
                     break;
                 case Key.ArcTanh:
-                    angle = TrigonometryConvert();
-                    Answer = Math.Atanh(angle);
+                    angle = Math.Atanh(CurrentValue);
+                    Answer = (float)TrigonometryAConvert(angle);
                     ExpressionListAdd($"arctanh({CurrentValue})|");
                     break;
                 default:
@@ -820,6 +825,18 @@ namespace Goke.Calculator
             else
             {
                 return CurrentValue;
+            }
+        }
+
+        private double TrigonometryAConvert(double value)
+        {
+            if (IsDegree)
+            {
+                return Maths.Functions.RadianToDegree(value);
+            }
+            else
+            {
+                return value;
             }
         }
 
