@@ -1,11 +1,13 @@
 ﻿@page "/products/maths"
 
+@implements IAsyncDisposable
+
+@inject IJSRuntime JS
 @inject ILogger<Maths> Logger
 
 @rendermode InteractiveAuto
 
 <PageTitle>Maths</PageTitle>
-
 
 <h1>Maths</h1>
 
@@ -20,6 +22,7 @@
             </div>
 
             <div style="padding-block:0.5em;">
+                <div id="myplot"></div>
             </div>
 
             <div style="padding-block:0.5em;">
@@ -28,7 +31,7 @@
                     {
                         int count = inputs.Count;
 
-                        <button class="primary calc-key" 
+                        <button class="@(k.Symbol=="=>" && input.CanCompute ? "calc-key":"primary calc-key")"
                             @onclick="()=>OnOperatorPress(k.Key)"                              
                             title="@k.Key">
                             <div class="calc-key-wrapper">
@@ -61,14 +64,44 @@
 
 
 @code {
-    List<Calculator.KeySymbol> operators = Calculator.Input.KEYS;
+    private IJSObjectReference? module;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import",
+                "./Pages/Products/Maths.razor.js");
+
+            //await module.InvokeVoidAsync("addHandlers");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+
+    async void OnShowPlot()
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("plotQuadratic", "#myplot");
+        }
+
+    }
+
+    List<Calculator.KeySymbol> operators = Calculator.KeySymbol.KEYS;
 
     Goke.Calculator.Input input = new();
 
     Stack<Calculator.Input> inputs = new();
     Calculator.Input? child;
 
-    private void OnOperatorPress(Calculator.Key op)
+    private async void OnOperatorPress(Calculator.Key op)
     {
         if (op == Calculator.Key.BracketOpen)
         {
@@ -100,6 +133,18 @@
             else
             {
                 input.SendKey(op);
+
+            }
+
+            if (op == Calculator.Key.Quadratic && input.GraphData is not null)
+            {
+                (double[] x, double[] y) = input.GraphData.Value;
+                var data = x.Zip(y).Select(s => new { x = s.First, y = s.Second });
+
+                if (module is not null)
+                {
+                    await module.InvokeVoidAsync("plotQuadratic", "#myplot", data);
+                }                
             }
         }
 

@@ -21,14 +21,14 @@ namespace Goke.Maths
         /// <para>i2: imagnary root 2</para> 
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
-        public static (double r1, double r2,double i1,double i2) Formula(double a, double b, double c)
+        public static (double r1, double r2, double i1, double i2) Formula(double a, double b, double c)
         {
-            double r1 = 0, r2 = 0, i1 = 0, i2= 0;
+            double r1 = 0, r2 = 0, i1 = 0, i2 = 0;
             if (a == 0)
             {
                 if (b != 0)
-                { 
-                    r1 = -c/b;
+                {
+                    r1 = -c / b;
                 }
                 else
                 {
@@ -46,11 +46,30 @@ namespace Goke.Maths
                     i2 = -i1;
                     // throw new ArithmeticException("Complex root expected");
                 }
-
-                r1 = (-b - Math.Sqrt(D)) / 2 / a;
-                r2 = (-b + Math.Sqrt(D)) / 2 / a;
+                else
+                {
+                    r1 = (-b - Math.Sqrt(D)) / 2 / a;
+                    r2 = (-b + Math.Sqrt(D)) / 2 / a;
+                }
             }
             return (r1, r2, i1, i2);
+        }
+
+        public static (double[] x, double[] y) Quadratic(double a, double b, double c)
+        {
+            int intervals = 10;
+            double h = Math.Abs(c) / intervals;
+
+            var count = (intervals * 2) + 1;
+            var v = -Math.Abs(c)-h;
+            double[] x = Enumerable.Range(0, count).Select(s => v + (s * h)).ToArray();
+            double[] y = Enumerable.Range(0, count).Select(s => 0.0).ToArray();
+
+            for (int i = 0; i < x.Length; i++)
+            {
+                y[i] = a * (x[i] * x[i]) + b * x[i] + c;
+            }
+            return (x, y);
         }
     }
 }

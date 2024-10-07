@@ -7,134 +7,8 @@ using Goke.Maths;
 
 namespace Goke.Calculator
 {
-    public enum KeyType {None, Numeric, Arithmethic, Binary, Unary, Storage }
-    public enum Key
-    {
-        None,
-        One = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero, Point,
-        Clear = 21, ClearExpression, Backspace, Equal, BracketOpen, BracketClose, EXP,
-        Answer, Store, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-        Plus = 91, Minus, Multiply, Divide,
-        Negate = 101, Percent, Reciprocal, Abs, Pi, e,
-        Square, Cube, SquareRoot, CubeRoot, TenPower, Log, Ln, Factorial,
-        Sine, Cosine, Tangent, ArcSine, ArcCosine, ArcTangent,
-        Secant, Cosecant, Cotangent, ArcSecant, ArcCosecant, ArcCotangent,
-        Sinh, Cosh, Tanh, ArcSinh, ArcCosh, ArcTanh,
-        XPowerY = 201, YRootX, XModY,
-    }
-
-    public class KeySymbol
-    {
-        public Calculator.Key Key { get; set; }
-        public String? Symbol { get; set; }
-
-        public bool Italic { get; set; }
-    };
-
     public class Input
-    {
-        public static List<KeySymbol> KEYS => [
-            new(){Key=Calculator.Key.One, Symbol="1"},
-            new(){Key=Calculator.Key.Two, Symbol="2"},
-            new(){Key=Calculator.Key.Three, Symbol="3"},
-            new(){Key=Calculator.Key.Four, Symbol="4"},
-            new(){Key=Calculator.Key.Five, Symbol="5"},
-            new(){Key=Calculator.Key.Six, Symbol="6"},
-            new(){Key=Calculator.Key.Seven, Symbol="7"},
-            new(){Key=Calculator.Key.Eight, Symbol="8"},
-            new(){Key=Calculator.Key.Nine, Symbol="9"},
-            new(){Key=Calculator.Key.Zero, Symbol="0"},
-            new(){Key=Calculator.Key.Point, Symbol="&#x002e;"},
-
-            new(){Key=Calculator.Key.Clear, Symbol="C"},
-            new(){Key=Calculator.Key.ClearExpression, Symbol="CE"},
-            new(){Key=Calculator.Key.Backspace, Symbol="&#x21d0;"},
-
-            new(){Key=Calculator.Key.Equal, Symbol="&#x003d;"},
-            new(){Key=Calculator.Key.BracketOpen, Symbol="("},
-            new(){Key=Calculator.Key.BracketClose, Symbol=")"},
-            new(){Key=Calculator.Key.Answer, Symbol="ans"},
-            new(){Key=Calculator.Key.Store, Symbol="STO"},
-            new(){Key=Calculator.Key.A, Symbol="A"},
-            new(){Key=Calculator.Key.B, Symbol="B"},
-            new(){Key=Calculator.Key.C, Symbol="C"},
-            new(){Key=Calculator.Key.D, Symbol="D"},
-            new(){Key=Calculator.Key.E, Symbol="E"},
-            new(){Key=Calculator.Key.F, Symbol="F"},
-            new(){Key=Calculator.Key.G, Symbol="G"},
-            new(){Key=Calculator.Key.H, Symbol="H"},
-            new(){Key=Calculator.Key.I, Symbol="I"},
-            new(){Key=Calculator.Key.J, Symbol="J"},
-            new(){Key=Calculator.Key.K, Symbol="K"},
-            new(){Key=Calculator.Key.L, Symbol="L"},
-            new(){Key=Calculator.Key.O, Symbol="O"},
-            new(){Key=Calculator.Key.P, Symbol="P"},
-            new(){Key=Calculator.Key.Q, Symbol="R"},
-            new(){Key=Calculator.Key.R, Symbol="Q"},
-            new(){Key=Calculator.Key.S, Symbol="S"},
-            new(){Key=Calculator.Key.T, Symbol="T"},
-            new(){Key=Calculator.Key.W, Symbol="W"},
-            new(){Key=Calculator.Key.X, Symbol="X"},
-            new(){Key=Calculator.Key.Y, Symbol="Y"},
-            new(){Key=Calculator.Key.Z, Symbol="Z"},
-
-            new(){Key=Calculator.Key.Plus, Symbol="&#x002b;"},
-            new(){Key=Calculator.Key.Minus, Symbol="&#x2212;"},
-            new(){Key=Calculator.Key.Multiply, Symbol="&#x00d7;"},
-            new(){Key=Calculator.Key.Divide, Symbol="&#x00f7;"},
-
-            new(){Key=Calculator.Key.Negate, Symbol="&#x00b1;"},
-            new(){Key=Calculator.Key.Percent, Symbol="&#x0025;"},
-            new(){Key=Calculator.Key.Reciprocal, Symbol="&#x00b9;/x"},
-            new(){Key=Calculator.Key.Abs, Symbol="&#x2223;x&#x2223;"},
-            new(){Key=Calculator.Key.Pi, Symbol="&#x03c0;", Italic=true},
-            new(){Key=Calculator.Key.e, Symbol="&#x0435;", Italic=true},
-
-
-            new(){Key=Calculator.Key.Square, Symbol="x&#x00b2;"},
-            new(){Key=Calculator.Key.Cube, Symbol="x&#x00b3;"},
-            new(){Key=Calculator.Key.SquareRoot, Symbol="&#x221a;"},
-            new(){Key=Calculator.Key.CubeRoot, Symbol="&#x221b;"},
-            new(){Key=Calculator.Key.TenPower, Symbol="10&#x207f;"},
-            new(){Key=Calculator.Key.Log, Symbol="log"},
-            new(){Key=Calculator.Key.Ln, Symbol="ln"},
-            new(){Key=Calculator.Key.Factorial, Symbol="x!"},
-
-            new(){Key=Calculator.Key.EXP, Symbol="exp", Italic=true},
-
-            new(){Key=Calculator.Key.Sine, Symbol="sin", Italic=true},
-            new(){Key=Calculator.Key.Cosine, Symbol="cos", Italic=true},
-            new(){Key=Calculator.Key.Tangent, Symbol="tan", Italic=true},
-            new(){Key=Calculator.Key.ArcSine, Symbol="sin&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.ArcCosine, Symbol="cos&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.ArcTangent, Symbol="tan&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.Secant, Symbol="sec", Italic=true},
-            new(){Key=Calculator.Key.Cosecant, Symbol="csc", Italic=true},
-            new(){Key=Calculator.Key.Cotangent, Symbol="cot", Italic=true},
-            new(){Key=Calculator.Key.ArcSecant, Symbol="sec&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.ArcCosecant, Symbol="csc&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.ArcCotangent, Symbol="cot&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.Sinh, Symbol="sinh", Italic=true},
-            new(){Key=Calculator.Key.Cosh, Symbol="cosh", Italic=true},
-            new(){Key=Calculator.Key.Tanh, Symbol="tanh", Italic=true},
-            new(){Key=Calculator.Key.ArcSinh, Symbol="sinh&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.ArcCosh, Symbol="cosh&#x207b;&#x00b9;", Italic=true},
-            new(){Key=Calculator.Key.ArcTanh, Symbol="tanh&#x207b;&#x00b9;", Italic=true},
-
-            new(){Key=Calculator.Key.XPowerY, Symbol="x&#x207f;", Italic=true},
-            new(){Key=Calculator.Key.YRootX, Symbol="&#x207f;&#x221a;x", Italic=true},
-            new(){Key=Calculator.Key.XModY, Symbol="mod"},
-
-    ];
-        public static KeyType GetKeyType(Key key) => key switch
-        {
-            >= Key.One and <= Key.Point => KeyType.Numeric,
-            >= Key.A and <= Key.Z => KeyType.Storage,
-            >= Key.Plus and <= Key.Divide => KeyType.Arithmethic,
-            >= Key.Negate and < Key.XPowerY => KeyType.Unary,
-            >= Key.XPowerY => KeyType.Binary,
-            _ => KeyType.None,
-        };
+    {       
 
         private Key lastKey;
         Input? parent;
@@ -257,10 +131,6 @@ namespace Goke.Calculator
                     canBackspace = false;
                     AnswerOperator();
                     break;
-                case Key.Store:
-                    canBackspace = false;
-                    Store();
-                    break;
                 case Key.BracketOpen:
                     canBackspace = false;
                     BracketOpen();
@@ -276,10 +146,26 @@ namespace Goke.Calculator
                         ExpOpen();
                     }
                     break;
+                case Key.STORE:
+                    canBackspace = false;
+                    Store();
+                    break;
+                case Key.DEGREE:
+                    canBackspace = false;
+                    IsDegree = true;
+                    break;
+                case Key.RADIAN:
+                    canBackspace = false;
+                    IsDegree = false;
+                    break;
+                case Key.COMPUTE:
+                    canBackspace = false;
+                    CanCompute=!CanCompute;
+                    break;
 
                 default:
                     canBackspace = false;
-                    if (key != lastKey || !IsBinary(key))
+                    if (key != lastKey || !KeySymbol.IsBinary(key))
                     {
                         Operator(key);
                     }
@@ -343,11 +229,15 @@ namespace Goke.Calculator
 
         private void Operator(Key key)
         {
-            if (IsStorage(key))
+            if (KeySymbol.IsStorage(key))
             {
                 Storage(key);
             }
-            else if (IsUnary(key))
+            else if(KeySymbol.IsParametric(key))
+            {
+                Parametric(key);
+            }
+            else if (KeySymbol.IsUnary(key))
             {
                 if (expOn)
                 {
@@ -363,14 +253,14 @@ namespace Goke.Calculator
                 PreviousOperator = CurrentOperator;
                 //CurrentOperator = key;
             }
-            else if (IsBinary(key))
+            else if (KeySymbol.IsBinary(key))
             {
                 if (expOn)
                 {
                     ExpClose();
                 }
 
-                if (IsBinary(lastKey))
+                if (KeySymbol.IsBinary(lastKey))
                 {
                     // change operator                    
                     CurrentOperator = key;
@@ -398,13 +288,13 @@ namespace Goke.Calculator
                     // CurrentValue = 0;                    
                 }
 
-                if (IsArithmetic(key))
+                if (KeySymbol.IsArithmetic(key))
                 {
-                    ExpressionListAdd(KEYS.First(f => f.Key == key).Symbol!);
+                    ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == key).Symbol!);
                 }
                 else
                 {
-                    var symbol = KEYS.First(f => f.Key == key).Symbol;
+                    var symbol = KeySymbol.KEYS.First(f => f.Key == key).Symbol;
                     if (symbol != null)
                     {
                         symbol = symbol.Replace("x", "");
@@ -414,6 +304,59 @@ namespace Goke.Calculator
                         ExpressionListAdd(symbol);
                     }
                 }
+            }
+        }
+
+       
+        private void Parametric(Key key)
+        {
+            try
+            {
+                switch (key)
+                {
+                    case Key.Quadratic:
+                        if (CanCompute)
+                        {
+                            double value = 0;
+                            var a = STORE.TryGetValue("A", out value) ? value : 0;
+                            var b = STORE.TryGetValue("B", out value) ? value : 0;
+                            var c = STORE.TryGetValue("C", out value) ? value : 0;
+
+                            (var r1, var r2, var i1, var i2) = Maths.Roots.Formula(a, b, c);
+
+                            if (i1 == 0 && i2 == 0)
+                            {
+                                STORE["D"] = r1;
+                                STORE["E"] = r2;
+
+                                Text = $"{r1}, {r2}";
+                            }
+                            else
+                            {
+                                STORE["D"] = r1;
+                                STORE["E"] = r2;
+                                STORE["F"] = i1;
+                                STORE["G"] = i2;
+
+                                Text = $"{r1}+{i1}, {r2}+{i2}";
+                            }
+                            CanCompute = false;
+
+                            GraphData = Roots.Quadratic(a, b, c);
+                        }
+                        else
+                        {
+                            Text = $"STO(A, B, C) => D, E";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Text = ex.Message;
             }
         }
 
@@ -428,7 +371,7 @@ namespace Goke.Calculator
             if (CurrentOperator == Key.None)
             {
                 ExpressionListAdd(Text);
-                ExpressionListAdd($"{KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
+                ExpressionListAdd($"{KeySymbol.KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
 
                 CurrentValue = double.Parse(Text);
                 PreviousValue = CurrentValue;
@@ -441,7 +384,7 @@ namespace Goke.Calculator
                     if (PreviousOperator == Key.None)
                     {
                         ExpressionListAdd(Text);
-                        ExpressionListAdd($"{KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
+                        ExpressionListAdd($"{KeySymbol.KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
 
                         CurrentValue = double.Parse(Text);
                         PreviousValue = CurrentValue;
@@ -449,15 +392,15 @@ namespace Goke.Calculator
                     else
                     {
                         ExpressionListAdd(Text);
-                        ExpressionListAdd(KEYS.First(f => f.Key == PreviousOperator).Symbol!);
+                        ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == PreviousOperator).Symbol!);
                         ExpressionListAdd(CurrentValue.ToString());
-                        ExpressionListAdd($"{KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
+                        ExpressionListAdd($"{KeySymbol.KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
                     }
                 }
                 else
                 {
                     ExpressionListAdd(Text);
-                    ExpressionListAdd($"{KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
+                    ExpressionListAdd($"{KeySymbol.KEYS.First(f => f.Key == Key.Equal).Symbol!} ");
 
                     PreviousOperator = CurrentOperator;
                     CurrentValue = double.Parse(Text);
@@ -477,16 +420,15 @@ namespace Goke.Calculator
 
         private void Store()
         {
-            canStore = true;
-
+            CanStore = true;
         }
 
         private void Storage(Key key)
         {
-            if (canStore)
+            if (CanStore)
             {
                 ToStore(key);
-                canStore = false;
+                CanStore = false;
 
             }
             else
@@ -498,13 +440,13 @@ namespace Goke.Calculator
         private void FromStore(Key key)
         {
             Text = STORE.TryGetValue(key.ToString(), out var value) ? value.ToString():"0";
-            ExpressionListAdd(KEYS.First(f => f.Key == key).Symbol!);
+            ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == key).Symbol!);
         }
 
         private void ToStore(Key key)
         {
             Input.STORE[key.ToString()] = double.Parse(Text);
-            ExpressionListAdd($"{KEYS.First(f => f.Key == key).Symbol!}({Text})");
+            ExpressionListAdd($"{KeySymbol.KEYS.First(f => f.Key == key).Symbol!}({Text})");
         }
 
         private void Clear()
@@ -528,7 +470,11 @@ namespace Goke.Calculator
         }
 
         bool canBackspace = false;
-        private bool canStore;
+
+        public bool CanCompute { get; private set; }
+        public (double[] x, double[] y)? GraphData { get; private set; }
+        public bool IsDegree { get; private set; } = true;
+        public bool CanStore { get; private set; }
 
         private void BackspaceOperator()
         {
@@ -562,24 +508,24 @@ namespace Goke.Calculator
                 PreviousValue = 1;
                 PreviousOperator = Key.Multiply;
             }
-            else if (IsNumeric(lastKey))
+            else if (KeySymbol.IsNumeric(lastKey))
             {
                 ExpressionListAdd(Text);
                 CurrentValue = double.Parse(Text);
                 PreviousValue = CurrentValue;
 
-                ExpressionListAdd(KEYS.First(f => f.Key == Key.Multiply).Symbol!);
+                ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == Key.Multiply).Symbol!);
                 CurrentOperator = Key.Multiply;
                 PreviousOperator = CurrentOperator;
             }
-            else if (IsArithmetic(lastKey))
+            else if (KeySymbol.IsArithmetic(lastKey))
             {
                 CurrentValue = double.Parse(Text);
                 PreviousValue = CurrentValue;
                 PreviousOperator = CurrentOperator;
             }
 
-            ExpressionListAdd(KEYS.First(f => f.Key == Key.BracketOpen).Symbol!);
+            ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == Key.BracketOpen).Symbol!);
 
             lastKey = Key.BracketOpen;
 
@@ -599,7 +545,7 @@ namespace Goke.Calculator
             canBackspace = false;
 
             ExpressionListAdd(Text);
-            ExpressionListAdd(KEYS.First(f => f.Key == Key.BracketClose).Symbol!);
+            ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == Key.BracketClose).Symbol!);
             ExpressionListAdd("|");
 
             // compute
@@ -624,7 +570,7 @@ namespace Goke.Calculator
         double x = 0, y = 0;
         private void ExpOpen()
         {
-            if (IsNumeric(lastKey))
+            if (KeySymbol.IsNumeric(lastKey))
             {
                 expOn = true;
                 x = double.Parse(Text);
@@ -765,99 +711,99 @@ namespace Goke.Calculator
                     ExpressionListAdd($"ln({CurrentValue})|");
                     break;
                 case Key.Factorial:
-                    Answer = Maths.Maths.Factorial((int)CurrentValue);
+                    Answer = Maths.Functions.Factorial((int)CurrentValue);
                     ExpressionListAdd($"{CurrentValue}!|");
                     break;
                 case Key.EXP:
                     break;
                 case Key.Sine:
-                    var angleInRadian = DegreeToRadian();
-                    Answer = Math.Sin(angleInRadian);
+                    var angle = TrigonometryConvert();
+                    Answer = Math.Sin(angle);
                     ExpressionListAdd($"sin({CurrentValue})|");
                     break;
                 case Key.Cosine:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Cos(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Cos(angle);
                     ExpressionListAdd($"cos({CurrentValue})|");
                     break;
                 case Key.Tangent:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Tan(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Tan(angle);
                     ExpressionListAdd($"tan({CurrentValue})|");
                     break;
                 case Key.ArcSine:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Asin(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Asin(angle);
                     ExpressionListAdd($"arcsin({CurrentValue})|");
                     break;
                 case Key.ArcCosine:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Acos(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Acos(angle);
                     ExpressionListAdd($"arccos({CurrentValue})|");
                     break;
                 case Key.ArcTangent:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Atan(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Atan(angle);
                     ExpressionListAdd($"arctan({CurrentValue})|");
                     break;
                 case Key.Secant:
-                    angleInRadian = DegreeToRadian();
-                    Answer = 1/Math.Cos(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = 1/Math.Cos(angle);
                     ExpressionListAdd($"sec({CurrentValue})|");
                     break;
                 case Key.Cosecant:
-                    angleInRadian = DegreeToRadian();
-                    Answer = 1/ Math.Sin(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = 1/ Math.Sin(angle);
                     ExpressionListAdd($"csc({CurrentValue})|");
                     break;
                 case Key.Cotangent:
-                    angleInRadian = DegreeToRadian();
-                    Answer = 1/Math.Tan(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = 1/Math.Tan(angle);
                     ExpressionListAdd($"cot({CurrentValue})|");
                     break;
                 case Key.ArcSecant:
-                    angleInRadian = DegreeToRadian();
-                    Answer = 1/Math.Acos(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = 1/Math.Acos(angle);
                     ExpressionListAdd($"arcsec({CurrentValue})|");
                     break;
                 case Key.ArcCosecant:
-                    angleInRadian = DegreeToRadian();
-                    Answer = 1/Math.Asin(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = 1/Math.Asin(angle);
                     ExpressionListAdd($"arccsc({CurrentValue})|");
                     break;
                 case Key.ArcCotangent:
-                    angleInRadian = DegreeToRadian();
-                    Answer = 1/ Math.Atan(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = 1/ Math.Atan(angle);
                     ExpressionListAdd($"arccot({CurrentValue})|");
                     break;
                 case Key.Sinh:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Sinh(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Sinh(angle);
                     ExpressionListAdd($"sinh({CurrentValue})|");
                     break;
                 case Key.Cosh:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Cosh(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Cosh(angle);
                     ExpressionListAdd($"cosh({CurrentValue})|");
                     break;
                 case Key.Tanh:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Tanh(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Tanh(angle);
                     ExpressionListAdd($"tanh({CurrentValue})|");
                     break;
                 case Key.ArcSinh:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Asinh(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Asinh(angle);
                     ExpressionListAdd($"arcsinh({CurrentValue})|");
                     break;
                 case Key.ArcCosh:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Acosh(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Acosh(angle);
                     ExpressionListAdd($"arccosh({CurrentValue})|");
                     break;
                 case Key.ArcTanh:
-                    angleInRadian = DegreeToRadian();
-                    Answer = Math.Atanh(angleInRadian);
+                    angle = TrigonometryConvert();
+                    Answer = Math.Atanh(angle);
                     ExpressionListAdd($"arctanh({CurrentValue})|");
                     break;
                 default:
@@ -865,40 +811,25 @@ namespace Goke.Calculator
             }
         }
 
-        private double DegreeToRadian()
+        private double TrigonometryConvert()
         {
-            return Maths.Maths.DegreeToRadian(CurrentValue);
+            if (IsDegree)
+            {
+                return Maths.Functions.DegreeToRadian(CurrentValue);
+            }
+            else
+            {
+                return CurrentValue;
+            }
         }
 
         private bool IsFirstNumber()
         {
-            return !(IsNumeric(lastKey) /*|| lastKey==Key.Backspace*/);
+            return !(KeySymbol.IsNumeric(lastKey) /*|| lastKey==Key.Backspace*/);
         }
 
-        private static bool IsNumeric(Key key)
-        {
-            return GetKeyType(key) == KeyType.Numeric;
-        }
+        
 
-        private static bool IsUnary(Key key)
-        {
-            return GetKeyType(key) == KeyType.Unary;
-        }
-
-        private static bool IsArithmetic(Key key)
-        {
-            return GetKeyType(key) == KeyType.Arithmethic;
-        }
-
-        private static bool IsBinary(Key key)
-        {
-            return GetKeyType(key) == KeyType.Binary || IsArithmetic(key);
-        }
-
-        private bool IsStorage(Key key)
-        {
-            return GetKeyType(key) == KeyType.Storage;
-        }
 
     }
 }
