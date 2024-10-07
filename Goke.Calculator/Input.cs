@@ -420,7 +420,7 @@ namespace Goke.Calculator
 
         private void Store()
         {
-            CanStore = true;
+            CanStore = !CanStore;
         }
 
         private void Storage(Key key)

@@ -31,7 +31,7 @@
                     {
                         int count = inputs.Count;
 
-                        <button class="@(k.Symbol=="=>" && input.CanCompute ? "calc-key":"primary calc-key")"
+                        <button class="@(KeyEnabled(k) ? "calc-key":"primary calc-key")"
                             @onclick="()=>OnOperatorPress(k.Key)"                              
                             title="@k.Key">
                             <div class="calc-key-wrapper">
@@ -100,6 +100,27 @@
 
     Stack<Calculator.Input> inputs = new();
     Calculator.Input? child;
+
+    bool KeyEnabled(Calculator.KeySymbol k)
+    {
+        if (k.Key == Calculator.Key.COMPUTE && input.CanCompute)
+        {
+            return true;
+        }
+        else if (k.Key == Calculator.Key.STORE && input.CanStore)
+        {
+            return true;
+        }
+        else if (k.Key == Calculator.Key.DEGREE && input.IsDegree)
+        {
+            return true;
+        }
+        else if (k.Key == Calculator.Key.RADIAN && !input.IsDegree)
+        {
+            return true;
+        }
+        return false;
+    }
 
     private async void OnOperatorPress(Calculator.Key op)
     {
