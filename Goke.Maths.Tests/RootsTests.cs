@@ -28,12 +28,12 @@ namespace Goke.Maths.Tests
         {
             Func<double, double> f = (x) => Math.Pow(Math.E, -x);
             double x0=0;
-            double errorLimit = 1.0;
+            double errorLimit = 0.0001;
             int maxIteration = 10;
 
             var actual = Roots.FixPoint(f, x0, errorLimit, maxIteration);
 
-            Assert.AreEqual(0.564879, actual);
+            Assert.IsTrue(Math.Abs(0.564879-actual) < errorLimit);
         }
 
         [TestMethod()]
@@ -46,7 +46,29 @@ namespace Goke.Maths.Tests
 
             var actual = Roots.Secant(f, x_1, x0, errorLimit, maxIteration);
 
-            Assert.AreEqual(0.564879, actual);
+            Assert.IsTrue(Math.Abs(0.564879 - actual) < errorLimit);
+        }
+
+        [TestMethod()]
+        public void PolyDivideByRoot_Test()
+        {
+            double[] a = [-24, 2, 1];
+            Roots.PolyDivideByRoot(a, 4);
+
+            Assert.AreEqual(6, a[0]);
+            Assert.AreEqual(1, a[1]);
+        }
+
+        [TestMethod()]
+        public void PolyDivide_Test()
+        {
+            double[] a = [-24, 2, 1];
+            double[] d = [-4, 1];
+            (var q, var r) = Roots.PolyDivide(a, d);
+
+            Assert.AreEqual(0, q[0]);
+            Assert.AreEqual(6, q[1]);
+            Assert.AreEqual(1, q[2]);
         }
     }
 }

@@ -8,7 +8,7 @@ using Goke.Maths;
 namespace Goke.Calculator
 {
     public class Input
-    {       
+    {
 
         private Key lastKey;
         Input? parent;
@@ -17,7 +17,7 @@ namespace Goke.Calculator
         private string text = "0";
         public string Text
         {
-            get => text; 
+            get => text;
             set
             {
                 text = value;
@@ -36,7 +36,7 @@ namespace Goke.Calculator
         private double answer;
         public double Answer
         {
-            get => answer; 
+            get => answer;
             set
             {
                 answer = value;
@@ -160,7 +160,7 @@ namespace Goke.Calculator
                     break;
                 case Key.COMPUTE:
                     canBackspace = false;
-                    CanCompute=!CanCompute;
+                    CanCompute = !CanCompute;
                     break;
 
                 default:
@@ -175,9 +175,14 @@ namespace Goke.Calculator
             lastKey = key;
         }
 
+        private bool IsFirstNumber()
+        {
+            return !(KeySymbol.IsNumeric(lastKey) || canBackspace);
+        }
+
         private void Number(char c)
         {
-            if(expOn)
+            if (expOn)
             {
                 ExpNumber(c);
                 return;
@@ -211,20 +216,20 @@ namespace Goke.Calculator
                 {
                     if (c == '.')
                     {
-                        if(!Text.Contains('.'))
+                        if (!Text.Contains('.'))
                         {
                             Text += c;
-                        }                                         
+                        }
                     }
                     else
                     {
                         Text += c;
                     }
-                }                
+                }
             }
 
             CurrentValue = double.Parse(Text);
-            canBackspace = true;   
+            canBackspace = true;
         }
 
         private void Operator(Key key)
@@ -233,7 +238,7 @@ namespace Goke.Calculator
             {
                 Storage(key);
             }
-            else if(KeySymbol.IsParametric(key))
+            else if (KeySymbol.IsParametric(key))
             {
                 Parametric(key);
             }
@@ -304,64 +309,6 @@ namespace Goke.Calculator
                         ExpressionListAdd(symbol);
                     }
                 }
-            }
-        }
-
-       
-        private void Parametric(Key key)
-        {
-            try
-            {
-                switch (key)
-                {
-                    case Key.Quadratic:
-                        OnQuadratic();
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Text = ex.Message;
-            }
-        }
-
-        private void OnQuadratic()
-        {
-            if (CanCompute)
-            {
-                double value = 0;
-                var a = STORE.TryGetValue("A", out value) ? value : 0;
-                var b = STORE.TryGetValue("B", out value) ? value : 0;
-                var c = STORE.TryGetValue("C", out value) ? value : 0;
-
-                (var r1, var r2, var i1, var i2) = Maths.Roots.Formula(a, b, c);
-
-                if (i1 == 0 && i2 == 0)
-                {
-                    STORE["D"] = r1;
-                    STORE["E"] = r2;
-
-                    Text = $"{r1}, {r2}";
-                }
-                else
-                {
-                    STORE["D"] = r1;
-                    STORE["E"] = r2;
-                    STORE["F"] = i1;
-                    STORE["G"] = i2;
-
-                    Text = $"{r1}+{i1}, {r2}+{i2}";
-                }
-                CanCompute = false;
-
-                GraphData = Roots.Quadratic(a, b, c);
-            }
-            else
-            {
-                Text = $"STO(A, B, C) => D, E";
             }
         }
 
@@ -444,7 +391,7 @@ namespace Goke.Calculator
 
         private void FromStore(Key key)
         {
-            Text = STORE.TryGetValue(key.ToString(), out var value) ? value.ToString():"0";
+            Text = STORE.TryGetValue(key.ToString(), out var value) ? value.ToString() : "0";
             ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == key).Symbol!);
         }
 
@@ -502,7 +449,7 @@ namespace Goke.Calculator
         public Input BracketOpen()
         {
             canBackspace = false;
-            
+
             if (lastKey == Key.None)
             {
                 PreviousValue = 1;
@@ -551,7 +498,7 @@ namespace Goke.Calculator
 
             ExpressionListAdd(Text);
             ExpressionListAdd(KeySymbol.KEYS.First(f => f.Key == Key.BracketClose).Symbol!);
-            ExpressionListAdd("|");
+            ExpressionListAdd("| ");
 
             // compute
             PreviousOperator = CurrentOperator;
@@ -586,7 +533,7 @@ namespace Goke.Calculator
 
         void ExpNumber(char c)
         {
-            if(c != '.')
+            if (c != '.')
             {
                 var s = y.ToString() + c;
                 y = double.Parse(s);
@@ -605,20 +552,12 @@ namespace Goke.Calculator
         void ExpNegate()
         {
             y = -y;
-            //if (y < 0)
-            //{
-            //    Text = $"{x}e{y}";
-            //}
-            //else
-            //{
-            //    Text = $"{x}e+{y}";
-            //}
             Text = $"{x}e{y}";
         }
 
         private void ExpClose()
         {
-            ExpressionListAdd($"{Text}|");
+            ExpressionListAdd($"{Text}| ");
 
             Answer = x * Math.Pow(10, y);
             // CurrentValue = Answer;
@@ -626,6 +565,64 @@ namespace Goke.Calculator
             x = 0;
             y = 0;
         }
+
+        private void Parametric(Key key)
+        {
+            try
+            {
+                switch (key)
+                {
+                    case Key.Quadratic:
+                        OnQuadratic();
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Text = ex.Message;
+            }
+        }
+
+        private void OnQuadratic()
+        {
+            if (CanCompute)
+            {
+                double value = 0;
+                var a = STORE.TryGetValue("A", out value) ? value : 0;
+                var b = STORE.TryGetValue("B", out value) ? value : 0;
+                var c = STORE.TryGetValue("C", out value) ? value : 0;
+
+                (var r1, var r2, var i1, var i2) = Maths.Roots.Formula(a, b, c);
+
+                if (i1 == 0 && i2 == 0)
+                {
+                    STORE["D"] = r1;
+                    STORE["E"] = r2;
+
+                    Text = $"{r1}, {r2}";
+                }
+                else
+                {
+                    STORE["D"] = r1;
+                    STORE["E"] = r2;
+                    STORE["F"] = i1;
+                    STORE["G"] = i2;
+
+                    Text = $"{r1}+{i1}, {r2}+{i2}";
+                }
+                CanCompute = false;
+
+                GraphData = Roots.Quadratic(a, b, c);
+            }
+            else
+            {
+                Text = $"STO(A, B, C) => D, E";
+            }
+        }
+
 
         private void BinaryOperation(Key key)
         {
@@ -650,7 +647,7 @@ namespace Goke.Calculator
                     Answer = PreviousValue % CurrentValue;
                     break;
                 case Key.YRootX:
-                    Answer = Math.Pow(PreviousValue, (1/CurrentValue));
+                    Answer = Math.Pow(PreviousValue, (1 / CurrentValue));
                     break;
                 default:
                     break;
@@ -663,153 +660,153 @@ namespace Goke.Calculator
             {
                 case Key.Negate:
                     Answer = -CurrentValue;
-                    ExpressionListAdd($"neg({CurrentValue})|");
+                    ExpressionListAdd($"neg({CurrentValue})| ");
                     break;
                 case Key.Percent:
-                    Answer = CurrentValue/100.0;
-                    ExpressionListAdd($"%({CurrentValue})|");
+                    Answer = CurrentValue / 100.0;
+                    ExpressionListAdd($"%({CurrentValue})| ");
                     break;
                 case Key.Reciprocal:
-                    Answer = 1/CurrentValue;
-                    ExpressionListAdd($"1/({CurrentValue})|");
+                    Answer = 1 / CurrentValue;
+                    ExpressionListAdd($"1/({CurrentValue})| ");
                     break;
                 case Key.Abs:
                     Answer = CurrentValue < 0 ? -CurrentValue : CurrentValue;
-                    ExpressionListAdd($"|{CurrentValue}||");
+                    ExpressionListAdd($"|{CurrentValue}|| ");
                     break;
 
                 case Key.Pi:
                     Answer = Math.PI;
-                    ExpressionListAdd("Pi|");
+                    ExpressionListAdd("Pi| ");
                     break;
                 case Key.e:
                     Answer = Math.E;
-                    ExpressionListAdd($"e|");
+                    ExpressionListAdd($"e| ");
                     break;
 
                 case Key.Square:
-                    Answer = CurrentValue*CurrentValue;
-                    ExpressionListAdd($"sq({CurrentValue})|");
+                    Answer = CurrentValue * CurrentValue;
+                    ExpressionListAdd($"sq({CurrentValue})| ");
                     break;
                 case Key.Cube:
                     Answer = CurrentValue * CurrentValue * CurrentValue;
-                    ExpressionListAdd($"cb({CurrentValue})|");
+                    ExpressionListAdd($"cb({CurrentValue})| ");
                     break;
                 case Key.SquareRoot:
                     Answer = Math.Sqrt(CurrentValue);
-                    ExpressionListAdd($"sqrt({CurrentValue})|");
+                    ExpressionListAdd($"sqrt({CurrentValue})| ");
                     break;
                 case Key.CubeRoot:
                     Answer = Math.Cbrt(CurrentValue);
-                    ExpressionListAdd($"cbrt({CurrentValue})|");
+                    ExpressionListAdd($"cbrt({CurrentValue})| ");
                     break;
                 case Key.TenPower:
-                    Answer = Math.Pow(10,CurrentValue);
-                    ExpressionListAdd($"10^({CurrentValue})|");
+                    Answer = Math.Pow(10, CurrentValue);
+                    ExpressionListAdd($"10^({CurrentValue})| ");
                     break;
                 case Key.Log:
                     Answer = Math.Log10(CurrentValue);
-                    ExpressionListAdd($"log({CurrentValue})|");
+                    ExpressionListAdd($"log({CurrentValue})| ");
                     break;
                 case Key.Ln:
                     Answer = Math.Log(CurrentValue);
-                    ExpressionListAdd($"ln({CurrentValue})|");
+                    ExpressionListAdd($"ln({CurrentValue})| ");
                     break;
                 case Key.Factorial:
                     Answer = Maths.Functions.Factorial((int)CurrentValue);
-                    ExpressionListAdd($"{CurrentValue}!|");
+                    ExpressionListAdd($"{CurrentValue}!| ");
                     break;
                 case Key.EXP:
                     break;
                 case Key.Sine:
                     var angle = TrigonometryConvert();
-                    Answer = (float)Math.Sin(angle);
-                    ExpressionListAdd($"sin({CurrentValue})|");
+                    Answer = Math.Sin(angle);
+                    ExpressionListAdd($"sin({CurrentValue})| ");
                     break;
                 case Key.Cosine:
                     angle = TrigonometryConvert();
-                    Answer = (float)Math.Cos(angle);
-                    ExpressionListAdd($"cos({CurrentValue})|");
+                    Answer = Math.Cos(angle);
+                    ExpressionListAdd($"cos({CurrentValue})| ");
                     break;
                 case Key.Tangent:
                     angle = TrigonometryConvert();
-                    Answer = (float)Math.Tan(angle);
-                    ExpressionListAdd($"tan({CurrentValue})|");
+                    Answer = Math.Tan(angle);
+                    ExpressionListAdd($"tan({CurrentValue})| ");
                     break;
                 case Key.ArcSine:
                     angle = Math.Asin(CurrentValue);
-                    Answer = (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arcsin({CurrentValue})|");
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arcsin({CurrentValue})| ");
                     break;
                 case Key.ArcCosine:
                     angle = Math.Acos(CurrentValue);
-                    Answer = (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arccos({CurrentValue})|");
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arccos({CurrentValue})| ");
                     break;
                 case Key.ArcTangent:
                     angle = Math.Atan(CurrentValue);
-                    Answer = (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arctan({CurrentValue})|");
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arctan({CurrentValue})| ");
                     break;
                 case Key.Secant:
                     angle = TrigonometryConvert();
-                    Answer = 1 / (float)Math.Cos(angle);
-                    ExpressionListAdd($"sec({CurrentValue})|");
+                    Answer = 1 / Math.Cos(angle);
+                    ExpressionListAdd($"sec({CurrentValue})| ");
                     break;
                 case Key.Cosecant:
                     angle = TrigonometryConvert();
-                    Answer = 1 / (float)Math.Sin(angle);
-                    ExpressionListAdd($"csc({CurrentValue})|");
+                    Answer = 1 / Math.Sin(angle);
+                    ExpressionListAdd($"csc({CurrentValue})| ");
                     break;
                 case Key.Cotangent:
                     angle = TrigonometryConvert();
-                    Answer = 1 / (float)Math.Tan(angle);
-                    ExpressionListAdd($"cot({CurrentValue})|");
+                    Answer = 1 / Math.Tan(angle);
+                    ExpressionListAdd($"cot({CurrentValue})| ");
                     break;
                 case Key.ArcSecant:
-                    angle = Math.Acos(CurrentValue);
-                    Answer = 1 / (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arcsec({CurrentValue})|");
+                    angle = Math.Acos(1 / CurrentValue);
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arcsec({CurrentValue})| ");
                     break;
                 case Key.ArcCosecant:
-                    angle = Math.Asin(CurrentValue);
-                    Answer = 1 / (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arccsc({CurrentValue})|");
+                    angle = Math.Asin(1 / CurrentValue);
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arccsc({CurrentValue})| ");
                     break;
                 case Key.ArcCotangent:
-                    angle = Math.Atan(CurrentValue);
-                    Answer = 1 / (float)TrigonometryAConvert(angle); 
-                    ExpressionListAdd($"arccot({CurrentValue})|");
+                    angle = Math.Atan(1 / CurrentValue);
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arccot({CurrentValue})| ");
                     break;
                 case Key.Sinh:
                     angle = TrigonometryConvert();
-                    Answer = (float)Math.Sinh(angle);
-                    ExpressionListAdd($"sinh({CurrentValue})|");
+                    Answer = Math.Sinh(angle);
+                    ExpressionListAdd($"sinh({CurrentValue})| ");
                     break;
                 case Key.Cosh:
                     angle = TrigonometryConvert();
-                    Answer = (float)Math.Cosh(angle);
-                    ExpressionListAdd($"cosh({CurrentValue})|");
+                    Answer = Math.Cosh(angle);
+                    ExpressionListAdd($"cosh({CurrentValue})| ");
                     break;
                 case Key.Tanh:
                     angle = TrigonometryConvert();
-                    Answer = (float)Math.Tanh(angle);
-                    ExpressionListAdd($"tanh({CurrentValue})|");
+                    Answer = Math.Tanh(angle);
+                    ExpressionListAdd($"tanh({CurrentValue})| ");
                     break;
                 case Key.ArcSinh:
                     angle = Math.Asinh(CurrentValue);
-                    Answer = (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arcsinh({CurrentValue})|");
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arcsinh({CurrentValue})| ");
                     break;
                 case Key.ArcCosh:
                     angle = Math.Acosh(CurrentValue);
-                    Answer = (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arccosh({CurrentValue})|");
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arccosh({CurrentValue})| ");
                     break;
                 case Key.ArcTanh:
                     angle = Math.Atanh(CurrentValue);
-                    Answer = (float)TrigonometryAConvert(angle);
-                    ExpressionListAdd($"arctanh({CurrentValue})|");
+                    Answer = TrigonometryAConvert(angle);
+                    ExpressionListAdd($"arctanh({CurrentValue})| ");
                     break;
                 default:
                     break;
@@ -839,14 +836,6 @@ namespace Goke.Calculator
                 return value;
             }
         }
-
-        private bool IsFirstNumber()
-        {
-            return !(KeySymbol.IsNumeric(lastKey) /*|| lastKey==Key.Backspace*/);
-        }
-
-        
-
 
     }
 }

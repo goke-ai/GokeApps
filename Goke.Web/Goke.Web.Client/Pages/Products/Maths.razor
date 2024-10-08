@@ -21,7 +21,8 @@
                 <div class="calc-input">@input.Text</div>
             </div>
 
-            <div style="padding-block:0.5em;">
+            <div style='@(hasChart ? "display:block;padding-block:0.5em;":"display:none;padding-block:0.5em;")'>
+                <button @onclick="OnClosePlot">&#x00d7;</button>
                 <div id="myplot"></div>
             </div>
 
@@ -85,13 +86,15 @@
         }
     }
 
-    async void OnShowPlot()
+    bool hasChart;
+    async void OnClosePlot()
     {
+        hasChart = false;
+        return;
         if (module is not null)
         {
-            await module.InvokeVoidAsync("plotQuadratic", "#myplot");
+            await module.InvokeVoidAsync("plotClose", "#myplot");
         }
-
     }
 
     List<Calculator.KeySymbol> operators = Calculator.KeySymbol.KEYS;
@@ -159,6 +162,8 @@
 
             if (op == Calculator.Key.Quadratic && input.GraphData is not null)
             {
+                hasChart = true;
+
                 (double[] x, double[] y) = input.GraphData.Value;
                 var data = x.Zip(y).Select(s => new { x = s.First, y = s.Second });
 
@@ -166,8 +171,6 @@
                 {
                     await module.InvokeVoidAsync("plotQuadratic", "#myplot", data);
                 }
-
-                
             }
         }
 

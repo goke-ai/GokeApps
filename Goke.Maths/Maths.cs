@@ -8,13 +8,20 @@ namespace Goke.Maths
 {
     public class Functions
     {
+        public static int Sign(double v) => v switch
+        {
+            > 0 => 1,
+            < 0 => -1,
+            _ => 0
+        };
+
         public static double DegreeToRadian(double degree)
         {
-            return degree / 180.0 * Math.PI;
+            return degree / 180.0 * /*Math.PI*/(22.0/7);
         }
         public static double RadianToDegree(double radian)
         {
-            return radian / Math.PI * 180;
+            return radian / /*Math.PI*/(22.0/7) * 180;
         }
 
         public static double FahrenheitToCentigrade(double fahrenheit)

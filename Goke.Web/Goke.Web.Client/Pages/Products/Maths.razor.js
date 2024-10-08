@@ -1,3 +1,8 @@
+
+export function plotClose(element) {
+    const div = document.querySelector(element);
+    div.replaceChildren();
+}
 export function plotQuadratic(element, data) {
     const plot = Plot.plot({
         grid: true,
@@ -9,3 +14,4 @@ export function plotQuadratic(element, data) {
     //div.append(plot);
     div.replaceChildren(plot);
 }
+

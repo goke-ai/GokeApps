@@ -72,11 +72,11 @@ namespace Goke.Maths
             return (x, y);
         }
 
-        public static double Bisection(Func<double, double> f, double xl, double xu, double percentErrorTolerance = 0.1, int maxIteration = 100)
+        public static double Bisection(Func<double, double> f, double xl, double xu, double tolerance = 1e-6, int maxIteration = 100)
         {
             double xr = 0;
             double xrold = 0;
-            double error = 100;
+            double error = 1;
             double test = 0;
             int i = 0;
             do
@@ -88,7 +88,7 @@ namespace Goke.Maths
                 if (xr != 0)
                 {
                     error = (xr - xrold) / xr;
-                    error = Math.Abs(error) * 100;
+                    error = Math.Abs(error);
                 }
 
                 test = f(xl) * f(xr);
@@ -105,16 +105,16 @@ namespace Goke.Maths
                     error = 0;
                 }
 
-            } while (i < maxIteration && error > percentErrorTolerance);
+            } while (i < maxIteration && error > tolerance);
 
             return xr;
         }
 
-        public static double FalsePosition(Func<double, double> f, double xl, double xu, double percentErrorTolerance = 0.1, int maxIteration = 100)
+        public static double FalsePosition(Func<double, double> f, double xl, double xu, double tolerance = 1e-6, int maxIteration = 100)
         {
             double xr = 0;
             double xrold = 0;
-            double error = 100;
+            double error = 1;
 
             double fl = f(xl);
             double fu = f(xu);
@@ -136,7 +136,7 @@ namespace Goke.Maths
                 if (xr != 0)
                 {
                     error = (xr - xrold) / xr;
-                    error = Math.Abs(error) * 100;
+                    error = Math.Abs(error);
                 }
 
                 test = f(xl) * f(xr);
@@ -168,17 +168,17 @@ namespace Goke.Maths
                     error = 0;
                 }
 
-            } while (i < maxIteration && error > percentErrorTolerance);
+            } while (i < maxIteration && error > tolerance);
 
             return xr;
         }
 
 
-        public static double FixPoint(Func<double, double> f, double x0, double percentErrorTolerance = 0.1, int maxIteration = 100)
+        public static double FixPoint(Func<double, double> f, double x0, double tolerance = 1e-6, int maxIteration = 100)
         {
             double xr = x0;
             double xrold = 0;
-            double error = 100;
+            double error = 1;
             int i = 0;
             do
             {
@@ -189,18 +189,18 @@ namespace Goke.Maths
                 if (xr != 0)
                 {
                     error = (xr - xrold) / xr;
-                    error = Math.Abs(error) * 100;
+                    error = Math.Abs(error);
                 }
 
-            } while (i < maxIteration && error > percentErrorTolerance);
+            } while (i < maxIteration && error > tolerance);
             return xr;
         }
 
-        public static double Secant(Func<double, double> f, double x_1, double x0, double percentErrorTolerance = 0.1, int maxIteration = 100)
+        public static double Secant(Func<double, double> f, double x_1, double x0, double tolerance = 1e-6, int maxIteration = 100)
         {
             double xr = x0;
             double xrold = x_1;
-            double error = 100;
+            double error = 1;
             double temp = 0;
             int i = 0;
             do
@@ -214,18 +214,42 @@ namespace Goke.Maths
                 if (xr != 0)
                 {
                     error = (xr - xrold) / xr;
-                    error = Math.Abs(error) * 100;
+                    error = Math.Abs(error);
                 }
 
-            } while (i < maxIteration && error > percentErrorTolerance);
+            } while (i < maxIteration && error > tolerance);
             return xr;
         }
 
-        public static double NewtonRaphson(Func<double, double> f, Func<double, double> ff, double x0, double percentErrorTolerance = 0.1, int maxIteration = 100)
+        public static double Secant(Func<double, double> f, double x0, double tolerance = 1e-6, int maxIteration = 100)
+        {
+            double d = 0.01;
+
+            double xr = x0;
+            double xrold = 0;
+            double error = 1;
+            int i = 0;
+            do
+            {
+                xrold = xr;
+                xr = xr - ((d * xrold * f(xrold)) / (f(xrold + d * xrold) - f(xrold)));
+                i++;
+
+                if (xr != 0)
+                {
+                    error = (xr - xrold) / xr;
+                    error = Math.Abs(error);
+                }
+
+            } while (i < maxIteration && error > tolerance);
+            return xr;
+        }
+
+        public static double NewtonRaphson(Func<double, double> f, Func<double, double> ff, double x0, double tolerance = 1e-6, int maxIteration = 100)
         {
             double xr = x0;
             double xrold = 0;
-            double error = 100;
+            double error = 1;
             int i = 0;
             do
             {
@@ -236,13 +260,158 @@ namespace Goke.Maths
                 if (xr != 0)
                 {
                     error = (xr - xrold) / xr;
-                    error = Math.Abs(error) * 100;
+                    error = Math.Abs(error);
                 }
 
-            } while (i < maxIteration && error > percentErrorTolerance);
+            } while (i < maxIteration && error > tolerance);
             return xr;
         }
 
+
+        public static double FZeros(Func<double, double> f, double xl, double xu)
+        {          
+            double tolerance = 1e-6;
+            double eps = 2.22044604925031e-16;
+
+            double a = xl;
+            double b = xu;
+            double fa = f(a);
+            double fb = f(b);
+            double c = a;
+            double fc = fa;
+            double d = b - c;
+            double e = d;
+
+            while (true)
+            {
+                if (fb == 0)
+                    break;
+
+                if (Functions.Sign(fa) == Functions.Sign(fb))
+                {
+                    a = c;
+                    fa = fc;
+                    d = b - c;
+                    e = d;
+                }
+                if (Math.Abs(fa) < Math.Abs(fb))
+                {
+                    c = b;
+                    b = a;
+                    a = c;
+                    fc = fb;
+                    fb = fa;
+                    fa = fc;
+                }
+                double m = 0.5 * (a - b);
+                tolerance = 2 * eps * (Math.Abs(b) > 1 ? Math.Abs(b) : 1.0);
+                if (Math.Abs(m) < tolerance || fb == 0)
+                {
+                    break;
+                }
+                // open method or bisection
+                if (Math.Abs(e) >= tolerance && Math.Abs(fc) > Math.Abs(fb))
+                {
+                    double s = fb / fc;
+                    double p;
+                    double q;
+                    if (a == c) // secant
+                    {
+                        p = 2 * m * s;
+                        q = 1 - s;
+                    }
+                    else
+                    {
+                        q = fc / fa;
+                        double r = fb / fa;
+                        p = s * (2 * m * q * (q - r) - (b - c) * (r - 1));
+                        q = (q - 1) * (r - 1) * (s - 1);
+                    }
+                    if (p > 0)
+                    {
+                        q = -q;
+                    }
+                    else
+                    {
+                        p = -p;
+                    }
+                    if (2 * p < 3 * m * q - Math.Abs(tolerance * q) && p < Math.Abs(0.5 * e * q))
+                    {
+                        e = d;
+                        d = p / q;
+                    }
+                    else
+                    {
+                        d = m;
+                        e = m;
+                    }
+                }
+                else
+                {
+                    d = m;
+                    e = m;
+                }
+                c = b;
+                fc = fb;
+
+                if (Math.Abs(d) > tolerance)
+                {
+                    b = b + d;
+                }
+                else
+                {
+                    b = b - Functions.Sign(b - a) * tolerance;
+                }
+                fb = f(b);
+            }
+            return b;
+        }
+
+
+        public static void PolyDivideByRoot(double[] a, double t)
+        {
+            int n = a.Length;
+            double r = a[n - 1];
+            a[n - 1] = 0;
+
+            for (int i = n - 2; i >= 0; i--)
+            {
+                double s = a[i];
+                a[i] = r;
+                r = s + r * t;
+            }
+        }
+
+        public static (double[] q, double[] r) PolyDivide(double[] a, double[] d)
+        {
+            int n = a.Length;
+            int m = d.Length;
+
+            double[] r = new double[n];
+            double[] q = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                r[i] = a[i];
+                q[i] = 0.0;
+            }
+
+            for (int k = (n-m); k >= 0; k--)
+            {
+                q[k+1] = r[(m-1) + k] / d[m-1];
+                for (int j = m+k-1; j >= k; j--)
+                {
+                    r[j] = r[j] - q[k + 1] * d[j - k];
+                }
+            }
+            for (int j = m; j < n; j++)
+            {
+                r[j] = 0;
+            }
+            n = n - m;
+
+            return (q, r);
+        }
 
     }
 }
