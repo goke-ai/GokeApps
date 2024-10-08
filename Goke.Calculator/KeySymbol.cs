@@ -14,7 +14,7 @@
         Secant, Cosecant, Cotangent, ArcSecant, ArcCosecant, ArcCotangent,
         Sinh, Cosh, Tanh, ArcSinh, ArcCosh, ArcTanh,
         XPowerY = 151, YRootX, XModY,
-        COMPUTE = 200, Quadratic, Polynomial3, Polynomial4, Polynomial5, Polynomial6, Polynomial7, 
+        COMPUTE = 200, Quadratic, Polynomial, Polynomial3, Polynomial4, Polynomial5, Polynomial6, Polynomial7, 
         Centigrade, Farenheit, 
     }
 
@@ -136,10 +136,11 @@
 
             new(){Key=Calculator.Key.COMPUTE, Symbol="=>"},
             new(){Key=Calculator.Key.Quadratic, Symbol="Quadratic"},
-            new(){Key=Calculator.Key.Polynomial3, Symbol="Poly3"},
-            new(){Key=Calculator.Key.Polynomial4, Symbol="Poly4"},
-            new(){Key=Calculator.Key.Polynomial5, Symbol="Poly5"},
-            new(){Key=Calculator.Key.Polynomial6, Symbol="Poly6"},
+            new(){Key=Calculator.Key.Polynomial, Symbol="Poly&#x207f;"},
+            //new(){Key=Calculator.Key.Polynomial3, Symbol="Poly3"},
+            //new(){Key=Calculator.Key.Polynomial4, Symbol="Poly4"},
+            //new(){Key=Calculator.Key.Polynomial5, Symbol="Poly5"},
+            //new(){Key=Calculator.Key.Polynomial6, Symbol="Poly6"},
 
     ];
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Goke.Maths
 {
@@ -38,7 +39,12 @@ namespace Goke.Maths
             else
             {
                 var D = Math.Pow(b, 2) - 4 * a * c;
-                if (D <= 0)
+                if (D > 0)
+                {
+                    r1 = (-b - Math.Sqrt(D)) / 2 / a;
+                    r2 = (-b + Math.Sqrt(D)) / 2 / a;
+                }
+                else
                 {
                     r1 = -b / 2 / a;
                     r2 = r1;
@@ -46,16 +52,16 @@ namespace Goke.Maths
                     i2 = -i1;
                     // throw new ArithmeticException("Complex root expected");
                 }
-                else
-                {
-                    r1 = (-b - Math.Sqrt(D)) / 2 / a;
-                    r2 = (-b + Math.Sqrt(D)) / 2 / a;
-                }
             }
             return (r1, r2, i1, i2);
         }
 
-        public static (double[] x, double[] y) Quadratic(double a, double b, double c)
+        public static (double r1, double r2, double i1, double i2) Quadratic(double a, double b, double c)
+        {
+            return Formula(a, b, c);
+        }
+
+        public static (double[] x, double[] y) QuadraticData(double a, double b, double c)
         {
             int intervals = 10;
             double h = Math.Abs(c) / intervals;
@@ -173,7 +179,6 @@ namespace Goke.Maths
             return xr;
         }
 
-
         public static double FixPoint(Func<double, double> f, double x0, double tolerance = 1e-6, int maxIteration = 100)
         {
             double xr = x0;
@@ -220,7 +225,7 @@ namespace Goke.Maths
             } while (i < maxIteration && error > tolerance);
             return xr;
         }
-
+        
         public static double Secant(Func<double, double> f, double x0, double tolerance = 1e-6, int maxIteration = 100)
         {
             double d = 0.01;
@@ -266,7 +271,6 @@ namespace Goke.Maths
             } while (i < maxIteration && error > tolerance);
             return xr;
         }
-
 
         public static double FZeros(Func<double, double> f, double xl, double xu)
         {          
@@ -367,8 +371,7 @@ namespace Goke.Maths
             return b;
         }
 
-
-        public static void PolyDivideByRoot(double[] a, double t)
+        public static void PolyDivideByRoot(double[] a, double root)
         {
             int n = a.Length;
             double r = a[n - 1];
@@ -378,7 +381,7 @@ namespace Goke.Maths
             {
                 double s = a[i];
                 a[i] = r;
-                r = s + r * t;
+                r = s + r * root;
             }
         }
 
@@ -412,6 +415,123 @@ namespace Goke.Maths
 
             return (q, r);
         }
+
+        public static (double re, double im)[] Bairstow(double[] a, double tolerance=1, int maxIteration=100)
+        {
+            int n = a.Length;
+            double[] re = new double[n];
+            double[] im = new double[n];
+            double[] b = new double[n];
+            double[] c = new double[n];
+
+            double r = -1;
+            double s = -1;
+
+            int iter = 0;
+            double ea1 = 1,  ea2 = 1;
+            while(true)
+            {
+                if (n < 3 || iter >= maxIteration)
+                {
+                    break;
+                }
+                iter = 0;
+
+                while (true)
+                {
+                    iter++;
+
+                    b[n - 1] = a[n - 1];
+                    b[n - 2] = a[n - 2] + r * b[n - 1];
+                    c[n - 1] = b[n - 1];
+                    c[n - 2] = b[n - 2] + r * c[n - 1];
+
+                    for (int i = (n-2) - (1); i >= 0; i--)
+                    {
+                        b[i] = a[i] + r * b[i + 1] + s * b[i + 2];
+                        c[i] = b[i] + r * c[i + 1] + s * c[i + 2];
+                    }
+
+                    var det = c[2] * c[2] - c[3] * c[1];
+
+                    if(det != 0)
+                    {
+                        var dr = (-b[1] * c[2] + b[0] * c[3]) / det;
+                        var ds = (-b[0] * c[2] + b[1] * c[1]) / det;
+
+                        r += dr;
+                        s += ds;
+                        if (r != 0)
+                        {
+                            ea1 = Math.Abs(dr / r) * 100;
+                        }
+                        if (s != 0)
+                        {
+                            ea2 = Math.Abs(ds / s) * 100;
+                        }
+                    }
+                    else
+                    {
+                        r++;
+                        s++;
+                        iter = 0;
+                    }
+
+                    if (ea1 <= tolerance && ea2 <= tolerance || iter >= maxIteration)
+                    {
+                        break;
+                    }
+                }
+
+                (double r1, double r2, double i1, double i2) = Quadratic(1, -r, -s);
+                re[n - 1] = r1;
+                im[n - 1] = i1;
+                re[n - 2] = r2;
+                im[n - 2] = i2;
+
+                n = n - 2;
+
+                for (int i = 0; i < n; i++)
+                {
+                    a[i] = b[i + 2];
+                }
+            }
+
+            if (iter < maxIteration)
+            {
+                if ((n-1) == 2)
+                {
+                    r = -a[1] / a[2];
+                    s = -a[0] / a[2];
+
+                    (double r1, double r2, double i1, double i2) = Quadratic(1, -r, -s);
+                    re[n - 1] = r1;
+                    im[n - 1] = i1;
+                    re[n - 2] = r2;
+                    im[n - 2] = i2;
+                }
+                else
+                {
+                    re[n - 1] = -a[0] / a[1];
+                    im[n - 1] = 0;
+                }
+            }
+            else
+            {
+                iter = 1;
+            }
+
+
+        //Exit:
+            return re.Zip(im).ToArray();
+        }
+
+        public static (double re, double im)[] Polynomial(double[] a, double tolerance = 1, int maxIteration = 100)
+        {
+            (double re, double im)[] y = Roots.Bairstow(a);
+            return y[1..];
+        }
+
 
     }
 }

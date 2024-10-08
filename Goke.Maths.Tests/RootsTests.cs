@@ -1,12 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Goke.Maths;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Goke.Maths.Tests
+﻿namespace Goke.Maths.Tests
 {
     [TestClass()]
     public class RootsTests
@@ -69,6 +61,29 @@ namespace Goke.Maths.Tests
             Assert.AreEqual(0, q[0]);
             Assert.AreEqual(6, q[1]);
             Assert.AreEqual(1, q[2]);
+        }
+
+        [TestMethod()]
+        public void Bairstow_Test()
+        {
+            double[] a = [1.25, -3.875, 2.125, 2.75, -3.5, 1];
+            (double re, double im)[] y = Roots.Bairstow(a);
+
+            Assert.AreEqual(0, y[0].re);
+        }
+
+        [TestMethod()]
+        public void Polynomial_Test()
+        {
+            double[] a = [1.25, -3.875, 2.125, 2.75, -3.5, 1];
+
+            (double re, double im)[] y = Roots.Polynomial(a);
+
+            Assert.IsTrue(Math.Abs(2 - y[0].re) < 1e-2);
+            Assert.IsTrue(Math.Abs(1 - y[1].re) < 1e-2);
+            Assert.IsTrue(Math.Abs(1 - y[2].re) < 1e-2);
+            Assert.IsTrue(Math.Abs(0.5 - y[3].re) < 1e-2);
+            Assert.IsTrue(Math.Abs(-1 - y[4].re) < 1e-2);
         }
     }
 }

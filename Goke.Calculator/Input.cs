@@ -575,6 +575,9 @@ namespace Goke.Calculator
                     case Key.Quadratic:
                         OnQuadratic();
                         break;
+                    case Key.Polynomial:
+                        OnPolynomial();
+                        break;
                     default:
                         break;
                 }
@@ -615,7 +618,7 @@ namespace Goke.Calculator
                 }
                 CanCompute = false;
 
-                GraphData = Roots.Quadratic(a, b, c);
+                GraphData = Roots.QuadraticData(a, b, c);
             }
             else
             {
@@ -623,6 +626,42 @@ namespace Goke.Calculator
             }
         }
 
+        private void OnPolynomial()
+        {
+            if (CanCompute)
+            {
+                //double value = 0;
+                //var a = STORE.TryGetValue("A", out value) ? value : 0;
+                //var b = STORE.TryGetValue("B", out value) ? value : 0;
+                //var c = STORE.TryGetValue("C", out value) ? value : 0;
+
+                //(var r1, var r2, var i1, var i2) = Maths.Roots.Formula(a, b, c);
+
+                //if (i1 == 0 && i2 == 0)
+                //{
+                //    STORE["D"] = r1;
+                //    STORE["E"] = r2;
+
+                //    Text = $"{r1}, {r2}";
+                //}
+                //else
+                //{
+                //    STORE["D"] = r1;
+                //    STORE["E"] = r2;
+                //    STORE["F"] = i1;
+                //    STORE["G"] = i2;
+
+                //    Text = $"{r1}+{i1}, {r2}+{i2}";
+                //}
+                CanCompute = false;
+
+                //GraphData = Roots.QuadraticData(a, b, c);
+            }
+            else
+            {
+                Text = $"(n, an...a0) => STO(A, B...Z) => Z...B";
+            }
+        }
 
         private void BinaryOperation(Key key)
         {
