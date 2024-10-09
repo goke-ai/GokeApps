@@ -162,7 +162,14 @@ namespace Goke.Calculator
                     canBackspace = false;
                     CanCompute = !CanCompute;
                     break;
-
+                case Key.Pi:
+                    Answer = Math.PI;
+                    ExpressionListAdd("Pi| ");
+                    break;
+                case Key.e:
+                    Answer = Math.E;
+                    ExpressionListAdd($"e| ");
+                    break;
                 default:
                     canBackspace = false;
                     if (key != lastKey || !KeySymbol.IsBinary(key))
@@ -250,7 +257,14 @@ namespace Goke.Calculator
                     return;
                 }
 
-                CurrentValue = double.Parse(Text);
+                try
+                {
+                    CurrentValue = double.Parse(Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException("Invalid argument.");
+                }
 
                 UnaryOperation(key);
                 CurrentValue = Answer;
