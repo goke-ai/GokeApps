@@ -1,4 +1,7 @@
-﻿namespace Goke.Maths.Tests
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Goke.Maths;
+
+namespace Goke.Maths.Tests
 {
     [TestClass()]
     public class RootsTests
@@ -16,16 +19,21 @@
         }
 
         [TestMethod()]
+        public void Bisection_Test()
+        {
+        }
+
+        [TestMethod()]
         public void FixPoint_Test()
         {
             Func<double, double> f = (x) => Math.Pow(Math.E, -x);
-            double x0=0;
+            double x0 = 0;
             double errorLimit = 0.0001;
             int maxIteration = 10;
 
             var actual = Roots.FixPoint(f, x0, errorLimit, maxIteration);
 
-            Assert.IsTrue(Math.Abs(0.564879-actual) < errorLimit);
+            Assert.IsTrue(Math.Abs(0.564879 - actual) < errorLimit);
         }
 
         [TestMethod()]
@@ -85,5 +93,6 @@
             Assert.IsTrue(Math.Abs(0.5 - y[3].re) < 1e-2);
             Assert.IsTrue(Math.Abs(-1 - y[4].re) < 1e-2);
         }
+
     }
 }
