@@ -92,7 +92,6 @@ internal class DataInitializer
         string adminEmail = "admin@ark.com";
         string adminPassword = emailSender is null ? "admin@ARK#135" : Text.GeneratePin();     
         await UserRoleService.CreateUserAddToRoles(userManager, adminEmail, adminPassword, ["Administrators"], emailSender, "admin@evirtuallab.com");
-
     }
 
     public static async Task SeedResetAdmins(UserManager<ApplicationUser> userManager, IEmailSender<ApplicationUser>? emailSender = null)
